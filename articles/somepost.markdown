@@ -1,6 +1,6 @@
 Title: Some post
 Author: Micheil Smith
-Date: 2010-01-29
+Date: Feb 02 2010 09:36:05 GMT-0600
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

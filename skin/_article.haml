@@ -1,6 +1,6 @@
 .post
   .details
-    %p&= date.getFullYear() + "." + date.getMonth() + "." + date.getDate()
+    %p(title=date)&= format_date(date, "%Y.%m.%d")
     %p
       %a(href=author.link)&= author.name
   .body
