@@ -6,6 +6,6 @@ I have worked for almost a decade on web based applications using a variety of o
 
 I prefer to work on open-source projects both paid and unpaid.
 
-Tim Caswell’s Specialties:
+Tim Caswell's Specialties:
 
  - Framework Design, Library Author, Team Leadership, Software Architect,  Javascript, Ruby, NodeJS, MVC in Browser.
