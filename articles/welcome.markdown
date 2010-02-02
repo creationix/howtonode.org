@@ -73,14 +73,18 @@ So to convert this to a Github POST hook, we'll keep it simple and assume all th
 
 So whenever a request is received, we call the external `rebuild` method.  The reason we pass in a callback instead of getting the return value is because the builder will need to do some of it's own IO and can't return a meaningful response right away.  When it's done, we'll be notified and then pass on the output to the browser.
 
-### Parallel IO - File Processor ###
-
-**TODO**: explain how node-blog processes the source files in parallel.
+In another article I'll explain how node-blog handles the parallel processing of the various source files and how it synchronizes the output into a single message to give back to the http server.
 
 ## Contributing ##
 
-**TODO**: Write how to contribute articles.
+This article is getting long enough, but it should be a good intro to node programming.  If you're already a node developer and would like to improve this article and/or write your own then please contribute.
 
+All you have to do is fork or clone the [howtonode.org] repository and add your content.  If you want to preview the site locally then you can clone [node-blog] and run a local instance.  This is not required as long as you trust the markdown conversion process.
+
+Add an author entry for yourself and write your article.  When done send any of the project contributors ([creationix] and [miksago] currently) either an email with a `git format-patch` or send a github pull requst.  We'll pull it in and it will automatically go live.
+
+[creationix]: http://github.com/creationix
+[miksago]: http://github.com/miksago
 [sys]: http://nodejs.org/api.html#_system_module
 [http]: http://nodejs.org/api.html#_http
 [node]: http://nodejs.org/
