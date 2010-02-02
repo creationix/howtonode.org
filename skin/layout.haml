@@ -1,9 +1,44 @@
-!!! XML
-!!! 1.1
-%html(xml:lang="en" xmlns="http://www.w3.org/1999/xhtml")
+!!! Strict
+%html{ lang: "en" }
   %head
-    %title&= title
-    %link(type="text/css" rel="stylesheet" href="style.css")
-    %link(type="text/css" rel="stylesheet" href="sh_vim-dark.css")
+    %meta{ content: "text/html; charset=utf-8", http-equiv: "Content-Type" }
+    %title&= title + " - How To Node"
+    %link{ href: "screen.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
   %body
-    #content= content
+    %a#ribbon{ href: "http://github.com/creationix" }
+      %img{ src: "http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png", alt: "Fork me on GitHub" }
+    #wrapper
+      #header
+        %h2
+          %a{ href: "/" }
+            How To Node
+        %p
+          Some catchy tagline about
+          %a{ href: "http://nodejs.org", title: "The project website" }
+            node.js
+      #content
+        = content
+        %hr
+        .block
+          %h2
+            About
+          %p
+            %strong
+              How To Node
+            is a blog featuring projects and tutorials relating to the Node.js project.
+          %p
+            This blog is powered by Node.js, it was developed by
+            %a{ href: "http://github.com/creationix" }
+              Tim Caswell
+            \. It was later redesigned by
+            %a{ href: "http://github.com/miksago" }
+              Micheil Smith
+            \. Go have a read of the
+            %a{ href: "http://github.com/creationix/howtonode.org" }
+              source code!
+          %p
+            Powered by
+            %a{ href: "http://github.com/creationix/node-blog" }
+              node-blog
+            \.
+

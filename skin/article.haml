@@ -1,5 +1,6 @@
-#article= content
-%a(href="index.html") Back to the front page
+=partial("_article", {date: date, link: link, author: author, title: title, content: content})
+%p
+  %a(href="index.html") Back to the front page
 #disqus_thread
 %script(src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript")
 %noscript

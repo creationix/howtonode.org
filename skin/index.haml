@@ -1,14 +1,2 @@
-%h1 HowToNode.org
-
-%h2 Articles
-%ul#articles
-  :each article in articles
-    %li.article
-      %a(href=article.link)&= article.name
-
-%h2 Authors
-%ul#authors
-  :each author in authors
-    %li.author
-      %a(href=author.link)&= author.name
-
+:each article in articles
+  = partial("_article", article)

@@ -1,0 +1,9 @@
+.post
+  .details
+    %p&= date.getFullYear() + "." + date.getMonth() + "." + date.getDate()
+    %p
+      %a(href=author.link)&= author.name
+  .body
+    %h1
+      %a(href=link)&= title
+    = content
