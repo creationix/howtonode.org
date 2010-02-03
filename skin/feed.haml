@@ -1,0 +1,17 @@
+%rss(version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/")
+  %channel
+    %title How To Node
+    %link http://howtonode.org
+    %description How To Node is a blog featuring projects and tutorials relating to the Node.js project.
+    %pubDate&= (new Date()).toString()
+    %generator http://github.com/creationix/node-blog
+    %language en
+    :each article in articles
+      %item
+        %title&= article.title
+        %link&= "http://howtonode.org/" + article.link
+        %comments&= "http://howtonode.org/" + article.link + "#disqus_thread"
+        %pubDate= article.date
+        %guid(isPermaLink="false")&= "http://howtonode.org/" + article.link
+        %description&= article.content.split("<h2>")[0]
+        %author&= article.author.name
