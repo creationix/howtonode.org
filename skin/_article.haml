@@ -3,6 +3,8 @@
     %p(title=date)&= format_date(date, "%Y.%m.%d")
     %p
       %a(href=author.link)&= author.name
+      :if typeof full !== 'undefined'
+        %img(src=gravitar(author.email, 140))
   .body
     %h1
       %a(href=link)&= title
