@@ -6,4 +6,9 @@
   .body
     %h1
       %a(href=link)&= title
-    = content
+    :if typeof full !== 'undefined'
+      = content
+    :if typeof full === 'undefined'
+      = content.split("<h2>")[0]
+      %p
+        %a(href=link) Read Full Story...
