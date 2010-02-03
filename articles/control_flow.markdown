@@ -70,9 +70,24 @@ So let's modify the example to pass callbacks:
       }
     }
 
-    read_directory('.', function (results) {
-      // Do something with the results
+    function read_directories(paths, next) {
+      var count = paths.length,
+          data = {};
+      paths.forEach(function (path) {
+        read_directory('.', function (results) {
+          data[path] = results;
+          count--;
+          if (count <= 0) {
+            next(data);
+          }
+        });
+      });
+    }
+
+    read_directories(['articles', 'authors', 'skin'], function (data) {
+      // Do something
     });
+
 
 Now we have made a composite asynchronous function.  It takes some arguments (the path in this case), and calls a callback when everything inside is done.  All the logic inside it, and importantly the several levels of nesting are now compressed into a single unnested callback.
 
@@ -109,9 +124,9 @@ Suppose you wanted to read some data from a database and read some more data fro
       // Do something
     });
     // Fire off the database query
-    people.find({name: "Tim", age: 27}).addCallback(both.add()));
+    people.find({name: "Tim", age: 27}).addCallback(both.add());
     // Fire off the file read
-    File.read('famous_quotes.txt').addCallback(both(add()));
+    File.read('famous_quotes.txt').addCallback(both.add());
 
 The database query and the file read will happen at the same time.  When they are both done, then the callback given to the `Combo` constructor will get called.  The first argument will be the database result and the second will be the file contents.
 
