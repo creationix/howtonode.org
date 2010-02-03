@@ -132,7 +132,7 @@ The database query and the file read will happen at the same time.  When they ar
 
 ## Conclusion ##
 
-The three techniques taught here are:
+The techniques taught here are:
 
  - Nest callbacks to get serial behavior.
  - Collocate method calls to get parallel behavior.
