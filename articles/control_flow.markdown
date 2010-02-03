@@ -2,7 +2,7 @@ Title: Control Flow in Node
 Author: Tim Caswell
 Date: Wed Feb 03 2010 00:34:10 GMT-0600 (CST)
 
-One on the unique aspects of programming in an async framework like node is the ability to decide between which function will run in serial and which will run in parallel.  While there are no built-in methods for managing this in node, I'll discuss some of the tricks I came up with while writing the node-blog engine that generates this site.
+One of the unique aspects of programming in an async framework like node is the ability to decide between which function will run in serial and which will run in parallel.  While there are no built-in methods for managing this in node, I'll discuss some of the tricks I came up with while writing the node-blog engine that generates this site.
 
 ## Parallel vs Serial ##
 
@@ -15,9 +15,9 @@ For my blog engine I have a tree structure of files that need to be processed.  
  - Get a list of articles.
  - Read in and parse the articles.
  - Get a list of authors.
- - Read in and parse the arthors.
- - Get a list of haml templates.
- - Read in all the haml templates.
+ - Read in and parse the authors.
+ - Get a list of HAML templates.
+ - Read in all the HAML templates.
  - Get a list of static resource files.
  - Read in the static files.
  - Write article html pages.
@@ -26,7 +26,7 @@ For my blog engine I have a tree structure of files that need to be processed.  
  - Write feed page.
  - Write static resources.
 
-As you can see, there are several items that can be run independent of each other.  For example I can do all of the file reading at once without any problems, but I can't read any file until I've scanned the directory to know what files to read.  I can write all the files at the same time once their contents are calculated, but I won't know what to put in them untill all the reads are done.
+As you can see, there are several items that can be run independent of each other.  For example I can do all of the file reading at once without any problems, but I can't read any file until I've scanned the directory to know what files to read.  I can write all the files at the same time once their contents are calculated, but I won't know what to put in them until all the reads are done.
 
 ## A counter for grouped parallel actions ##
 
@@ -46,11 +46,11 @@ For the simple case of scanning a directory and reading all the files into one o
       });
     }
 
-Nesting callbacks is a great way to ensure they run synchronously.  So inside the callback of `readdir`, we set a countdown to the number of files to read.  Then we start of a `read` for each of the files.  These will run in parallel and finish in any arbitrary order.  The important thing is that we're decrementing the counter after each one finishes.  When the counter goes back to 0 we know that was the last file to read.
+Nesting callbacks is a great way to ensure they run synchronously.  So inside the callback of `readdir`, we set a countdown to the number of files to read.  Then we start a `read` for each of the files.  These will run in parallel and finish in any arbitrary order.  The important thing is that we're decrementing the counter after each one finishes.  When the counter goes back to 0 we know that was the last file to read.
 
 ## Passing callbacks to avoid excessive nesting ##
 
-Now, if we wanted to execute more code now that we have the contents of the files, we would put in inside the inner-most nesting where the comment is.  This can become a problem real quick when a program has 7 levels of sequential actions.
+Now, if we wanted to execute more code now that we have the contents of the files, we would put it inside the inner-most nesting where the comment is.  This can become a problem real quick when a program has 7 levels of sequential actions.
 
 So let's modify the example to pass callbacks:
 
