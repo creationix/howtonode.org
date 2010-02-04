@@ -1,12 +1,12 @@
 Title: Control Flow in Node Part II
 Author: Tim Caswell
-Date: Wed Feb 03 2010 00:34:10 GMT-0600 (CST)
+Date: Thu Feb 04 2010 02:24:35 GMT-0600 (CST)
 
 I had so much fun writing the last article on control flow, that I decided to play around with the feedback I received.  One thing in particular I want to talk about is the good work [inimino][] is doing.
 
 Node has two constructs that are used currently to handle async return values, namely [promises and event emitters][].  You can read all about those on the [nodejs.org][] website.  I'm going to talk about these and another way to manage asynchronous return values and streaming events.
 
-## Why the difference between Promise and EventEmitter? ##
+## Why the distinction between Promise and EventEmitter? ##
 
 In node there are two event handling classes.  They are called Promise, and EventEmitter.  Promises are for the async equivalent of a function.
 

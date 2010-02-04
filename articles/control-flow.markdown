@@ -32,7 +32,7 @@ As you can see, there are several items that can be run independent of each othe
 
 For the simple case of scanning a directory and reading all the files into one object, we can employ a simple counter.
 
-    Posix.readdir(".").addCallback(files) {
+    Posix.readdir(".").addCallback(function (files) {
       var count = files.length,
           results = {};
       files.forEach(function (filename) {
@@ -42,9 +42,9 @@ For the simple case of scanning a directory and reading all the files into one o
           if (count <= 0) {
             // Do something once we know all the files are read.
           }
-        })
+        });
       });
-    }
+    });
 
 Nesting callbacks is a great way to ensure they run synchronously.  So inside the callback of `readdir`, we set a countdown to the number of files to read.  Then we start a `read` for each of the files.  These will run in parallel and finish in any arbitrary order.  The important thing is that we're decrementing the counter after each one finishes.  When the counter goes back to 0 we know that was the last file to read.
 
@@ -55,7 +55,7 @@ Now, if we wanted to execute more code now that we have the contents of the file
 So let's modify the example to pass callbacks:
 
     function read_directory(path, next) {
-      Posix.readdir(path).addCallback(files) {
+      Posix.readdir(path).addCallback(function (files) {
         var count = files.length,
             results = {};
         files.forEach(function (filename) {
@@ -65,9 +65,9 @@ So let's modify the example to pass callbacks:
             if (count <= 0) {
               next(results);
             }
-          })
+          });
         });
-      }
+      });
     }
 
     function read_directories(paths, next) {
