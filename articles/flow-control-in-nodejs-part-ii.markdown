@@ -210,6 +210,8 @@ Just for fun, here is the same example translated to the [Jack][] language (stil
         next string.toUpperCase()
     | fun string -> next ->
       writeFile 'names_up.txt', string | next
+    | fun ->
+      # File was saved
 
 [Jack]: http://github.com/creationix/jack
 [inimino]: http://boshi.inimino.org/3box/asof/1263250371783/fileIO/README.html
