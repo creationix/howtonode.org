@@ -82,23 +82,23 @@ You can save this in /etc/monit/monitrc. Here is the break down:
 This will tell monit to log all output to /var/log/monit.log, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
 The next part is the vital part, which defines how we will test for failures:
 
-        start program = "/sbin/start yourprogram"
-        stop program  = "/sbin/stop yourprogram"
-        if failed port 8000 protocol HTTP
-            request /
-            with timeout 10 seconds
-            then restart
+    start program = "/sbin/start yourprogram"
+    stop program  = "/sbin/stop yourprogram"
+    if failed port 8000 protocol HTTP
+        request /
+        with timeout 10 seconds
+        then restart
 
 The first two lines should be self-explanatory, this defines how monit will start and stop your application. You will need to specify an absolute path to upstart's start and stop utilities, while suffixing your application name as an argument.
 
 The third line is the crux of monit's useful-ness. If we were running our application on port 8000, serving through the HTTP protocol, then this would apply. Monit will perform an analysis on the specified port and protocol, and if its routines discover that something is not right, it will execute the next few lines. Monit has lots of different options for dealing with service failures, such as sending e-mails and restarting servers. In this case we are going to do a simple request to the root of the local domain, and if 10 seconds pass without the expected response, monit will restart the application.
 
-Now all that is left, is to start your application, them set monit off to do its tedious task of saving the world from crashing servers.
+Now all that is left, is to start your application, then set monit off to do its tedious task of saving the world from crashing servers.
 
     sudo start yourprogram
     monit -d 60 -c /etc/monit/monitrc
 
-Setting the `-d 60` flag tells monit to check against your configuration every seconds. I recommend setting this to the same time as any response timeouts you may have.
+Setting the `-d 60` flag tells monit to check against your configuration every 60 seconds. I recommend setting this to the same time as any response timeouts you may have.
 
 Monit's useful-ness doesn't hit a brick wall there either, monit can be extended further to monitor the other services your web application relies upon. This may range from databases to nginx instances. Their website has many more examples and configurations, and even more again can be found littered over the internet.
 
