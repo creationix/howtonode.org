@@ -74,9 +74,9 @@ You'll note that we have to create a promise object, do our logic, and forward o
 
 ## There could be another way ##
 
-Promised work well, but after reading about continuables from [inimino][], I was inspired to try another way.
+Promises work well, but after reading about continuables from [inimino][], I was inspired to try another way.
 
-Remember our first example, well suppose that File.read was used like this.
+Remember our first example? Suppose that File.read was used like this:
 
     var File = require('file');
     File.read('mydata.txt')(function (text) {
@@ -85,7 +85,7 @@ Remember our first example, well suppose that File.read was used like this.
       // Handle error
     });
 
-Instead of returning a promise object, it returns a function that's expecting two callback methods.  One for success and one for error.  I call this the `Do` style, and you'll soon see why.
+Instead of returning a promise object, it returns a function that's expecting two callback methods:  One for success and one for error.  I call this the `Do` style, and you'll soon see why.
 
 ## Making callback style actions ##
 
@@ -108,13 +108,13 @@ Often we will want to make custom functions that don't return a value right away
       }, errback);
     }};
 
-Notice how easy it is to chain the error messages back up to our caller.  Also this code is much shorter, and easier to read I think.
+Notice how easy it is to chain the error messages back up to our caller.  Also this code is much shorter, and easier to read.
 
-The key to making these action is to, instead of creating a promise and returning, you return a function that takes two callbacks and then call them directly when needed;
+The key to making these actions is to, instead of creating a promise and returning, return a function that takes two callbacks and then call them directly when needed.
 
 ## The Do library ##
 
-I came up with a small library called `Do` earlier today.  Actually it's not much, just a single function that does parallel actions much the Combo Library from the last article.
+I came up with a small library called `Do` earlier today.  Actually it's not much, just a single function that does parallel actions much like the Combo Library from the last article.
 
 ### Implementation ###
 
