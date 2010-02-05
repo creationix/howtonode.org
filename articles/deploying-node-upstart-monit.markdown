@@ -2,19 +2,19 @@ Title: Deploying Node.js With Upstart and Monit
 Author: Tim Smart
 Date: Sat Feb 06 2010 10:03:12 GMT+1300 (NZST)
 
-## So you like Node.js? You want to deploy it? ##
+**So you like Node.js? You want to deploy it?**
 
 If I heard two "Yes"'s, then you are in the some boat as me, and being in that boat feels really really vulnerable. Like the kind of vulnerable you would feel if you were trapped in a cage with lions. And here is why:
 
  - If Node.js decides to crash, you are screwed.
  - If the above isn't enough for you, then you may need to reconsider.
 
-There are two well-known technologies that can save us from this mess, and dam right we are going to use them!  
+There are two well-known technologies that can save us from this mess, and you'd better believe we're going to use them!
 
 
 ## Problems ##
 
-The first problem we will get thrown by, is the fact that we can not run Node.js as a daemon. A daemon, for the un-aware, is a child process that spawns from a process, leaving the parent to die. Tragic story I know, but this allows things to run in the background. But why is this a problem? Well if [Kevin's blog post][] isn't enough for you, it essentially allows one to separate node from any form of interface, meaning terminal doesn't have stay open all day. I highly recommend you pause now and read Kevin's material, as it will expand more on daemon-izing the node process.
+The first problem we will get thrown by, is the fact that we can not run Node.js as a daemon. A daemon, for the unaware, is a child process that spawns from a process, leaving the parent to die. Tragic story I know, but this allows things to run in the background. But why is this a problem? Well if [Kevin's blog post][] isn't enough for you, it essentially allows one to separate node from any form of interface, meaning terminal doesn't have stay open all day. I highly recommend you pause now and read Kevin's material, as it will expand more on daemonizing the node process.
 
 
 ## upstart ##
@@ -28,9 +28,11 @@ Most linux distributions that have a decent package manager which will allow you
 
     sudo apt-get install upstart
 
+If you're running the latest Ubuntu, you've got it built in already.
+
 Otherwise you will need to configure and compile from source, and this blog post will not go off topic! So we resume...
 
-We now will want to configure [upstart][], and I am shame-less-ly borrowing Kevin's example:
+We now will want to configure [upstart][], and I am shamelessly borrowing Kevin's example:
 
     description "node.js server"
     author      "joe"
@@ -55,7 +57,7 @@ And now node will automatically start at boot and log output to `/var/log/node.l
 
 ## The real problem ##
 
-Turning your application into a daemon isn't enough. A daemon can still crash, and those lions are getting awefully close. We need a tool that keeps an eye out for any falls our node instances may have. When something crashes our server, we need that tool to take evasive action. Also that tool should be capable of expanding its reach to any other services our app may need; such as databases and nginx instances. Thankfully this isn't taken lightly by most, and serveral helpful tools that fit our description do exist.
+Turning your application into a daemon isn't enough. A daemon can still crash, and those lions are getting awfully close. We need a tool that keeps an eye out for any falls our node instances may have. When something crashes our server, we need that tool to take evasive action. Also that tool should be capable of expanding its reach to any other services our app may need; such as databases and nginx instances. Thankfully this isn't taken lightly by most, and several helpful tools that fit our description do exist.
 
 ## monit ##
 
@@ -91,7 +93,7 @@ The next part is the vital part, which defines how we will test for failures:
 
 The first two lines should be self-explanatory, this defines how monit will start and stop your application. You will need to specify an absolute path to upstart's start and stop utilities, while suffixing your application name as an argument.
 
-The third line is the crux of monit's useful-ness. If we were running our application on port 8000, serving through the HTTP protocol, then this would apply. Monit will perform an analysis on the specified port and protocol, and if its routines discover that something is not right, it will execute the next few lines. Monit has lots of different options for dealing with service failures, such as sending e-mails and restarting servers. In this case we are going to do a simple request to the root of the local domain, and if 10 seconds pass without the expected response, monit will restart the application.
+The third line is the crux of monit's usefulness. If we were running our application on port 8000, serving through the HTTP protocol, then this would apply. Monit will perform an analysis on the specified port and protocol, and if its routines discover that something is not right, it will execute the next few lines. Monit has lots of different options for dealing with service failures, such as sending e-mails and restarting servers. In this case we are going to do a simple request to the root of the local domain, and if 10 seconds pass without the expected response, monit will restart the application.
 
 Now all that is left, is to start your application, then set monit off to do its tedious task of saving the world from crashing servers.
 
@@ -111,3 +113,4 @@ The next article I will write I'll explain how the awesomeness of node, can play
 [upstart]: http://upstart.ubuntu.com/
 [monit]: http://mmonit.com/monit/
 [their website]: http://mmonit.com/monit/
+
