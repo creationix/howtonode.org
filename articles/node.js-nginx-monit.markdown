@@ -44,14 +44,14 @@ We now will want to configure [upstart][], and I am shame-less-ly borrowing Kevi
         exec sudo -u username /usr/local/bin/node /where/yourprogram.js 2>&1 >> /var/log/node.log
     end script
 
-You will need to replace "username" with the user you want to run node as, and "/where/yourprogram.js" with the location of your application. You can then save this file to /etc/init/yourprogram.conf for later use. (Dont't forget to make it executable!) If you are using an older linux distribution, you may need to save the file to /etc/event.d/yourprogram
+You will need to replace `username` with the user you want to run node as, and `/where/yourprogram.js` with the location of your application. You can then save this file to `/etc/init/yourprogram.conf` for later use. (Dont't forget to make it executable!) If you are using an older linux distribution, you may need to save the file to `/etc/event.d/yourprogram`
 
 Using your program is now a cinch:
 
     start yourprogram
     stop yourprogram
 
-And now node will automatically start at boot and log output to /var/log/node.log. But I assumed you read all that on Kevin's blog, right? Moving on...
+And now node will automatically start at boot and log output to `/var/log/node.log`. But I assumed you read all that on Kevin's blog, right? Moving on...
 
 ## The real problem ##
 
@@ -73,13 +73,13 @@ I'm not going to tell you how to install it, [their website][] has plenty on inf
             with timeout 10 seconds
             then restart
 
-You can save this in /etc/monit/monitrc. Here is the break down:
+You can save this in `/etc/monit/monitrc`. Here is the break down:
 
     set logfile /var/log/monit.log
 
     check host nodejs with address 127.0.0.1
 
-This will tell monit to log all output to /var/log/monit.log, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
+This will tell monit to log all output to `/var/log/monit.log`, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
 The next part is the vital part, which defines how we will test for failures:
 
     start program = "/sbin/start yourprogram"
@@ -98,7 +98,7 @@ Now all that is left, is to start your application, then set monit off to do its
     sudo start yourprogram
     monit -d 60 -c /etc/monit/monitrc
 
-Setting the `-d 60` flag tells monit to check against your configuration every 60 seconds. I recommend setting this to the same time as any response timeouts you may have.
+Setting the `-d 60` flag tells monit to check against your configuration every 60 seconds. I recommend setting this to the same time as any response timeouts you may have installed. You have now passed monit 101! Easy, huh?
 
 Monit's useful-ness doesn't hit a brick wall there either, monit can be extended further to monitor the other services your web application relies upon. This may range from databases to nginx instances. Their website has many more examples and configurations, and even more again can be found littered over the internet.
 
