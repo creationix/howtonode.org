@@ -1,6 +1,6 @@
 Title: Deploying Node.js With Upstart and Monit
 Author: Tim Smart
-Date: 
+Date: Sat Feb 06 2010 10:03:12 GMT+1300 (NZST)
 
 ## So you like Node.js? You want to deploy it? ##
 
