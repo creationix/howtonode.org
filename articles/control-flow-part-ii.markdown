@@ -214,6 +214,6 @@ Just for fun, here is the same example translated to the [Jack][] language (stil
       # File was saved
 
 [Jack]: http://github.com/creationix/jack
-[inimino]: http://boshi.inimino.org/3box/asof/1263250371783/fileIO/README.html
+[inimino]: http://inimino.org/~inimino/blog/fileio_first_release
 [promises and event emitters]: http://nodejs.org/api.html#_events
 [nodejs.org]: http://nodejs.org/
