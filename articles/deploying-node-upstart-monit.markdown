@@ -26,6 +26,7 @@ As Kevin stated in his blog, the first tool we are going to look at is [upstart]
 
 Most linux distributions that have a decent package manager which will allow you to install [upstart][] the easy way. On debian systems this is usually:
 
+    #!sh
     sudo apt-get install upstart
 
 If you're running the latest Ubuntu, you've got it built in already.
@@ -34,6 +35,7 @@ Otherwise you will need to configure and compile from source, and this blog post
 
 We now will want to configure [upstart][], and I am shamelessly borrowing Kevin's example:
 
+    #!upstart
     description "node.js server"
     author      "joe"
 
@@ -50,6 +52,7 @@ You will need to replace `username` with the user you want to run node as, and `
 
 Using your program is now a cinch:
 
+    #!sh
     start yourprogram
     stop yourprogram
 
@@ -65,6 +68,7 @@ Now that we have our application in a easy to manage form, we need to look at th
 
 I'm not going to tell you how to install it, [their website][] has plenty on information for that, but here instead is an example config file designed for our upstart node daemon will made earlier:
 
+    #!monit
     set logfile /var/log/monit.log
 
     check host nodejs with address 127.0.0.1
@@ -84,6 +88,7 @@ You can save this in `/etc/monit/monitrc`. Here is the break down:
 This will tell monit to log all output to `/var/log/monit.log`, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
 The next part is the vital part, which defines how we will test for failures:
 
+    #!monit
     start program = "/sbin/start yourprogram"
     stop program  = "/sbin/stop yourprogram"
     if failed port 8000 protocol HTTP
@@ -97,6 +102,7 @@ The third line is the crux of monit's usefulness. If we were running our applica
 
 Now all that is left, is to start your application, then set monit off to do its tedious task of saving the world from crashing servers.
 
+    #!monit
     sudo start yourprogram
     monit -d 60 -c /etc/monit/monitrc
 

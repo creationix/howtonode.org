@@ -1,6 +1,6 @@
 Title: Using HAML templates in JavaScript
 Author: Tim Caswell
-Date: Sat Feb 06 2010 20:11:14 GMT-0600 (CST)
+Date: Sat Feb 06 2010 23:06:39 GMT-0600 (CST)
 
 One of my favorite libraries when I was doing [ruby][] development was the HTML templating language [HAML][].  For those of you who haven't yet been enlightened, it's an alternate syntax for XML that results in a **lot** less code to write the same thing.
 
