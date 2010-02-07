@@ -1,0 +1,7 @@
+%h1 Users
+:if users.length === 0
+  %p There are no users in the system.
+:if users.length > 0
+  %ul
+    :each user in users
+      %li&= user
