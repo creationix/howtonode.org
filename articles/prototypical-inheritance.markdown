@@ -2,7 +2,7 @@ Title: Prototypical Inheritance
 Author: Tim Caswell
 Date: Tue Feb 09 2010 13:44:09 GMT-0600 (CST)
 
-In almost all modern programming languages we use the concept of Object Oriented Programming (OOP) to help manage the complexity of today's software.  The biggest challenge in modern software is in face managing the complexity of it.
+In almost all modern programming languages we use the concept of Object Oriented Programming (OOP) to help manage the complexity of today's software.  The biggest challenge in modern software is in fact managing the complexity of it.
 
 Most languages do this with a variant OOP called Classical OOP.  This is the one you see in Java, C#, C++, PHP, Ruby, and Python.  It has the idea that classes should be separate from instances.  Classes hold behavior and instances hold data.
 
