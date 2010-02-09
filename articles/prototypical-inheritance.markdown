@@ -49,11 +49,18 @@ Instead try this on for size:
 
     var frank = Object.create(Person, {name: {value: "Frank Dijon", enumerable: true}})
 
-There is more you can set, but `value` and `enumerable` are the interesting ones.  What `enumerable` does it tell's operators like `for ... in ...` if they should enumerate over that key.  When you set a property directly, it's enumerable property is set to `true` automatically.  Object.create actually defaults to false, so we could write this as:
+There is more you can set, but `value` and `enumerable` are the interesting ones.  What `enumerable` does is tell operators like `for ... in ...` if they should enumerate over that key.  When you set a property directly, it's enumerable property is set to `true` automatically.  `Object.create` actually defaults to false, so we could write this as:
 
     var frank = Object.create(Person, {name: {value: "Frank Dijon"}})
 
-Just make sure you understand that most functions like `sys.inspect` and `JSON.stringify` won't show the name property of frank how that it's hidden.  If you pass `true` as the second argument to `sys.inspect`, it will show hidden properties using `Object.getOwnPropertyNames`.
+Just make sure you understand that most functions like `sys.inspect` and `JSON.stringify` won't show the name property of frank now that it's hidden.  If you pass `true` as the second argument to `sys.inspect`, it will show hidden properties using `Object.getOwnPropertyNames`.
+
+    sys.puts(sys.inspect(frank));
+    // {}
+    sys.puts(sys.inspect(frank, true));
+    // {
+    //  [name]: "Frank Dijon"
+    // }
 
 ## Using `Object.spawn`
 
