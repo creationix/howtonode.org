@@ -49,7 +49,7 @@ Instead try this on for size:
 
     var frank = Object.create(Person, {name: {value: "Frank Dijon", enumerable: true}})
 
-There is more you can set, but `value` and `enumerable` are the interesting ones.  What `enumerable` does is tell operators like `for ... in ...` if they should enumerate over that key.  When you set a property directly, it's enumerable property is set to `true` automatically.  `Object.create` actually defaults to false, so we could write this as:
+There is more you can set, but `value` and `enumerable` are the interesting ones.  What `enumerable` does is tell operators like `for ... in` if they should enumerate over that key.  When you set a property directly, it's enumerable property is set to `true` automatically.  `Object.create` actually defaults to false, so we could write this as:
 
     var frank = Object.create(Person, {name: {value: "Frank Dijon"}})
 
