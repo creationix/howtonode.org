@@ -43,7 +43,7 @@ Instead try this on for size:
     var frank = Object.create(Person);
     frank.name = "Frank Dijon";
     var message = frank.greet();
-    // message is now "Hello world, my name is Frank DiJorno"
+    // message is now "Hello world, my name is Frank DiJon"
 
 `Object.create` is new to JavaScript (it's part of [ES5]), but [node supports it][] so we can safely use it.  This creates a new object that inherits from another object.  `Object.create` actually can set properties right away, but the syntax is rather verbose:
 
