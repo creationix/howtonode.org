@@ -25,7 +25,7 @@ From what I hear (I wasn't there at the time), JavaScript was initially a protot
 
     var frank = new Person("Frank Dijon");
     var message = frank.greet();
-    // message is now "Hello world, my name is Frank DiJorno"
+    // message is now "Hello world, my name is Frank Dijon"
 
 Here we have a class like object `Person`.  Actually it's just a regular JavaScript function, but that's how it works, there are no real classes.  There are many ways to emulate classical OOP, but the most straightforward and the one designed into the language is this pattern.  Only functions can have prototypes and prototypes hold instance methods.  Then instances are `new` instances of the function which is now dubbed a constructor.
 
