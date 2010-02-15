@@ -31,7 +31,7 @@ First we'll make a little module that wraps around these three commands and expo
 Then solving the problem is very straightforward using sync style coding:
 
     // Here is the sync version:
-    function scandir_sync(path) {
+    function loaddir_sync(path) {
      return posix_sync.readdir(path).filter(function (filename) {
        return posix_sync.stat(filename).isFile();
      }).map(function (filename) {
@@ -51,7 +51,7 @@ Either way, you can't stat one file until the stat for the previous has returned
 
 They say that in computer science there is always a give and take when comparing different algorithms.  The pro to synchronous coding style is that it's very easy to read and write.  The con is that it's very inefficient.  That's why most programming languages need threads to achieve any level of concurrency, but node is able to do quite a bit on a single threaded platform.
 
-To make the comparison simple, I'll wrap the `posix` library again, but this time in the continuable style.  The same could be done with regular promises, but the code would be more complicated.
+To make the comparison simple, I'll wrap the `posix` library again, but this time in the continuable style.  These examples could be written using vanilla promises, but the code would be [even longer][].
 
     // Async api wrapper around some Posix commands
     // Uses continuable style for cleaner syntax
@@ -67,10 +67,10 @@ To make the comparison simple, I'll wrap the `posix` library again, but this tim
       }}
     }
 
-And an initial implementation of our `scandir` function would be this:
+And an initial implementation of our `loaddir` function would be this:
 
     // Here is the async version without helpers
-    function scandir1(path) { return function (next) {
+    function loaddir1(path) { return function (next) {
       posix.readdir(path)(function (filenames) {
         var realfiles = [];
         var count = filenames.length;
@@ -143,7 +143,7 @@ Since map and filter are common tasks in programming and that's what we really w
 Now with our helpers, let's try the async version again to see how much shorter we can make it:
 
     // Here is the async version with filter and map helpers:
-    function scandir2(path) { return function (next) {
+    function loaddir2(path) { return function (next) {
       posix.readdir(path)(function (filenames) {
         filter(filenames, function (filename, callback) {
           posix.stat(filename)(function (stat) {
@@ -184,10 +184,10 @@ Often, and this is an example of this, you will want to filter and then map on t
 
 I found it neat that this combined helper is about as small as the smaller of the two separate helpers.  That's very cool.
 
-Now with this combined helper, let's write a truly parallel `scandir` function.
+Now with this combined helper, let's write a truly parallel `loaddir` function.
 
     // Here is the async version with a combined filter and map helper:
-    function scandir3(path) { return function (next) {
+    function loaddir3(path) { return function (next) {
       posix.readdir(path)(function (filenames) {
         filter_map(filenames, function (filename, callback) {
           posix.stat(filename)(function (stat) {
@@ -209,8 +209,9 @@ Here we will issue all the `stat` commands at once, and as they come back, check
 
 While it is a tradeoff in code complexity vs performance, with a little thinking and some good libraries, we can make async programming manageable enough to be understandable while taking full advantage of the parallel nature of non-blocking IO in node.
 
-Full runnable source code can be found on [github][].  These examples were executed on node version `v0.1.28-68-gdc01587`.
+Full runnable source code can be found on [github][].  These examples were tested on node version `v0.1.28-68-gdc01587`.
 
+[even longer]: http://github.com/creationix/howtonode.org/blob/master/articles/control-flow-part-iii/program.js#L84
 [github]: http://github.com/creationix/howtonode.org/tree/master/articles/control-flow-part-iii/
 [promises]: http://nodejs.org/api.html#_tt_events_promise_tt
 [Search the mailing list]: http://groups.google.com/group/nodejs/search?group=nodejs&q=wait

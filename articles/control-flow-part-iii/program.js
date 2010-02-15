@@ -5,17 +5,17 @@ process.mixin(require('./helpers'));
 // Read contents of files
 
 // Here is the sync version:
-function scandir_sync(path) {
+function loaddir_sync(path) {
  return posix_sync.readdir(path).filter(function (filename) {
    return posix_sync.stat(filename).isFile();
  }).map(function (filename) {
    return [filename, posix_sync.cat(filename)];
  });
 }
-debug(scandir_sync(__dirname));
+debug(loaddir_sync(__dirname));
 
 // Here is the async version without helpers
-function scandir1(path) { return function (next) {
+function loaddir1(path) { return function (next) {
   posix.readdir(path)(function (filenames) {
     var realfiles = [];
     var count = filenames.length;
@@ -40,11 +40,11 @@ function scandir1(path) { return function (next) {
     });
   });
 }}
-scandir1(__dirname)(debug);
+loaddir1(__dirname)(debug);
 
 
 // Here is the async version with filter and map helpers:
-function scandir2(path) { return function (next) {
+function loaddir2(path) { return function (next) {
   posix.readdir(path)(function (filenames) {
     filter(filenames, function (filename, callback) {
       posix.stat(filename)(function (stat) {
@@ -59,11 +59,11 @@ function scandir2(path) { return function (next) {
     });
   });
 }}
-scandir2(__dirname)(debug);
+loaddir2(__dirname)(debug);
 
 
 // Here is the async version with a combined filter and map helper:
-function scandir3(path) { return function (next) {
+function loaddir3(path) { return function (next) {
   posix.readdir(path)(function (filenames) {
     filter_map(filenames, function (filename, callback) {
       posix.stat(filename)(function (stat) {
@@ -78,5 +78,36 @@ function scandir3(path) { return function (next) {
     })(next);
   });
 }}
-scandir3(__dirname)(debug);
+loaddir3(__dirname)(debug);
+
+// Sample using vanilla promises for comparison
+function loaddir4(path) {
+  var promise = new process.Promise();
+  Posix.readdir(path).addCallback(function (filenames) {
+    var realfiles = [];
+    var count = filenames.length;
+    filenames.forEach(function (filename) {
+      Posix.stat(filename).addCallback(function (stat) {
+        if (stat.isFile()) {
+          realfiles.push(filename);
+        }
+        count--;
+        if (count <=0) {
+          var results = [];
+          realfiles.forEach(function (filename) {
+            Posix.cat(filename).addCallback(function (data) {
+              results.push([filename, data]);
+              if (results.length === realfiles.length) {
+                promise.emitSuccess(results);
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+  return promise;
+}
+loaddir4(__dirname).addCallback(debug);
+
 

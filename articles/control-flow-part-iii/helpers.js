@@ -3,6 +3,9 @@ var Sys = require('sys'),
 
 module.exports = {
 
+  // Pass through native Posix for promise example
+  Posix: Posix,
+
   // Sync api wrapper around some Posix commands
   // Sells it soul to `wait`.
   posix_sync: {
