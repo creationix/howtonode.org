@@ -8,21 +8,22 @@ The technology stack that we'll be using will be [node][] + [express][] + [mongo
 
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
-# Getting Started / Pre-Requisites
+## Getting Started / Pre-Requisites
 Before we start with the code it's important to make sure you have [git][] installed, an up-to-date installation of [node][] and a running [mongodb][] server on your development environment.
 
-## git
+**git**     
 Whilst not a mandatory requirement I will be using [git][] to pull down code from various location.  Sadly the installation, configuration and setup of [git][] is way beyond the scope of this article and I recommend reading up on that before embarking on this article if you're not familiar with [git][]! 
 
-## mongoDB
+**mongoDB**     
 Installation is as simple as downloading the [installer from here][].  For this tutorial I've been using v1.2.2 on MacOSX but any recent version should work. Once installed you can just execute 'mongod' to have a local instance up and running.
 
-## node.js    
+**node.js**     
 I'll assume that you already have an installed version of node.js (why else would you be looking at a how-to?! ;) )  However as [node][] is subject to a reasonably high rate of change for the purposes of this article everything has been written to run against the ['v0.1.28' tag][]
   
-# Getting hold of express     
+## Getting hold of express     
 To create our 'blog' we'll work with the default express repository locally, to do this please perform the following commands in your console:
 
+    #!sh
     git clone git://github.com/visionmedia/express.git
     cd express
     git checkout 347c8847b0a8d9322c5555fa809b6213f49cd187 -b our_blog_branch
@@ -31,20 +32,23 @@ To create our 'blog' we'll work with the default express repository locally, to 
     
 The checkout is just to make sure we get a version of express that works with the previously mentioned tag of [node][]!  Before we go any further lets just test that your node installation is fully working.  To do this execute the following command inside the express folder:
 
+    #!sh
     node examples/chat/app.js 
 
 If everything is going well then you should in your console see the following:
 
     Express started at http://localhost:3000/ in development mode
 
-If you now 'browse' to [here][] with your web browser you will find a fully working long-polling / AJAX example chat server, exciting n'est pas? 
+If you now 'browse' to [localhost][] with your web browser you will find a fully working long-polling / AJAX example chat server, exciting n'est pas? 
 
 If you now kill the running node process that we started a moment ago we can begin with the process of writing our blog, let the good times (blog)roll.
 
-# Defining our application #
+## Defining our application ##
+
 We're going to build a very simple blogging application (perhaps we'll build on this in a future article?)  It is going to support the reading of blog articles, posting of blog articles and commenting on them.  There will be no security, authentication or authorisation.  Hopefully this will demonstrate enough of the technology stack to let you move forward quickly.
 
-## The data types ##
+### The data types ###
+
 Because we're dealing with a [document orientated][] database rather than a [relational][] database we don't need to worry about what 'tables' we will need to persist this data to the database or the relationships between records within those tables.  In fact we only have 1 datatype in the application at all, the article:
 
     {   _id: 0,
@@ -62,7 +66,8 @@ There are plenty of other document configurations we could've gone for but this 
 
 > It should be noted that one oft-reported issue with mongoDB is the size of the data on the disk.  As we're dealing with a [document orientated][] database each and every record stores all the field-names with the data so there is no re-use.  This means that it can often be more space-efficient to have properties such as 't', or 'b' rather than 'title' or 'body', however for fear of confusion I would avoid this unless truly required!
 
-## The operations ##
+### The operations ###
+
 There is a discrete set of operations (or things we want to achieve) that fall within the scope of this article they are (in the order that we will tackle them):
 
  * Show an individual article and its' comments.
@@ -70,9 +75,11 @@ There is a discrete set of operations (or things we want to achieve) that fall w
  * Show the list of all the articles.
  * Comment on an article
  
-# Building the application #
+Now that we know what we're trying to achieve lets try and achieve that goal in a step-by-step fashion.
 
-## From acorns do great big oak trees grow (well alright, fairly small blogging apps can grow!) ##
+### From small acorns do giant oak trees grow ###
+
+_Well alright, fairly small blogging apps can grow!_
 
 In express a 'normal' application consists of a call to 'configure', followed by a series of method calls that declare 'routes' and what happens to requests that match this route followed by a call to 'run'.
 
@@ -102,16 +109,18 @@ The above code declares a single 'route' that operates on 'GET' requests to the 
 
 Convention seems to be to place this code into a file named 'app.js' at the root of your express folder.  If you do this and then execute it:
 
+    #!sh
     node app.js
     
-When you browse to [here][] you should see that old favourite 'Hello World!'.  This file is the starting point of the blogging application and we shall build on it now :)
+When you browse to [localhost][] you should see that old favourite 'Hello World!'.  This file is the starting point of the blogging application and we shall build on it now :)
 
 ## A chapter in which we build on our humble beginnings  ##
+
 Now that we have a fully working web server we should probably look at doing something with it.  In this section we will learn how to use haml to render our data and create forms to post the data back to the server, initially we will store this in memory.
 
 The layout of express applications is fairly familiar and is usually of the form:
 
-### Folder structure of the application ###
+**Folder structure of the application**
 
     express                     /* The cloned express folder */
       |---- app.js              /* The application code itself */
@@ -123,12 +132,14 @@ The layout of express applications is fairly familiar and is usually of the form
 
 Please take a moment to create the folders that you require, these will need creating:
 
+    #!sh
     mkdir public
     mkdir public/javascript
     mkdir public/images
     mkdir views
     
-### Of providers and data ###
+###Of providers and data###
+
 Because the intention of this article is to be able to show how one might use a persistent approach in their node.js we shall start with an abstraction: provider.  These 'providers' are going to responsible for returning and updating the data.  Initially we'll create a dummy in-memory version just to bootstrap us up and running, but then we'll move over to using a real persistence layer without changing the calling code. 
 
 #### articleprovider-memory.js ####
@@ -212,12 +223,14 @@ If the above code is saved to a file named articleprovider-memory.js in the same
 
     run()
 
-If the app is re-run and you browse to [here][] you will see the object structure of 3 blog posts that the memory provider starts off with, magic :)
+If the app is re-run and you browse to [localhost][] you will see the object structure of 3 blog posts that the memory provider starts off with, magic :)
 
-### A view to a kill ###
+###A view to a kill###
+
 Now we have a way of reading and storing data (patience, memory is only the beginning!) we'll want a way of displaying and creating the data properly.  Initially we'll start by just providing an index view of all the blog articles.  To do this create the following two files in your views sub-directory (be very careful about the indentation, that first lines should be up against the left-hand margin!):
 
 #### layout.haml.html ####
+    #!haml
     %html
       %head
         %title= title
@@ -225,6 +238,7 @@ Now we have a way of reading and storing data (patience, memory is only the begi
         #wrapper= body
     
 #### blogs_index.haml.html ####
+    #!haml
     %h1= title
     #articles
       :each article in articles
@@ -247,7 +261,7 @@ Next change your get('/') routing rule in your app.js to be as follows:
         });
     })
 
-Now you should be able to restart the server and browser to [here][]. Et voila! We'll not win any design awards, but you should now see a list of 3 very 'functional' blog postings (don't worry we'll come back to the style in a moment.)
+Now you should be able to restart the server and browser to [localhost][]. Et voila! We'll not win any design awards, but you should now see a list of 3 very 'functional' blog postings (don't worry we'll come back to the style in a moment.)
 
 There are two important things to note that we've just done;
 
@@ -257,7 +271,9 @@ The second is the usage of a 'layout' [haml-js][] file 'layout.haml.html'.  This
 
 As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet, add a new rule to service this request and add a sass template to the views folder in order to generate the css:
 
-#### layout.haml.html #### 
+####layout.haml.html####
+
+    #!haml
     %html
       %head
         %title= title
@@ -272,6 +288,8 @@ Add a new route to app.js
     })
     
 #### style.sass.css ####
+
+    #!haml
     body
       :font-family "Helvetica Neue", "Lucida Grande", "Arial"
       :font-size 13px
@@ -301,12 +319,15 @@ Add a new route to app.js
         .body
           :background-color #ffa
 
-Again after restarting your app and browsing to [here][] you should see the posts, with a little more style (grantedly not much more!)
+Again after restarting your app and browsing to [localhost][] you should see the posts, with a little more style (grantedly not much more!)
 
-### Great, so how do I make my first post ??! ###
+###Great, so how do I make my first post?###
+
 Now we can view a list of blog posts it would be nice to have a simple form for making new posts and being re-directed back to the new list.  To achieve this we'll need a new view (to let us create a post) and two new routes (one to accept the post data, the other to return the form.)
 
 #### blog_new.haml.html ####
+
+    #!haml
     %h1= title
     %form{ method: 'post' }
       %div
@@ -343,11 +364,13 @@ Upon restarting your app if you browse to [new post][] you will be able to creat
 
 If I've lost you along the way you can get an archive of this fully working (but non-persisting) blog here: [Checkpoint 1][]
 
-## Adding permanent persistence to the mix ##
+### Adding permanent persistence to the mix ###
+
 I promised that by the end of this article we'd be persisting our data across restarts of node, I've not yet delivered on this promise but now I will ..hopefully ;) 
 
 To do this we need to install a dependency on [node-mongodb-native][] which will allow our burgeoning application to access [mongoDB][].  If we open the console up and enter the 'express' directory we created earlier we will be able to type the following commands to install the driver.
 
+    #!sh
     git submodule add git://github.com/christkv/node-mongodb-native.git lib/support/mongodb
     cd lib/support/mongodb
     git checkout a0392fb6095aefdb8889dc8a269a36ee957e27a4
@@ -355,110 +378,112 @@ To do this we need to install a dependency on [node-mongodb-native][] which will
 Now we need to replace our old memory based data provider with one thats capable of using mongodb, this will also require a (minor) change to app.js to use the replacement provider.
 
 #### articleprovider-mongodb.js ####
-require.paths.unshift("./lib/support/mongodb/lib");   
-var mongo = require("mongodb/db");
-process.mixin(mongo, require('mongodb/connection'));
-var ObjectID= require('mongodb/bson/bson').ObjectID;
 
-ArticleProvider = function(host, port) {
-    this.connected = false;
-    this.db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {auto_reconnect: true}, {})); 
-}
+    require.paths.unshift("./lib/support/mongodb/lib");   
+    var mongo = require("mongodb/db");
+    process.mixin(mongo, require('mongodb/connection'));
+    var ObjectID= require('mongodb/bson/bson').ObjectID;
+
+    ArticleProvider = function(host, port) {
+        this.connected = false;
+        this.db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {auto_reconnect: true}, {})); 
+    }
 
 
-ArticleProvider.prototype.findAll = function() {
-    var promise= new process.Promise();
-    this.db.open(function(db) {
-        db.collection(function(article_collection) { 
-            article_collection.find(function(cursor) { 
-                cursor.toArray(function(results) {
-                    promise.emitSuccess( results ); 
-                });
-            });
-        }, 'articles');
-    });
-    return promise;
-};
-
-ArticleProvider.prototype.findById = function(id) {
-    var promise= new process.Promise();
+    ArticleProvider.prototype.findAll = function() {
+        var promise= new process.Promise();
         this.db.open(function(db) {
             db.collection(function(article_collection) { 
-                article_collection.findOne(function(result) {
-                    promise.emitSuccess(result);
-                }, {_id: ObjectID.createFromHexString(id)});
+                article_collection.find(function(cursor) { 
+                    cursor.toArray(function(results) {
+                        promise.emitSuccess( results ); 
+                    });
+                });
             }, 'articles');
         });
-    return promise;
-};    
+        return promise;
+    };
 
-ArticleProvider.prototype.save = function(articles) {
-    var promise= new process.Promise()
-    this.db.open(function(db) {
-        db.collection(function(article_collection) { 
-            article_collection.insert(articles, function() {
-                promise.emitSuccess();
+    ArticleProvider.prototype.findById = function(id) {
+        var promise= new process.Promise();
+            this.db.open(function(db) {
+                db.collection(function(article_collection) { 
+                    article_collection.findOne(function(result) {
+                        promise.emitSuccess(result);
+                    }, {_id: ObjectID.createFromHexString(id)});
+                }, 'articles');
             });
-        }, 'articles');
-    });
-                                
-    return promise;
-};  
+        return promise;
+    };    
 
-exports.ArticleProvider= ArticleProvider;  
+    ArticleProvider.prototype.save = function(articles) {
+        var promise= new process.Promise()
+        this.db.open(function(db) {
+            db.collection(function(article_collection) { 
+                article_collection.insert(articles, function() {
+                    promise.emitSuccess();
+                });
+            }, 'articles');
+        });
+                                
+        return promise;
+    };  
+
+    exports.ArticleProvider= ArticleProvider;  
 
 #### app.js ####
-require.paths.unshift('lib')
-require('express')
-require('express/plugins')
-var ArticleProvider= require('./articleprovider-mongodb').ArticleProvider;
 
-configure(function(){
-  use(MethodOverride)
-  use(ContentLength)
-  use(CommonLogger)
-  set('root', __dirname)
-})                                             
+    require.paths.unshift('lib')
+    require('express')
+    require('express/plugins')
+    var ArticleProvider= require('./articleprovider-mongodb').ArticleProvider;
 
-function getArticleProvider() {
-    return new ArticleProvider('localhost', 27017);
-}
+    configure(function(){
+      use(MethodOverride)
+      use(ContentLength)
+      use(CommonLogger)
+      set('root', __dirname)
+    })                                             
+
+    function getArticleProvider() {
+        return new ArticleProvider('localhost', 27017);
+    }
             
-get('/', function(){
-    var self= this;
-     getArticleProvider().findAll().addCallback(function(docs) {      
-        self.render('blogs_index.haml.html', {
+    get('/', function(){
+        var self= this;
+         getArticleProvider().findAll().addCallback(function(docs) {      
+            self.render('blogs_index.haml.html', {
+              locals: {
+                title: 'Blog',
+                articles: docs
+              }
+            })    
+        });
+    })
+
+    get('/blog/new', function(){          
+        this.render('blog_new.haml.html', {
           locals: {
-            title: 'Blog',
-            articles: docs
+            title: 'New Post'
           }
         })    
-    });
-})
+    }) 
 
-get('/blog/new', function(){          
-    this.render('blog_new.haml.html', {
-      locals: {
-        title: 'New Post'
-      }
-    })    
-}) 
+    post('/blog/new', function(){ 
+        var self= this;
+        getArticleProvider().save({
+            title: this.param('title'), 
+            body: this.param('body')
+        }).addCallback(function(docs) {         
+            self.redirect('/')
+        });    
+    })
 
-post('/blog/new', function(){ 
-    var self= this;
-    getArticleProvider().save({
-        title: this.param('title'), 
-        body: this.param('body')
-    }).addCallback(function(docs) {         
-        self.redirect('/')
-    });    
-})
+    get('/*.css', function(file){
+      this.render(file + '.sass.css', { layout: false })
+    })
 
-get('/*.css', function(file){
-  this.render(file + '.sass.css', { layout: false })
-})
-
-run()
+    run()
 
 As you can see we had to make only the smallest of changes to move away from a temporary in-memory JSON store to the fully persistent and highly scalable mongoDB store 
 
@@ -470,7 +495,7 @@ As you can see we had to make only the smallest of changes to move away from a t
 [mongoDB]: http://www.mongodb.org
 [installer from here]: http://www.mongodb.org/display/DOCS/Downloads
 ['v0.1.28' tag]: http://github.com/ry/node/tree/v0.1.28
-[here]: http://localhost:3000
+[localhost]: http://localhost:3000
 [new post]: http://localhost:3000/blog/new 
 [document orientated]: http://en.wikipedia.org/wiki/Document-oriented_database
 [relational]: http://en.wikipedia.org/wiki/Relational_database_management_system
