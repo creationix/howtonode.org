@@ -122,13 +122,13 @@ The layout of express applications is fairly familiar and is usually of the form
 
 **Folder structure of the application**
 
-    express                     /* The cloned express folder */
-      |---- app.js              /* The application code itself */
-      |---- lib                 /* Third party dependencies */
-      |---- public              /* Publicly accessible resources */
-      |       |----- images
-      |       |----- javascript
-      |----- views              /* The templates for the 'views' */
+    express                 /* The cloned express folder     */
+    |-- app.js              /* The application code itself   */
+    |-- lib                 /* Third party dependencies      */
+    |-- public              /* Publicly accessible resources */
+    |   |-- images
+    |   `-- javascript
+    `-- views               /* The templates for the 'views' */
 
 Please take a moment to create the folders that you require, these will need creating:
 
