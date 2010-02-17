@@ -55,7 +55,7 @@ Because we're dealing with a [document orientated][] database rather than a [rel
         title: '', 
         body: '', 
         comments: [{
-            author: '',
+            person: '',
             comment: '',
             created_at: new Date()_
         }],
@@ -70,10 +70,10 @@ There are plenty of other document configurations we could've gone for but this 
 
 There is a discrete set of operations (or things we want to achieve) that fall within the scope of this article they are (in the order that we will tackle them):
 
- * Show an individual article and its' comments.
- * Create a new article.
- * Show the list of all the articles.
- * Comment on an article
+1. Create a new article.
+2. Show the list of all the articles.
+3. Show an individual article and its' comments.
+4. Comment on an article
  
 Now that we know what we're trying to achieve lets try and achieve that goal in a step-by-step fashion.
 
@@ -229,7 +229,7 @@ If the app is re-run and you browse to [localhost][] you will see the object str
 
 Now we have a way of reading and storing data (patience, memory is only the beginning!) we'll want a way of displaying and creating the data properly.  Initially we'll start by just providing an index view of all the blog articles.  To do this create the following two files in your views sub-directory (be very careful about the indentation, that first lines should be up against the left-hand margin!):
 
-#### layout.haml.html ####
+#### views/layout.haml.html ####
     #!haml
     %html
       %head
@@ -237,7 +237,7 @@ Now we have a way of reading and storing data (patience, memory is only the begi
       %body
         #wrapper= body
     
-#### blogs_index.haml.html ####
+#### views/blogs_index.haml.html ####
     #!haml
     %h1= title
     #articles
@@ -271,7 +271,7 @@ The second is the usage of a 'layout' [haml-js][] file 'layout.haml.html'.  This
 
 As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet, add a new rule to service this request and add a sass template to the views folder in order to generate the css:
 
-####layout.haml.html####
+####views/layout.haml.html####
 
     #!haml
     %html
@@ -287,7 +287,7 @@ Add a new route to app.js
       this.render(file + '.sass.css', { layout: false })
     })
     
-#### style.sass.css ####
+####views/style.sass.css ####
 
     #!haml
     body
@@ -321,11 +321,17 @@ Add a new route to app.js
 
 Again after restarting your app and browsing to [localhost][] you should see the posts, with a little more style (grantedly not much more!)
 
+A couple of things to notice here:
+
+1. We setup a route to handle the request for the css as a regular expression match.  We then used the matched url segment to load a sass file from  the available views and dynamically converts the sass into css for us on the fly.  In a production environment there are configuration options that can be passed to the 'configure' method to make sure these views are cached but during development its rather useful to be able to change your sass on the fly :) 
+2. As express is treating the sass to css rendering in exactly the same manner as the html to html rendering we need to surprise the default 'layout' behaviour as there is no meaningful layout here for our sass.
+
+
 ###Great, so how do I make my first post?###
 
 Now we can view a list of blog posts it would be nice to have a simple form for making new posts and being re-directed back to the new list.  To achieve this we'll need a new view (to let us create a post) and two new routes (one to accept the post data, the other to return the form.)
 
-#### blog_new.haml.html ####
+####views/blog_new.haml.html ####
 
     #!haml
     %h1= title
@@ -419,15 +425,26 @@ Now we need to replace our old memory based data provider with one thats capable
     ArticleProvider.prototype.save = function(articles) {
         var promise= new process.Promise()
         this.db.open(function(db) {
-            db.collection(function(article_collection) { 
+            db.collection(function(article_collection) {
+                if( typeof(articles.length)=="undefined") articles= [articles];
+
+                for( var i=0;i< articles.length;i++ ) {
+                    article= articles[i];
+                    article.created_at= new Date(); 
+                    if( article.comments === undefined ) article.comments= [];
+                    for(var j=0;j< article.comments.length; j++) {
+                        article.comments[j].created_at= new Date();
+                    }
+                }                                      
+
                 article_collection.insert(articles, function() {
                     promise.emitSuccess();
                 });
             }, 'articles');
         });
-                                
+
         return promise;
-    };  
+    }; 
 
     exports.ArticleProvider= ArticleProvider;  
 
@@ -487,7 +504,180 @@ Now we need to replace our old memory based data provider with one thats capable
 
 As you can see we had to make only the smallest of changes to move away from a temporary in-memory JSON store to the fully persistent and highly scalable mongoDB store 
 
-.... to be continued when I wake up :( 
+## Adding comments 
+
+We're about half way through the set of (4) operations we defined earlier but you'll be pleased to know that we've completed the majority of the work, everything from here on in is just minor improvements :)
+
+Just to re-cap we've done;
+
+* Create a new article. 
+* Show the list of all the articles.
+
+and we still need to do;
+
+* Show an individual article and its' comments. - 
+* Comment on an article.
+
+So, lets crack on!
+
+### Showing an individual article and its' comments
+
+Displaying an individual article isn't much different to displaying one of the articles within the list of articles that we've already done, so we'll pinch some of that template.  In addition to displaying the title and body though we will also want to render all the existing comments and provide a form for readers to add their own comment.
+
+We'll also need a new route to allow the article to be referenced by a URL and we'll need to tweak the rendered list so our titles on the list can now be hyperlinks to the real article's own page.
+
+> One thing that we should touch on here is [surrogate][] vs [natural][] keys. It seems that with [document orientated][] databases it is encouraged where possible to use [natural][] keys however in this case we've not got any sensible one to use (_unless you fancy title to be unique enough_.)  Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays.  These 'numbers' don't really translate to well into html so we need to use some utility methods on the 'ObjectId' class to translate to and from a hex-string into the id that can located on the database.
+
+#### views/blogs_index.haml.html ####
+
+    %h1= title
+    #articles
+      :each article in articles
+        %div.article             
+          %div.created_at= article.created_at
+          %div.title
+            %a{href:"/blog/"+article._id.toHexString()}= article.title
+          %div.body= article.body   
+
+#### views/blog_show.haml.html ####
+
+      %h1= title
+      %div.article             
+        %div.created_at= article.created_at
+        %div.title= article.title
+        %div.body= article.body
+        :each comment in article.comments
+          %div.comment
+            %div.person= comment.person
+            %div.comment= comment.comment
+        %div
+          %form{ method: 'post', action:"/blog/addComment" }
+            %input{type: "hidden", name:"_id", value: article._id.toHexString()}
+            %div
+              %span Author  :
+              %input{ type: 'text', name: 'person', id: 'addCommentPerson' }
+            %div
+              %span Comment :
+              %textarea{name: 'comment', rows: 5, id: 'addCommentComment' }
+            %div#editArticleSubmit
+              %input{ type: 'submit', value: 'Send' }
+
+#### views/style.sass.css ####
+
+    body
+      :font-family "Helvetica Neue", "Lucida Grande", "Arial"
+      :font-size 13px
+      :text-align center
+      =text-stroke 1px rgba(255, 255, 255, 0.1)
+      :color #555  
+    h1, h2
+      :margin 0
+      :font-size 22px
+      :color #343434
+    h1
+      :text-shadow 1px 2px 2px #ddd
+      :font-size 60px
+    #articles
+      :text-align left
+      :margin-left auto
+      :margin-right auto
+      :width 320px
+      .article
+        :margin 20px
+        .created_at
+          :display none
+        .title
+          :font-weight bold
+          :text-decoration underline
+          :background-color #eee
+        .body
+          :background-color #ffa
+    #article
+      .created_at
+        :display none
+      input[type=text]
+        :width 490px
+        :margin-left 16px
+      input[type=button]
+        :text-align left
+        :margin-left 440px
+      textarea
+        :width 490px
+        :height 90px  
+
+We also need to add a new rule to app.js for serving these view requests:
+
+#### app.js ####
+
+    get('/blog/*', function(id){
+        var self= this;
+         getArticleProvider().findById(id).addCallback(function(article) {
+                   self.render('blog_show.haml.html', {
+                     locals: {
+                       title: article.title,
+                       article:article
+                     }
+                })
+        });    
+    })
+    
+Now if you browse to [localhost][] the previous blog articles you added (click [new post] to create a new one if you have none) should now be visible (apologies for the lack of style once again!)  The titles of these articles are now hyperlinks to individual pages that display the article in all its' original glory comments and all (but alas no comments have been added so far.)
+
+### Comment on an article ###
+
+Commenting on an article is a simple extension upon everything we've already gone through, the only minor complexity is in the style of 'update' we use on the back-end. 
+
+Transactions are largely non-existent in [mongoDB][] but there are several approaches to achieving atomicity in certain scenarios.  For comment addition we're going to use a '$push' update that allows us to add an element to the end of an array property of an existing document atomically    (which is absolutely perfect for our needs!)  
+
+sAll the views/stylesheet changes we need were made in the last set of changes but we need to add in a new route to handle the POST and a method to our provider to make the change on the persistent store:
+
+#### app.js ####
+
+    post('/blog/addComment', function() {
+        var self= this;
+        getArticleProvider().addCommentToArticle(this.param('_id'), {
+            person: self.param('person'),
+            comment: self.param('comment'),
+            created_at: new Date()
+        }).addCallback(function(docs) {         
+            self.redirect('/blog/' + self.param('_id'))
+        });    
+    })
+    
+#### articleprovider-mongodb.js ####
+
+    ArticleProvider.prototype.addCommentToArticle= function(articleId, comment) {
+        var promise= new process.Promise();
+        this.db.open(function(db) {
+            db.collection(function(article_collection) {
+                article_collection.update( function(article){
+                                               promise.emitSuccess();
+                                            },
+                                           {_id: ObjectID.createFromHexString(articleId)}, 
+                                           {"$push": {comments: comment}});
+            }, 'articles');
+        });
+        return promise;
+    };    
+
+After restarting and browsing to a blog article (any one will do) you should now be able to add comments to your articles ad-infinitum.  How easy was that!
+
+If you've made it to this point without any issues then congratulations! Otherwise this [Checkpoint 2][] archive should contain all the code as I have it now! 
+
+## Where next ##
+
+Clearly this blogging application is very rough and ready (there is no style to speak of for starters) but there are several clear directions that it could take, depending on feedback I'll either leave these as exercises for the reader or provide additional tutorials over time:
+
+ * Security, authentication et al.
+ * Administrative interface
+ * Markup language support (HTML, Markdown etc. in the posts and comments)
+ * Decent styling <g>
+
+I hope this helps at least someone out there get to grips with how you might start actually writing web apps with [node][], [express][] and [mongoDB][].  
+
+Good luck ! :) 
+
+__Fin__.
 
 [git]: http://git-scm.com/
 [node]: http://nodejs.org
@@ -502,4 +692,7 @@ As you can see we had to make only the smallest of changes to move away from a t
 [haml-js]: http://github.com/creationix/haml-js
 [sass.js]: http://github.com/visionmedia/sass.js 
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
-[Checkpoint 1]: 
+[surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
+[natural]: http://en.wikipedia.org/wiki/Natural_key
+[Checkpoint 1]:  
+[Checkpoint 2]:
