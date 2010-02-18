@@ -102,10 +102,11 @@ I made a simple `Combo` library the other day.  It basically wraps up the task o
     }
     Combo.prototype = {
       add: function () {
-        var self = this;
+        var self = this,
+            id = this.items;
         this.items++;
         return function () {
-          self.check(self.items - 1, arguments);
+          self.check(id, arguments);
         };
       },
       check: function (id, arguments) {
