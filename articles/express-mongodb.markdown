@@ -1,6 +1,6 @@
 Title: Blog rolling with mongoDB, express and Node.js
 Author: Ciaran Jessup
-Date: Sun Feb 14 2010 15:10:00 GMT-0000 (GMT)
+Date: Thu Feb 18 2010 21:28:42 GMT+0000 (UTC)
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].   
 
