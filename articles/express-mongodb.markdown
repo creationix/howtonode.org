@@ -1,4 +1,4 @@
-Title: Roll your own blog with mongoDB, express and Node.js
+Title: Blog rolling with mongoDB, express and Node.js
 Author: Ciaran Jessup
 Date: Sun Feb 14 2010 15:10:00 GMT-0000 (GMT)
 
@@ -368,7 +368,7 @@ Add two new routes to app.js
     
 Upon restarting your app if you browse to [new post][] you will be able to create new blog articles, awesome! Looking at the post route we can see that upon successfully saving we redirect back to the index page where all the articles are displayed.
 
-If I've lost you along the way you can get an archive of this fully working (but non-persisting) blog here: [Checkpoint 1][]
+If I've lost you along the way you can get a patch of this fully working (but non-persisting) blog here: [Checkpoint 1][].  This patch should apply cleanly to the previously described sha of express :)
 
 ### Adding permanent persistence to the mix ###
 
@@ -526,7 +526,8 @@ Displaying an individual article isn't much different to displaying one of the a
 
 We'll also need a new route to allow the article to be referenced by a URL and we'll need to tweak the rendered list so our titles on the list can now be hyperlinks to the real article's own page.
 
-> One thing that we should touch on here is [surrogate][] vs [natural][] keys. It seems that with [document orientated][] databases it is encouraged where possible to use [natural][] keys however in this case we've not got any sensible one to use (_unless you fancy title to be unique enough_.)  Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays.  These 'numbers' don't really translate to well into html so we need to use some utility methods on the 'ObjectId' class to translate to and from a hex-string into the id that can located on the database.
+> One thing that we should touch on here is [surrogate][] vs [natural][] keys. It seems that with [document orientated][] databases it is encouraged where possible to use [natural][] keys however in this case we've not got any sensible one to use (_unless you fancy title to be unique enough_.)  
+Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays.  These 'numbers' don't really translate to well into html so we need to use some utility methods on the 'ObjectId' class to translate to and from a hex-string into the id that can located on the database.
 
 #### views/blogs_index.haml.html ####
 
@@ -662,16 +663,17 @@ sAll the views/stylesheet changes we need were made in the last set of changes b
 
 After restarting and browsing to a blog article (any one will do) you should now be able to add comments to your articles ad-infinitum.  How easy was that!
 
-If you've made it to this point without any issues then congratulations! Otherwise this [Checkpoint 2][] archive should contain all the code as I have it now! 
+If you've made it to this point without any issues then congratulations! Otherwise this [Checkpoint 2][] patch should contain all the code as I have it now! 
 
 ## Where next ##
 
 Clearly this blogging application is very rough and ready (there is no style to speak of for starters) but there are several clear directions that it could take, depending on feedback I'll either leave these as exercises for the reader or provide additional tutorials over time:
 
- * Security, authentication et al.
- * Administrative interface
  * Markup language support (HTML, Markdown etc. in the posts and comments)
- * Decent styling <g>
+ * Security, authentication etc.
+ * An administrative interface
+ * Multiple blog-support.
+ * Decent styling <g>  (inc. themes)
 
 I hope this helps at least someone out there get to grips with how you might start actually writing web apps with [node][], [express][] and [mongoDB][].  
 
@@ -694,5 +696,5 @@ __Fin__.
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
 [surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
 [natural]: http://en.wikipedia.org/wiki/Natural_key
-[Checkpoint 1]:  
-[Checkpoint 2]:
+[Checkpoint 1]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/0001-Checkpoint-1.patch 
+[Checkpoint 2]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/0001-Checkpoint-2.patch 
