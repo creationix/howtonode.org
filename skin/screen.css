@@ -52,7 +52,7 @@ dl dd { margin: 0 0 0 40px; padding: 0px; -moz-padding-start: 0px; }
 
 pre, code { font-family: "Bitstream Vera Sans Mono", "Courier",monospace; }
 
-pre { margin: 24px 0 30px -30px; padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; }
+pre { margin: 24px 0 30px -30px; padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; white-space: pre; white-space: pre-line!important;}
 
 
 img { margin: 12px 0 12px; }
