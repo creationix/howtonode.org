@@ -93,5 +93,5 @@ The page count problems are basically a simple analysis of text with some accoun
 
 It's a little longer then my shell script. On the other hand it is easier to read and with a little modification I can embed it as a web service or put it into a web page.
 
-pagecount reports the plain text version of this essay is 672 words or 1.92 pages including the source code examples.
+pagecount reports the plain text version of this essay is 656 words or 1.87 pages including the source code examples.
 
