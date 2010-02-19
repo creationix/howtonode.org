@@ -1,6 +1,6 @@
 Title: Blog rolling with mongoDB, express and Node.js
 Author: Ciaran Jessup
-Date: Sun Feb 14 2010 15:10:00 GMT-0000 (GMT)
+Date: Fri Feb 19 2010 23:05:00 GMT-0000 (GMT)
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].   
 
@@ -265,9 +265,11 @@ Now you should be able to restart the server and browser to [localhost][]. Et vo
 
 There are two important things to note that we've just done;
 
-The first is the change to our application's routing rules.  What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [haml-js][] file `blogs_index.haml.html`.
+The first is the change to our application's routing rules.  What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [haml-js][] template `blogs_index.haml.html`. 
 
 The second is the usage of a 'layout' [haml-js][] file `layout.haml.html`.  This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
+
+> If you're familiar with  [Haml][] then you may want to skip this block, otherwise please read-on :)   [Haml][] is yet-another templating language, however this one is driven by the rule that 'Markup should be beautiful'.  It provides a lightweight syntax for declaring markup with a bare minimum of typed characters. [haml-js][] is a server-side JavaScript partial/mostly-complete implementation of [Haml][].  Reading a [haml-js][] template is simple.  The hierarchy of elements is expressed as indentation on the left hand-side; that is everything that starts in a given column shares the same parent.  Each line of [Haml][] represents either a new element in the (eventual) HTML document or a function within [Haml][] (which offers conditions and loops etc.) Effectively [haml-js][] takes a JSON object and binds it to any `literal` text in the [haml-js][] template, applies the rules that define [Haml][] and then processes the resulting bag of stuff to produce a well-formed and valid HTML document of the specified DOCTYPE. (Yay!)
 
 As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet, add a new rule to service this request and add a Sass template to the `views` folder in order to generate the css:
 
@@ -325,6 +327,8 @@ A couple of things to notice here:
 
 1. We setup a route to handle the request for the css as a regular expression match.  We then used the matched url segment to load a Sass file from  the available views and `express` dynamically converts the Sass into CSS for us on the fly.  In a production environment there are configuration options that can be passed to the `configure` method to make sure these views are cached but during development its rather useful to be able to change your Sass on the fly :) 
 2. As express is treating the sass to CSS rendering in exactly the same manner as the Haml to HTML rendering we need to suppress the default `layout` behaviour as there is no meaningful layout here for our Sass.
+
+> Sass is to CSS as Haml is to HTML.  However reading Sass can be a little more complex as the hierarchy that is being described is really individual selectors.  Lines that start at the same column and begin with a `:` are rules, these rules are applied to the hierarchy that they're found under, for example in the above Sass example the bottom most line of Sass `:background-color #ffa` is equivalent to the CSS `#articles .article .body {background-color: #ffa;}` this equivalence is due to the position of the start of this line relative to its parent lines :) (Easy really !)
 
 
 ###Great, so how do I make my first post?###
@@ -502,7 +506,37 @@ Now we need to replace our old memory based data provider with one thats capable
 
     run()
 
-As you can see we had to make only the smallest of changes to move away from a temporary in-memory JSON store to the fully persistent and highly scalable mongoDB store 
+As you can see we had to make only the smallest of changes to move away from a temporary in-memory JSON store to the fully persistent and highly scalable mongoDB store.
+
+Let us pause for a second to take a look at one of the methods we've just written to access [mongoDB][]
+
+    ArticleProvider.prototype.findById = function(id) {
+        var promise= new process.Promise();
+            this.db.open(function(db) {
+                db.collection(function(article_collection) { 
+                    article_collection.findOne(function(result) {
+                        promise.emitSuccess(result);
+                    }, {_id: ObjectID.createFromHexString(id)});
+                }, 'articles');
+            });
+        return promise;
+    };
+
+It is perhaps not immediately obvious what is happening here,  as there are a *lot* of different things going on <g>. I'll try to describe each line:
+    
+1.  Declares the `findById` method on the provider's `prototype`.  This method is going to take in one argument the `id` of the article we wish to retrieve and it is going to return a promise.  (A promise is a data-structure that exists in versions of [node][] prior to 0.1.30, it allows for handling synchronous and asynchronous events equivalently in the calling code.)
+2. Creates the promise that will be returned to the calling code
+3. Opens the [mongoDB][] connection asynchronously and passes in a callback function that will be executed (and passed a reference to this connection) once it has been opened.
+4. In [mongoDB][] there are no tables as such (hence schema-less) but there are `collections`.  A `collection` seems to be a logical grouping of similar documents, but there appears to be no real constraint on what types of document is put in these `collections`.  For our purpose we will have a single `collection` called `articles`.  By calling `collection` on the `db` object and passing in our collection name `articles` and a callback to deal with the response mongoDb will quietly create the collection from scratch and return it if there wasn't a collection of that name already or it will just return a reference to an existing connection.  (This behaviour can actually be controlled by configuring [mongoDB][] to be `strict`.)
+5. The `collection` type that is passed in the callback from the previous call to `db.collection(...)` exposes various methods for manipulating the data stored inside of the database.  Here we've chosen to use `findOne` which when given some criteria to search on will return the sole record that matches those criteria, but there are others such as `find` which returns a `cursor` that can be iterated over etc. 
+6. Now we have the record we searched for in the database we tell the promise we created back at the start that we're done so any associated callbacks that the promise has are executed (in our case this callback would do the page rendering.)
+7. This is the `specification` argument (think `criteria` or `WHERE clause`) used by the `findOne` method that started on line 5, here we're using the passed in `id` (which is a hexadecimal string ultimately coming from the browser so needs to be converted to the real type that our `_id` fields are being stored as.)  It basically states 'Find me the document in the collection who has a property named `_id` and a value equivalent to an `ObjectId` constructed with the passed in hexadecimal string.
+8. This is the `collection` argument (think `FROM clause`) used by the `collection` method that started on line 4.  This tells [mongoDB][] which set of documents we care about.
+9. Meh! some brackets and stuff :)
+10. Returns the promise. (The code above may or may not have executed yet, but when the calling code attaches its callback it will be notified with the results that were emitted on line 6)
+
+I hope this explains a little better what is now going on inside our new provider code.  
+    
 
 ## Adding comments 
 
@@ -527,7 +561,7 @@ Displaying an individual article isn't much different to displaying one of the a
 We'll also need a new route to allow the article to be referenced by a URL and we'll need to tweak the rendered list so our titles on the list can now be hyperlinks to the real article's own page.
 
 > One thing that we should touch on here is [surrogate][] vs [natural][] keys. It seems that with [document orientated][] databases it is encouraged where possible to use [natural][] keys however in this case we've not got any sensible one to use (_unless you fancy title to be unique enough_.)  
-Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays.  These 'numbers' don't really translate well into html so we need to use some utility methods on the `ObjectId` class to translate to and from a hex-string into the id that can located on the database.
+Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays.  These 'numbers' don't really translate well into HTML so we need to use some utility methods on the `ObjectId` class to translate to and from a hex-string into the id that can located on the database.
 
 #### views/blogs_index.haml.html ####
 
@@ -691,7 +725,8 @@ __Fin__.
 [new post]: http://localhost:3000/blog/new 
 [document orientated]: http://en.wikipedia.org/wiki/Document-oriented_database
 [relational]: http://en.wikipedia.org/wiki/Relational_database_management_system
-[haml-js]: http://github.com/creationix/haml-js
+[haml-js]: http://github.com/creationix/haml-js  
+[Haml]: http://haml-lang.com/
 [sass.js]: http://github.com/visionmedia/sass.js 
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
 [surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
