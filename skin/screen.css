@@ -80,3 +80,4 @@ button { border: 1px solid #333; background: #ccc; }
 
 blockquote p { border-left: 2px solid red; padding-left: 8px;
 margin-left: 21px; margin-right:21px; font-size:13px;}
+pre { overflow-x: auto; }
