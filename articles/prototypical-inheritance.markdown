@@ -1,4 +1,4 @@
-Title: Prototypical Inheritance
+Title: Prototypal Inheritance
 Author: Tim Caswell
 Date: Tue Feb 09 2010 13:44:09 GMT-0600 (CST)
 
@@ -6,11 +6,11 @@ In almost all modern programming languages we use the concept of Object Oriented
 
 Most languages do this with a variant OOP called Classical OOP.  This is the one you see in Java, C#, C++, PHP, Ruby, and Python.  It has the idea that classes should be separate from instances.  Classes hold behavior and instances hold data.
 
-While this is a great abstraction, I would like to experiment with other ideas.  Prototypical inheritance gets rid of the distinction between class and instance, between constructor and method.  It's just objects with inherited and local properties.
+While this is a great abstraction, I would like to experiment with other ideas.  Prototypal inheritance gets rid of the distinction between class and instance, between constructor and method.  It's just objects with inherited and local properties.
 
 ## So what does JavaScript have? ##
 
-From what I hear (I wasn't there at the time), JavaScript was initially a prototypical inheritance system.  It was super simple like the rest of the language.  But then Netscape decided to make it be more like Java and added the idea of constructors to the language. Hence pseudo classes were born.
+From what I hear (I wasn't there at the time), JavaScript was initially a prototypal inheritance system.  It was super simple like the rest of the language.  But then Netscape decided to make it be more like Java and added the idea of constructors to the language. Hence pseudo classes were born.
 
 ### Classical OOP
 
@@ -29,7 +29,7 @@ From what I hear (I wasn't there at the time), JavaScript was initially a protot
 
 Here we have a class like object `Person`.  Actually it's just a regular JavaScript function, but that's how it works, there are no real classes.  There are many ways to emulate classical OOP, but the most straightforward and the one designed into the language is this pattern.  Only functions can have prototypes and prototypes hold instance methods.  Then instances are `new` instances of the function which is now dubbed a constructor.
 
-### Prototypical OOP
+### Prototypal OOP
 
 I don't like the `new` keyword, it overloads the meaning of functions and is dangerous.  If we were to say `frank = Person("Frank")`, then `this` inside the function would now be the global `this` object, not the new instance! The constructor would be overriding all sorts of global variables inadvertently.  Also bad things happen if you `return` from a constructor function.
 
@@ -148,6 +148,6 @@ I plan on using this technique with some upcoming projects. I'm not sure what wi
 
 You can see the full source of `Object.spawn` and `Object.prototype.spawn` on [github][].
 
-[github]: http://github.com/creationix/howtonode.org/tree/master/articles/prototypical-inheritance
+[github]: http://github.com/creationix/howtonode.org/tree/master/articles/prototypal-inheritance
 [node supports it]: http://wiki.github.com/ry/node/ecma-5mozilla-features-implemented-in-v8
 [ES5]: http://www.ecma-international.org/publications/standards/Ecma-262.htm
