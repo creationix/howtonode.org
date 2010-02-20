@@ -120,7 +120,7 @@ The layout of express applications is fairly familiar and is usually of the form
 
     express                 /* The cloned express folder     */
     |-- app.js              /* The application code itself   */
-    |-- lib                 /* Third party dependencies      */
+    |-- lib                 /* Third-party dependencies      */
     |-- public              /* Publicly accessible resources */
     |   |-- images
     |   `-- javascript
