@@ -287,7 +287,7 @@ The signature of `fn` is `function fn(item, callback, errback)` or any regular c
 
 ## Using with node libraries
 
-Do has a super nifty `Do.convert` function that takes a library and converts it to use Do style continuables.  For example, if you wanted to use `fs.fileRead` and `fs.fileWrite`, then you would do this:
+Do has a super nifty `Do.convert` function that takes a library and converts it to use Do style continuables.  For example, if you wanted to use `fs.readFile` and `fs.writeFile`, then you would do this:
 
     var fs = Do.convert(require('fs'), ['readFile', 'writeFile']);
 
