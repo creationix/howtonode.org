@@ -50,9 +50,9 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
 
 ## We can `Do` better.
 
-`Do` is a library that adds higher level abstraction to continuables.  What I mean by a continuable is the following:
+`Do` is a library that adds higher level abstraction to actions and continuables.  What I mean by actions and continuables is the following:
 
-### Continuables
+### Actions and Continuables
 
     function divide(a, b) { return function (callback, errback) {
       // the timeout it to prove that we're working asynchronously
@@ -65,7 +65,7 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
       });
     }}
 
-A continuable is a function that returns a curried version of itself instead of a result directly.  The last two arguments are the callback and the errback.  So a continuable won't execute until you attach callbacks to it:
+An "action" is an async function that returns a curried version of itself (Implemented using a closure and a new function).  This curried version of the function is the "continuable."  The last two arguments are the callback and the errback.  So a continuable won't execute until you attach callbacks to it:
 
     divide(100, 10)(function (result) {
       puts("the result is " + result);
