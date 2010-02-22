@@ -22,7 +22,7 @@ Creating an async function that exports this interface is simple too [plain_call
     // Load 'fs', a built-in node library that has async functions
     var fs = require('fs');
 
-    function safe_read(filename, callback) {
+    function safeRead(filename, callback) {
       fs.readFile(filename, function (err, data) {
         if (err) {
           if (error.errno === process.ENOENT) {
@@ -39,7 +39,7 @@ Creating an async function that exports this interface is simple too [plain_call
       })
     }
 
-    safe_read(__filename, function (err, text) {
+    safeRead(__filename, function (err, text) {
       if (err) {
         throw err;
       }
@@ -55,8 +55,8 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
 ### Continuables
 
     function divide(a, b) { return function (callback, errback) {
-      // the timeout it to prove that we're working asynchronously
-      setTimeout(function () {
+      // Use nextTick to prove that we're working asynchronously
+      process.nextTick(function () {
         if (b === 0) {
           errback(new Error("Cannot divide by 0"));
         } else {
@@ -65,7 +65,7 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
       });
     }}
 
-`Do` expects async functions to not require the callback in the initial invocation, but instead return a continuable which can then be called with the `callback` and `errback`.  This is done by manually currying the function. The "continuable" is the partially applied version of the function returned by the outer function.  The body of the function won't be executed until you finish the application by attaching a callback.
+`Do` expects async functions to not require the callback in the initial invocation, but instead return a continuable which can then be called with the `callback` and `errback`.  This is done by manually currying the function. The "continuable" is the function returned by the outer function.  The body of the function won't be executed until you finish the application by attaching a callback.
 
     divide(100, 10)(function (result) {
       puts("the result is " + result);
@@ -80,13 +80,13 @@ This style is extremely simple (doesn't require an external library like process
 
 ### Why is this better than plain-ol-callbacks?
 
-Well, let's convert the `safe_read` example from above to continuables [continuable_based.js][]:
+Well, let's convert the `safeRead` example from above to continuables [continuable_based.js][]:
 
     var Do = require('do');
     // Convert `readFile` from fs to use continuable style.
     var fs = Do.convert(require('fs'), ['readFile']);
 
-    function safe_read(filename) { return function (callback, errback) {
+    function safeRead(filename) { return function (callback, errback) {
       fs.readFile(filename)(callback, function (error) {
         if (error.errno === process.ENOENT) {
           callback("");
@@ -96,7 +96,7 @@ Well, let's convert the `safe_read` example from above to continuables [continua
       })
     }}
 
-    safe_read(__filename)(puts, error_handler);
+    safeRead(__filename)(puts, errorHandler);
 
 You'll notice that this is a lot shorter and you don't have to constantly check for the error argument or pad your success results with a `null` argument.  Also since we're passing through the success case as is, we can use the outer `callback` as the inner `callback`.  In most cases you won't do this for success, but you will for `errback`.
 
@@ -109,7 +109,7 @@ The real power of `Do` and continuables comes when you're dealing with several a
 
     // Checks the `stat` of a file path and outputs the file contents if it's
     // a real file
-    function load_file(path, callback, errback) {
+    function loadFile(path, callback, errback) {
       fs.stat(path)(function (stat) {
 
         // Output undefined when the path isn't a regular file
@@ -127,11 +127,11 @@ The real power of `Do` and continuables comes when you're dealing with several a
     // Load an array of the contents of all files in a directory.
     function loaddir(path) { return function (callback, errback) {
       fs.readdir(path)(function (filenames) {
-        Do.filter_map(filenames, load_file)(callback, errback);
+        Do.filterMap(filenames, loadFile)(callback, errback);
       }, errback);
     }}
 
-    loaddir(__dirname)(p, error_handler)
+    loaddir(__dirname)(p, errorHandler)
 
 ## How to `Do` (API)
 
@@ -152,7 +152,7 @@ Takes an array of actions and runs them all in parallel. You can either pass in 
       Do.read(__filename)
     )(function (passwd, self) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
     // Single argument
     var actions = [
@@ -161,7 +161,7 @@ Takes an array of actions and runs them all in parallel. You can either pass in 
     ];
     Do.parallel(actions)(function (results) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
 ### Do.chain(actions) {...}
 
@@ -180,7 +180,7 @@ Chains together several actions feeding the output of the first to the input of 
       }
     )(function (stat) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
     // Single argument
     var actions = [
@@ -194,7 +194,7 @@ Chains together several actions feeding the output of the first to the input of 
     ];
     Do.chain(actions)(function (stat) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
 ### Do.map(array, fn) {...}
 
@@ -204,20 +204,20 @@ Takes an array and does an array map over it using the async callback `fn`. The 
 
     // Direct callback filter
     var files = ['users.json', 'pages.json', 'products.json'];
-    function load_file(filename, callback, errback) {
+    function loadFile(filename, callback, errback) {
       fs.read(filename)(function (data) {
         callback([filename, data]);
       }, errback);
     }
-    Do.map(files, load_file)(function (contents) {
+    Do.map(files, loadFile)(function (contents) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
     // continuable based filter
     var files = ['users.json', 'pages.json', 'products.json'];
     Do.map(files, fs.read)(function (contents) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
 ### Do.filter(array, fn) {...}
 
@@ -234,7 +234,7 @@ Takes an array and does an array filter over it using the async callback `fn`. T
     }
     Do.filter(files, is_file)(function (filtered_files) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
     // Continuable based filter
     var files = ['users.json', 'pages.json', 'products.json'];
@@ -245,9 +245,9 @@ Takes an array and does an array filter over it using the async callback `fn`. T
     }}
     Do.filter(files, is_file)(function (filtered_files) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
-### Do.filter_map(array, fn) {...}
+### Do.filterMap(array, fn) {...}
 
 Takes an array and does a combined filter and map over it.  If the result
 of an item is undefined, then it's filtered out, otherwise it's mapped in.
@@ -260,30 +260,30 @@ The signature of `fn` is `function fn(item, callback, errback)` or any regular c
     function check_and_load(filename, callback, errback) {
       fs.stat(filename)(function (stat) {
         if (stat.isFile()) {
-          load_file(filename, callback, errback);
+          loadFile(filename, callback, errback);
         } else {
           callback();
         }
       }, errback);
     }
-    Do.filter_map(files, check_and_load)(function (filtered_files_with_data) {
+    Do.filterMap(files, check_and_load)(function (filtered_files_with_data) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
     // Continuable based filter
     var files = ['users.json', 'pages.json', 'products.json'];
     function check_and_load(filename) { return function (callback, errback) {
       fs.stat(filename)(function (stat) {
         if (stat.isFile()) {
-          load_file(filename, callback, errback);
+          loadFile(filename, callback, errback);
         } else {
           callback();
         }
       }, errback);
     }}
-    Do.filter_map(files, check_and_load)(function (filtered_files_with_data) {
+    Do.filterMap(files, check_and_load)(function (filtered_files_with_data) {
       // Do something
-    }, error_handler);
+    }, errorHandler);
 
 ## Using with node libraries
 

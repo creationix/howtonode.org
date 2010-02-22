@@ -1,6 +1,6 @@
 process.mixin(require('sys'));
 
-function error_handler(error) {
+function errorHandler(error) {
   throw error;
 }
 
@@ -9,7 +9,7 @@ var fs = Do.convert(require('fs'), ['readdir', 'stat', 'readFile']);
 
 // Checks the `stat` of a file path and outputs the file contents if it's
 // a real file
-function load_file(path, callback, errback) {
+function loadFile(path, callback, errback) {
   fs.stat(path)(function (stat) {
     
     // Output undefined when the path isn't a regular file
@@ -27,8 +27,8 @@ function load_file(path, callback, errback) {
 // Load an array of the contents of all files in a directory.
 function loaddir(path) { return function (callback, errback) {
   fs.readdir(path)(function (filenames) {
-    Do.filter_map(filenames, load_file)(callback, errback);
+    Do.filterMap(filenames, loadFile)(callback, errback);
   }, errback);
 }}
 
-loaddir(__dirname)(p, error_handler)
+loaddir(__dirname)(p, errorHandler)

@@ -1,13 +1,13 @@
 process.mixin(require('sys'));
 
-function error_handler(error) {
+function errorHandler(error) {
   throw error;
 }
 
 // Load 'fs', a built-in node library that has async functions
 var fs = require('fs');
 
-function safe_read(filename, callback) {
+function safeRead(filename, callback) {
   fs.readFile(filename, function (err, data) {
     if (err) {
       if (error.errno === process.ENOENT) {
@@ -24,9 +24,9 @@ function safe_read(filename, callback) {
   })
 }
 
-safe_read(__filename, function (err, text) {
+safeRead(__filename, function (err, text) {
   if (err) {
-    error_handler(err);
+    errorHandler(err);
   } else {
     puts(text);
   }
