@@ -227,23 +227,23 @@ Takes an array and does an array filter over it using the async callback `fn`. T
 
     // Direct callback filter
     var files = ['users.json', 'pages.json', 'products.json'];
-    function is_file(filename, callback, errback) {
+    function isFile(filename, callback, errback) {
       fs.stat(filename)(function (stat) {
         callback(stat.isFile());
       }, errback);
     }
-    Do.filter(files, is_file)(function (filtered_files) {
+    Do.filter(files, isFile)(function (filtered_files) {
       // Do something
     }, errorHandler);
 
     // Continuable based filter
     var files = ['users.json', 'pages.json', 'products.json'];
-    function is_file(filename) { return function (callback, errback) {
+    function isFile(filename) { return function (callback, errback) {
       fs.stat(filename)(function (stat) {
         callback(stat.isFile());
       }, errback);
     }}
-    Do.filter(files, is_file)(function (filtered_files) {
+    Do.filter(files, isFile)(function (filtered_files) {
       // Do something
     }, errorHandler);
 
