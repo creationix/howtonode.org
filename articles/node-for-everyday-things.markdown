@@ -2,11 +2,10 @@ Title: NodeJS for everyday things
 Author: R. S. Doiel
 Date: Fri Feb 19 2010 14:20:20 GMT-0800 (PST)
 
-    
 Everyday things:
 > Those little programs you write quickly to get something done like counting pages in a text document.
 
-## Page counting ##
+## Page counting
 
 Recently I was writing an essay and I needed to calculate a page count. My text editor was great at giving me a word count. I used the result and divided it by 350 to ball park my page count. This became problematic because I'm lousy at doing math in my head. Next I decided to chain some Unix commands together to do the job. I played with Bash, Unix's wc and cut commands I came up with this:
 
@@ -21,21 +20,21 @@ The page count problems are basically a simple analysis of text with some accoun
 
     #!/usr/bin/env node
     /**
-    * Calculate the approximate the number of "pages" in a text document based on
-    * a word count of 350 words per page.
-    */
+     * Calculate the approximate the number of "pages" in a text document based on
+     * a word count of 350 words per page.
+     */
 
     var sys = require('sys'),
-    fs = require('fs');
+        fs = require('fs');
 
-    (function(){
+    (function () {
       /* Include some instructions for when I forget how this works. */
       USAGE = function (message) {
         var error_code = 0;
-        sys.puts("\n USAGE: pagecount FILENAME\n" +
-        "\n" + " Show the estimated page count of a file based on 350 words per page.\n" +
-        " FILENAME should be the name of a utf-8 encoded text file.\n" +
-        "\b\n Example:\n\t\tpagecount MyFile.txt\n\n Estimates the page count of MyFile.txt\n");
+        sys.puts("\n  USAGE: pagecount FILENAME\n" +
+          "\n" + "  Show the estimated page count of a file based on 350 words per page.\n" +
+          "  FILENAME should be the name of a utf-8 encoded text file.\n" +
+          "\b\n  Example:\n\t\tpagecount MyFile.txt\n\n  Estimates the page count of MyFile.txt\n");
 
         if (message !== undefined) {
           sys.puts(message);
@@ -43,49 +42,46 @@ The page count problems are basically a simple analysis of text with some accoun
         }
         process.exit(error_code);
       };
-      
+
       if (process.argv.length < 3) {
         USAGE();
       }
-      
+
       /* PageCount() analyze the file and displays the results */
       PageCount = function (filename) {
-        var promise = process.Promise();
-        fs.stat(filename).addCallback(function (stat) {
-          var promise = process.Promise();
+        fs.stat(filename, function (stat_error, stat) {
+          if (stat_error) {
+            USAGE("ERROR: " + filename + ", " + stat_error);
+          }
 
           if (stat.isFile()) {
-            fs.readFile(filename, 'utf8').addCallback(function (content) {
-              var promise = process.Promise(), subtotal_words = 0;
+            fs.readFile(filename, 'utf8', function (read_error, content) {
+              var subtotal_words = 0;
+              if (read_error) {
+                USAGE("ERROR: Can't read " + filename + ". " + read_error);
+              }
               /* Replace all non-letter characters with a single space. */
               subtotal_words = content.replace(/\W+|\s+/gm,' ').split(' ').length;
               page_count = (subtotal_words/350);
               if (Number(page_count).toFixed(0) <= 1) {
-                sys.puts(filename + "(" + subtotal_words + " words): " + 
-                Number(page_count * 100).toFixed(0) + "% of one page.");
+                sys.puts(filename + "(" + subtotal_words + " words): " +
+                  Number(page_count * 100).toFixed(0) + "% of one page.");
               } else {
-                sys.puts(filename + "(" + subtotal_words + " words):" + 
-                Number(page_count).toFixed(2) + " pages.");
+                sys.puts(filename + "(" + subtotal_words + " words):" +
+                  Number(page_count).toFixed(2) + " pages.");
               }
-              return promise;
-            }).addErrback(function (error) {
-              USAGE("ERROR: Can't read " + filename + ". " + error.message);
             });
           } else {
             USAGE("ERROR: " + filename + " is not a file.");
           }
-          return promise;
-        }).addErrback(function (error) {
-          USAGE("ERROR: " + filename + ", " + error.message);
         });
-        return promise;
       };
-      
+
       /* For each file I want to tally up call PageCount() */
       for (var i = 2; i < process.argv.length; i += 1) {
         PageCount(process.argv[i]);
       }
     })();
 
-`pagecount` reports the plain text version of this essay is 656 words or 1.87 pages including the source code examples. It's a little longer than my shell script. On the other hand it is easier to read and with a little modification I can embed it as a web service or put it into a web page.
+`pagecount` reports the plain text version of this essay is 636 words or 1.82 pages including the source code examples. It's a little longer than my shell script. On the other hand it is easier to read and with a little modification I can embed it as a web service or put it into a web page.
 
