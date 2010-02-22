@@ -174,9 +174,10 @@ You can also pass in an array of pre-made actions.
     });
 
     Do.parallel(actions)(function () {
-      var contents = {};
+      var contents = {},
+          args = arguments;
       files.forEach(function (filename, index) {
-        contents[filename] = arguments[index];
+        contents[filename] = args[index];
       });
       // Do something
     });
