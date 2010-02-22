@@ -2,9 +2,9 @@ Title: "Do" it fast!
 Author: Tim Caswell
 Date: Mon Feb 22 2010 10:52:08 GMT-0600 (CST)
 
-Now with the release of [Node v0.1.30][] there is even more need for a library like [Do][].  While working with the node community to decide on the best alternative to node promises, we decided that it's best left to library developers.  So as this morning, node no longer ships with promises, but uses a simple callback interface for all async functions.
+Now with the release of [Node v0.1.30][] there is even more need for a library like [Do][].  While working with the node community to decide on the best alternative to node promises, we decided that it's best left to library developers.  So as of this morning, node no longer ships with promises, but uses a simple callback interface for all async functions.
 
-I took my do library that I've been developing throughout the Control Flow series and made it into a real node library called [Do][].
+I took my async library that I've been developing throughout the Control Flow series and made it into a real library called [Do][].
 
 ## Node callback interface
 
@@ -307,6 +307,7 @@ This is done to keep node simple and to allow for interoperability between the v
 
 If you're writing a library, make sure to export all your async functions following the node interface.  Then anyone using your library can know what format to expect.
 
+[third control flow article]: http://howtonode.org/control-flow-part-iii
 [plain_callbacks.js]: http://github.com/creationix/howtonode.org/blob/master/articles/do-it-fast/plain_callbacks.js
 [continuable_based.js]: http://github.com/creationix/howtonode.org/blob/master/articles/do-it-fast/continuable_based.js
 [Node v0.1.30]: http://groups.google.com/group/nodejs/browse_thread/thread/e6cc6f04cd0ddf14
