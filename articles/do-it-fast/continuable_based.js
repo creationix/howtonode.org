@@ -10,7 +10,7 @@ var fs = Do.convert(require('fs'), ['readFile']);
 
 function safe_read(filename) { return function (callback, errback) {
   fs.readFile(filename)(callback, function (error) {
-    if (error.message === 'No such file or directory') {
+    if (error.errno === process.ENOENT) {
       callback("");
     } else {
       errback(error);

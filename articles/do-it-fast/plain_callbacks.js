@@ -10,7 +10,7 @@ var fs = require('fs');
 function safe_read(filename, callback) {
   fs.readFile(filename, function (err, data) {
     if (err) {
-      if (err.message === 'No such file or directory') {
+      if (error.errno === process.ENOENT) {
         // Ignore file not found errors and return an empty result
         callback(null, "");
       } else {
