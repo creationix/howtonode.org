@@ -65,7 +65,7 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
       });
     }}
 
-`Do` expects async functions to not require the callback in the initial invocation, but instead return a continuable which can then be called with the `callback` and `errback`.  This is done by manually currying the function. The "continuable" is the partially applied version of the function returned by the outer function.  The body of the function won't be executed until you finish the application and attach a callback.
+`Do` expects async functions to not require the callback in the initial invocation, but instead return a continuable which can then be called with the `callback` and `errback`.  This is done by manually currying the function. The "continuable" is the partially applied version of the function returned by the outer function.  The body of the function won't be executed until you finish the application by attaching a callback.
 
     divide(100, 10)(function (result) {
       puts("the result is " + result);
