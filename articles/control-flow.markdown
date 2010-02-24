@@ -74,7 +74,7 @@ So let's modify the example to pass callbacks:
       var count = paths.length,
           data = {};
       paths.forEach(function (path) {
-        read_directory('.', function (results) {
+        read_directory(path, function (results) {
           data[path] = results;
           count--;
           if (count <= 0) {
@@ -102,10 +102,11 @@ I made a simple `Combo` library the other day.  It basically wraps up the task o
     }
     Combo.prototype = {
       add: function () {
-        var self = this;
+        var self = this,
+            id = this.items;
         this.items++;
         return function () {
-          self.check(self.items - 1, arguments);
+          self.check(id, arguments);
         };
       },
       check: function (id, arguments) {

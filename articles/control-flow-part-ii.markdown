@@ -164,7 +164,7 @@ Now let's combine that with the Do library:
       // Handle Error
     });
 
-This does two async actions in parallel and reports when both are done. Note that it stops on first error and passes it to the common error handler.
+This does two async actions in parallel and reports when both are done. Note that it only fires success if there are no errors.  If there is an error, then it passes it to the common error handler.
 
 You can also pass in an array of pre-made actions.
 
@@ -174,9 +174,10 @@ You can also pass in an array of pre-made actions.
     });
 
     Do.parallel(actions)(function () {
-      var contents = {};
+      var contents = {},
+          args = arguments;
       files.forEach(function (filename, index) {
-        contents[filename] = arguments[index];
+        contents[filename] = args[index];
       });
       // Do something
     });

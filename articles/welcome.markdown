@@ -59,7 +59,7 @@ So to convert this to a Github POST hook, we'll keep it simple and assume all th
 
     var sys = require('sys'),
        http = require('http'),
-       build = require('./builder').rebuild;
+       rebuild = require('./builder').rebuild;
 
     http.createServer(function (req, res) {
       rebuild(function (output) {

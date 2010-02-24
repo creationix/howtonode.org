@@ -15,6 +15,7 @@ caption, th, td { text-align: left; font-weight: normal; vertical-align: middle;
 q, blockquote { quotes: "" ""; }
 q:before, q:after, blockquote:before, blockquote:after { content: ""; }
 
+blockquote p { border-left: 2px solid red; padding-left: 8px; margin-left: 21px; margin-right:21px; font-size:13px;}
 img a { border: none; }
 
 body { margin: 30px 0; font-family: "Helvetica", arial, sans-serif; font-size: 14px; line-height: 1.5em; color: #333333; }
@@ -52,7 +53,7 @@ dl dd { margin: 0 0 0 40px; padding: 0px; -moz-padding-start: 0px; }
 
 pre, code { font-family: "Bitstream Vera Sans Mono", "Courier",monospace; }
 
-pre { margin: 24px 0 30px -30px; padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; }
+pre { margin: 24px 0 30px -30px; padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; white-space: pre; overflow: auto;}
 
 
 img { margin: 12px 0 12px; }
@@ -79,3 +80,4 @@ button { border: 1px solid #333; background: #ccc; }
 
 blockquote p { border-left: 2px solid red; padding-left: 8px;
 margin-left: 21px; margin-right:21px; font-size:13px;}
+pre { overflow-x: auto; }

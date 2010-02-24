@@ -14,4 +14,4 @@
         %pubDate= article.date
         %guid(isPermaLink="true")&= "http://howtonode.org/" + article.link
         %description&= article.content
-        %author&= article.author.name
+        %author&= article.author && article.author.name

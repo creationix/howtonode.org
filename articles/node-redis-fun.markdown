@@ -1,6 +1,6 @@
 Title: Node + Redis = Fun
 Author: Nikhil Marathe
-Date: Sat Feb 20 2010 23:26:00 GMT+530 (IST)
+Date: Tue Feb 23 2010 21:20:20 GMT+530 (IST)
 
 node brings asynchronous, evented I/O to the server. Redis gives you a blazing fast database with support for strings, lists and sets. Both Redis and Node.js follow certain patterns, Redis for data-storage, and node for event based programming. I hope to give an introduction to both in this article. By the time we are done, we will have built a [Pastebin][] service.
 
