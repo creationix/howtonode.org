@@ -20,7 +20,7 @@ For the source to the articles and actual content, see the repository for [howto
 
 Something you'll notice coming from other languages (especially PHP) is that [node][] doesn't assume your code is running *in* a web-server.  In fact it doesn't assume much at all.  This turns out to be a very good thing and we'll see why later.
 
-Also something that will be new is the fact that **all** IO functions are non-blocking and asynchronous.  This allows node to be single threaded at the application layer, but perform very well. Especially for use cases where time is speant in IO wait.
+Also something that will be new is the fact that **all** IO functions are non-blocking and asynchronous.  This allows node to be single threaded at the application layer, but perform very well. Especially for use cases where time is spent in IO wait.
 
 ### HTTP Server - Github Hook ###
 
