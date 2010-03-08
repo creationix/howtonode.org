@@ -153,7 +153,7 @@ We created a little closure that then calls `Cart.onClick()`.  The problem with 
 
     $("#mybutton").click(function () { return Cart.onClick.apply(Cart, arguments) });
 
-This works, but it's even harder to read and understand.  If you don't already know, "`arguments`" is another special function that is an array-like object that contains the arguments that were passed to the current inner-most function.
+This works, but it's even harder to read and understand.  If you don't already know, "`arguments`" is another special variable that is an array-like object that contains the arguments that were passed to the current inner-most function.
 
 If Cart was a globally accessible singleton object we could just use the variable `Cart` directly instead of relying on "`this`", but that's often not the case when you have "classes" of objects sharing common functionality.
 
