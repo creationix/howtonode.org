@@ -48,7 +48,7 @@ So what does all that mean, how about an example:
       }
       // Here `name` is "middle" and `other` is "findme"
     }
-    // Here `name` is "middle" and `other` is undefined.
+    // Here `name` is "outer" and `other` is undefined.
 
 Here we see that local variables in an inner scope can shadow variables by the same name in the outer scope.  But from the outside, variables in the inside don't exist.  Lexical scope is 100% based on the physical location of the variables in the nesting in the code.  It doesn't matter what path you might take to get to the inner function.  That's how closures are able to make inner variables usable.
 
