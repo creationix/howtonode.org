@@ -157,7 +157,7 @@ This works, but it's even harder to read and understand.  If you don't already k
 
 If Cart was a globally accessible singleton object we could just use the variable `Cart` directly instead of relying on "`this`", but that's often not the case when you have "classes" of objects sharing common functionality.
 
-Wouldn't it be easier to somehow modify `Cart.onClick` so that "`this`" was always Cart from within it? (NOTE: )
+Wouldn't it be easier to somehow modify `Cart.onClick` so that "`this`" was always Cart from within it?
 
     function bind(fn, scope) {
       return function () {
