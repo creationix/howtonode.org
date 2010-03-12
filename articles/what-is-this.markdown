@@ -22,7 +22,7 @@ This is an example of global scope:
 This is an example of local scope:
 
     // Create a couple of local variables in a function.
-    function () {
+    function newScope() {
       var name = "tim";
       var age = 27;
     }
