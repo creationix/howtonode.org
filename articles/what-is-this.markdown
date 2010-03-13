@@ -4,9 +4,9 @@ Date: Mon Mar 08 2010 12:59:10 GMT-0600 (CST)
 
 Most people that learn JavaScript are coming from a background in another language.  This brings with it a view of how the world works that may be different from how it really works in JavaScript.  For this and other reasons, JavaScript is often misunderstood.  It's not entirely out fault, the language was designed to work like one thing (scheme-like), but look like another (c-like).  This article will describe lexical scope and the "`this`" variable and how to control them rather than be controlled by them when in coding JavaScript.
 
-## It's all about the scope.
+## It's all about where you are.
 
-In all programming languages, there is this idea of current scope.  Most languages have more than one type of local scope.  JavaScript is one of these.  The two main scopes in JavaScript are lexical scope and "`this`" scope.
+In all programming languages, there is this idea of current scope and current context.  In JavaScript we have a lexical scope and a current "`this`" context.
 
 In JavaScript all new scopes are created through "`function`" definitions.  But contrary to other c-like languages, this is the *only* way to make a new scope.  For loops don't do it, if blocks don't do it, plain curly braces assuredly don't do it.  This simplicity is both a blessing and a curse.  First let's have a couple of examples to explain creating scopes.
 
@@ -39,10 +39,10 @@ Lexical scope is the key to making closures work.  Here's a quote from wikipedia
 So what does all that mean, how about an example:
 
     var name = "outer";
-    function () {
+    function one() {
       var name = "middle";
       var other "findme";
-      function () {
+      function two() {
         var name = "inner"
         // Here `name` is "inner" and `other` is "findme"
       }
@@ -67,9 +67,9 @@ Here we see that local variables in an inner scope can shadow variables by the s
 The variables `name` and `age` are local to the `myModule` function, but when we call `greeter` from the global scope, it doesn't throw an error.  This is because the `greet` function has `name` and `age` in it's lexical scope and so they're accessible as if they were local variables.  Basically the way variable lookup works is that it goes up scope by scope looking for a variable by the requested name.
 
 
-### "`this`" Scope
+### The context of "`this`"
 
-In addition to the lexical scope.  JavaScript adds another scope through the special variable "`this`".  This variable looks and acts like any other javascript variable.  If it's an object, you access it's properties the normal way by prefixing with "`this.`". The magic is that it's automatically set for you.  In OOP terms, it's the receiver of the method you're in.  For example:
+In addition to the lexical scope.  JavaScript adds another layer of locality through the special keyword "`this`".  This keyword looks and acts like any other javascript variable except that you can't modify it.  It acts as a reference to the context object, and as an object, you can get to it's properties through normal dot or bracket notation. The magic is that the value of "`this`" changes depending on what context your executing in.  In most cases, the context is the receiver of the message.  For example:
 
     var Person = {
       name: "Tim",
@@ -153,7 +153,7 @@ We created a little closure that then calls `Cart.onClick()`.  The problem with 
 
     $("#mybutton").click(function () { return Cart.onClick.apply(Cart, arguments) });
 
-This works, but it's even harder to read and understand.  If you don't already know, "`arguments`" is another special variable that is an array-like object that contains the arguments that were passed to the current inner-most function.
+This works, but it's even harder to read and understand.  If you don't already know, "`arguments`" is another special keyword that is an array-like object that contains the arguments that were passed to the current inner-most function.
 
 If Cart was a globally accessible singleton object we could just use the variable `Cart` directly instead of relying on "`this`", but that's often not the case when you have "classes" of objects sharing common functionality.
 
