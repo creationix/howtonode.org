@@ -181,7 +181,7 @@ Here is an example Express application that uses no persistent storage ([app.js]
       use(ContentLength)
       use(Cookie)
       use(Session)
-      use(CommonLogger)
+      use(Logger)
       use(require('facebook').Facebook, {
         apiKey: 'FACEBOOK_API_KEY', 
         apiSecret: 'FACEBOOK_API_SECRET'
