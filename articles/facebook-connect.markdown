@@ -18,7 +18,7 @@ As you can see in this totally unnecessary diagram, most of the integration take
 
 ## Dependencies
 
-_Note: the NodeJS version used in this article is 0.1.31_
+_Note: For this article I've been using NodeJS version 0.1.31 and Express version 0.7.1_
 
 You need to install both [NodeJS][] and the [Express Web Framework][]. Assuming you've installed NodeJS, you can easily include express into your Git project by adding a submodule:
 
