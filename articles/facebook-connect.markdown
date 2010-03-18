@@ -18,6 +18,8 @@ As you can see in this totally unnecessary diagram, most of the integration take
 
 ## Dependencies
 
+_Note: the NodeJS version used in this article is 0.1.31_
+
 You need to install both [NodeJS][] and the [Express Web Framework][]. Assuming you've installed NodeJS, you can easily include express into your Git project by adding a submodule:
 
     #!sh
@@ -181,7 +183,7 @@ Here is an example Express application that uses no persistent storage ([app.js]
       use(ContentLength)
       use(Cookie)
       use(Session)
-      use(CommonLogger)
+      use(Logger)
       use(require('facebook').Facebook, {
         apiKey: 'FACEBOOK_API_KEY', 
         apiSecret: 'FACEBOOK_API_SECRET'
