@@ -41,7 +41,7 @@ So what does all that mean, how about an example:
     var name = "outer";
     function one() {
       var name = "middle";
-      var other "findme";
+      var other = "findme";
       function two() {
         var name = "inner"
         // Here `name` is "inner" and `other` is "findme"
