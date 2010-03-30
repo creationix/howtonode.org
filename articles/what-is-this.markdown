@@ -2,7 +2,7 @@ Title: What is "this"?
 Author: Tim Caswell
 Date: Mon Mar 08 2010 12:59:10 GMT-0600 (CST)
 
-Most people that learn JavaScript are coming from a background in another language.  This brings with it a view of how the world works that may be different from how it really works in JavaScript.  For this and other reasons, JavaScript is often misunderstood.  It's not entirely out fault, the language was designed to work like one thing (scheme-like), but look like another (c-like).  This article will describe lexical scope and the "`this`" variable and how to control them rather than be controlled by them when in coding JavaScript.
+Most people that learn JavaScript are coming from a background in another language.  This brings with it a view of how the world works that may be different from how it really works in JavaScript.  For this and other reasons, JavaScript is often misunderstood.  It's not entirely our fault, the language was designed to work like one thing (scheme-like), but look like another (c-like).  This article will describe lexical scope and the "`this`" variable and how to control them rather than be controlled by them when in coding JavaScript.
 
 ## It's all about where you are.
 
@@ -41,7 +41,7 @@ So what does all that mean, how about an example:
     var name = "outer";
     function one() {
       var name = "middle";
-      var other "findme";
+      var other = "findme";
       function two() {
         var name = "inner"
         // Here `name` is "inner" and `other` is "findme"
@@ -203,6 +203,10 @@ This is especially dangerous in things like for loops:
 
 The `i` variable in both loops is the **same** variable and so the inner loop will break the outer loop and give the wrong answer.  Also if I had not put var statements before the two `n` variables, then they would walk over each other and give a wrong answer too.
 
+---
+
+**UPDATE**:  Some astute readers have pointed out that the next section is not true for modern browsers and node.JS.  I'm not sure where I've seen it, but I'm sure I've this undesirable behavior somewhere.
+
 There is one word of caution for `var` users.  It doesn't matter where in the function body you put the `var` word.  It only matters which function body you put it in.  And it's scope in inner to function parameters. For example:
 
     function greet(name) {
@@ -212,7 +216,9 @@ There is one word of caution for `var` users.  It doesn't matter where in the fu
     }
     greet("Tim");
 
-This is why [jslint][] tells you to put all your var statements at the top of a function.  I've actually had this one bite me because there was a page of code between the top of the function and the `var` statement.  I couldn't figure out why my variable I was passing in got set to `undefined` before the first line of the function body.    
+This is why [jslint][] tells you to put all your var statements at the top of a function.  I've actually had this one bite me because there was a page of code between the top of the function and the `var` statement.  I couldn't figure out why my variable I was passing in got set to `undefined` before the first line of the function body.
+
+---
 
 ## Conclusion
 
