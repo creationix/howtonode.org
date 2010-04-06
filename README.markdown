@@ -2,9 +2,11 @@
 
 This is a community supported blog about how to program in nodejs.
 
-When this github repo is pushed to, the site at <http://howtonode.org> is automatically updated.  This is powered by a new static site generator written in node called [node-blog][].
+This is powered by a new static blog engine written in node called [wheat][].
 
-[node-blog]: http://github.com/creationix/node-blog
+To run a local version of the blog, simply install [wheat][], node.JS v0.1.33-205-g2ff20d8 or later and then run the included `server.js` script.
+
+[wheat]: http://github.com/creationix/wheat
 
 ## Contributing
 
