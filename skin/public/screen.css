@@ -53,7 +53,7 @@ dl dd { margin: 0 0 0 40px; padding: 0px; -moz-padding-start: 0px; }
 
 pre, code { font-family: "Bitstream Vera Sans Mono", "Courier",monospace; }
 
-pre { margin: 24px 0 30px -30px; padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; white-space: pre; overflow: auto;}
+pre { padding: 6px 30px 7px; font-size: 12px; line-height: 20px; border: 1px solid #eee; background: #f9f9f9; color: #555; white-space: pre; overflow: auto;}
 
 
 img { margin: 12px 0 12px; }
@@ -68,15 +68,41 @@ button { border: 1px solid #333; background: #ccc; }
 #ribbon { position: absolute; top: 0; right: 0; }
 #ribbon img { margin: 0; }
 
-#wrapper { width: 750px; margin: 0 0 0 140px; padding: 0 0 60px 0; }
-#wrapper #header { padding: 0 0 34px 180px; }
-#wrapper #header h2 { margin: 56px 0 8px 0; line-height: 1.2em; font-size: 40px; font-weight: bold; font-family: Times, Georgia, sans-serif; }
-#wrapper #header p { margin: 0; }
-#wrapper #content .post { margin: 0 0 55px 0; border-top: 1px solid #ccc; padding: 1px 20px 0 180px; }
-#wrapper #content .post .details { width: 170px; margin: 46px 0 0 -170px; float: left; }
-#wrapper #content .post .details p { font-size: 16px; line-height: 1.3em; color: #AAA; margin: 0 0 21px 0; }
-#wrapper #content .post .details img { border: 1px solid #333; }
-#wrapper #content .block { padding: 0 0 0 180px; }
+#content {
+  margin: 150px 15px 15px 15px;
+}
+
+#content .right {
+  float:right;
+}
+#content .right .box {
+  min-width: 150px;
+  margin: 15px;
+  padding: 0px;
+  border: 1px solid #444;
+  box-shadow: 2px 2px 5px #555;
+  -webkit-box-shadow: 2px 2px 5px #555;
+  -moz-box-shadow: 2px 2px 5px #555;
+}
+#content .right .box h2 {
+  background: #48f; /* fallback for older/unsupporting browsers */  
+  background: -moz-linear-gradient(top, #f44, #fd5 90%);  
+  background: -webkit-gradient(linear, 0 0, 0 90%, from(#f44), to(#fd5));  
+  color: #000;
+
+  margin: 0;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1em;
+  border-bottom: 1px solid #444;
+}
+#content .right .box p {
+  margin: 0;
+  padding: 2px 5px;
+  line-height: 1em;
+}
+
 
 blockquote p { border-left: 2px solid red; padding-left: 8px;
 margin-left: 21px; margin-right:21px; font-size:13px;}

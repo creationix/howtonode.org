@@ -1,2 +1,11 @@
-:each article in articles
-  = partial("_article", article)
+.right
+  .box
+    %h2 Versions
+    :each tag in tags
+      %p
+        %a{href: tag.href}&= tag.name
+  .box
+    %h2 Authors
+    :each author in authors
+      %p
+        %a{href: author.homepage}&= author.name

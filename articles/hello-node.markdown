@@ -9,7 +9,7 @@ Then we'll shift gears and go through a real example that teaches enough to get 
 
 # Hello World Examples
 
-Here are four simple hello world examples.
+Here are four simple hello world examples. The comments in the code explain how the code works and the text around it explain what it does and how to test it.
 
 ## Hello Console
 
@@ -89,4 +89,34 @@ Often you won't be using the node built-in libraries because they are designed t
 
 In order to test this, you will need to install the `node-router` library.  There are two ways to do this.  You can either install it into a path that node recognizes (I create a symlink into ~/.node_libraries) or put the `node-router.js` file in your application and reference it locally.  See the [node docs on modules][] for more details on how modules work.
 
+# Instant Node Wiki
+
+Now I'll explain how to design and implement a node based wiki engine.  This will be very simple and use a few libraries to help keep us from reinventing the wheel too many times.
+
+## Modules Required
+
+Please install or have otherwise available to your application the following modules:
+
+ - [node-router][] - Wraps the built-in http library with many convenience functions like request routing and message body decoding.
+ - [haml-js][] - Template engine that compiles HAML templates into HTML
+ - [proto][] - Baby library that adds some useful stuff to Object.prototype
+
+You can install these however you please, but here is how I'd do it.  The following code will clone the four libraries and install them into your local node library search path:
+
+    mkdir ~/NodeLibs
+    cd ~/NodeLibs
+    git clone git://github.com/creationix/node-router.git
+    git clone git://github.com/creationix/haml-js.git
+    git clone git://github.com/creationix/proto.git
+    mkdir ~/.node_libraries
+    cd ~/.node_libraries
+    ln -s ~/NodeLibs/*/lib/* ./
+
+## Directory Structure
+
+
+
 [node docs on modules]: http://nodejs.org/api.html#_modules
+[node-router]: http://github.com/creationix/node-router
+[haml-js]: http://github.com/creationix/haml-js
+[less.js]: http://github.com/cloudhead/less.js

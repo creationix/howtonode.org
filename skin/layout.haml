@@ -4,70 +4,10 @@
     %meta{ content: "text/html; charset=utf-8", http-equiv: "Content-Type" }
     %title&= title + " - How To Node"
     %link{ href: "screen.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
-    %link{ href: "sh_highlight.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
+    %link{ href: "prettify.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
     %link(rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml")
     %link(href="/favicon.ico" rel="icon" type="image/x-icon")
-    %script{ src: "sh_highlight.js", type: "text/javascript" }
-    :script
-      function onload() {
-        var items = document.getElementsByTagName("pre");
-        for (var i=0, l = items.length; i < l; i++) {
-          var code = items[i].innerHTML;
-          console.log(code);
-          var match = code.match(/^<code>\#\!([a-z]+)\n/);
-          console.log(match);
-          if (match) {
-            items[i].className = "sh_" + match[1];
-            items[i].innerHTML = "<code>" + code.substr(match[0].length);
-          } else {
-            items[i].className = "sh_javascript";
-          }
-        };
-        sh_highlightDocument();
-      };
 
-  %body{onload: "onload()"}
-    %a#ribbon{ href: "http://github.com/creationix/howtonode.org" }
-      %img{ src: "http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png", alt: "Fork me on GitHub" }
-    #wrapper
-      #header
-        %h2
-          %a{ href: "./" }
-            How To Node
-        %p
-          Node:
-          %em (verb)
-          to connect and share ideas about a point.
-      #content
-        = content
-        %hr
-        .block
-          %h2
-            About
-          %p
-            %strong
-              How To Node
-            is a blog featuring projects and tutorials relating to the Node.js project.
-          %p
-            This blog is powered by Node.js. It was developed by
-            %a{ href: "http://github.com/creationix" }
-              Tim Caswell
-            \. It was later redesigned by
-            %a{ href: "http://github.com/miksago" }
-              Micheil Smith
-            \. Go have a read of the
-            %a{ href: "http://github.com/creationix/howtonode.org" }
-              source code!
-          %p
-            Powered by
-            %a{ href: "http://github.com/creationix/node-blog" }
-              node-blog
-            \.
-    :script
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    :script
-      try {
-      var pageTracker = _gat._getTracker("UA-12824411-1");
-      pageTracker._trackPageview();
-      } catch(err) {}
+  %body
+    #content
+      = content
