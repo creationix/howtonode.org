@@ -6,7 +6,7 @@ There have been several async management libraries proposed and written.  I'm gu
 
 ## Parallel and Serial
 
-Most the libraries to date help solve two main common patterns of function use.  They are parallel execution and serial execution.  In parallel execution you fire off several asynchronous functions and want a common callback to be called then they all finish.  The serial pattern is when you have a chain of steps that can't execute till the previous one is done.  Combining these two patterns gives some pretty flexible uses of async functions without excessive boilerplate or nesting.
+Most of the libraries to date help solve two main common patterns of function use.  They are parallel execution and serial execution.  In parallel execution you fire off several asynchronous functions and want a common callback to be called then they all finish.  The serial pattern is when you have a chain of steps that can't execute till the previous one is done.  Combining these two patterns gives some pretty flexible uses of async functions without excessive boilerplate or nesting.
 
 ### Step
 
