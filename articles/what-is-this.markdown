@@ -36,7 +36,7 @@ Lexical scope is the key to making closures work.  Here's a quote from wikipedia
 
 > In computer science, a closure is a first-class function with free variables that are bound in the lexical environment. Such a function is said to be "closed over" its free variables. A closure is defined within the scope of its free variables, and the extent of those variables is at least as long as the lifetime of the closure itself.
 
-So what does all that mean, how about an example:
+So what does all that mean?  Here's an example:
 
     var name = "outer";
     function one() {
