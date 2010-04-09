@@ -38,6 +38,22 @@ body {
   padding: 0;
   margin: 15px 30px 10px;
 }
+#container #header h1 a {
+  color: #000000;
+  text-decoration: none;
+}
+#container #header h1 a:link {
+  color: #000000;
+  text-decoration: none;
+}
+#container #header h1 a:active {
+  color: #000000;
+  text-decoration: none;
+}
+#container #header h1 a:hover {
+  color: #000000;
+  text-decoration: none;
+}
 #container #header .tagline {
   font-family: ArtBrushMedium, sans-serif;
   text-shadow: #ffffff 1px 1px 3px;
@@ -135,7 +151,7 @@ body {
   font-size: 14px;
   line-height: 1.25em;
 }
-#container #sidebar .heading {
+#container #sidebar h3 {
   font-size: 18px;
   font-weight: bold;
   line-height: 1em;
@@ -166,7 +182,7 @@ body {
   color: #ffffff;
   padding: 10px 10px 10px 20px;
 }
-#container #sidebar .aside .heading {
+#container #sidebar .aside h3 {
   background-color: rgba(255, 255, 255, 0.4);
   background-color: #a3a2a1;
   text-shadow: #ffffff 1px 1px 3px;
@@ -206,7 +222,7 @@ body {
   background: -webkit-gradient(linear, 0 0, 0 90%, from(#ffffff), to(#bcbab8));
   background-color: #d5d3d2;
 }
-#container #sidebar .bubble .heading {
+#container #sidebar .bubble h3 {
   text-shadow: #000000 1px 1px 3px;
   -webkit-border-top-left-radius: 10px;
   -moz-border-radius-topleft: 10px;

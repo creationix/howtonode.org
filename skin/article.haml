@@ -1,1 +1,97 @@
-=partial("_article", {date: date, link: link, author: author, title: title, content: content, full: true})
+#sidebar
+  .aside.clearfix
+    %h3 About the Author
+    %img.headshot{src: gravitar(author.email) }
+    %dl
+      %dt Name:
+      %dd&= author.name
+    %dl
+      %dt Github:
+      %dd&= author.github
+    %dl
+      %dt Twitter:
+      %dd&= author.twitter
+    %dl
+      %dt Location:
+      %dd&= author.location
+  .aside
+    %h3
+      About this Article
+    %dl
+      %dt
+        Date Released:
+      %dd
+        Wednesday April 1, 2010
+    %dl
+      %dt
+        Last Updated:
+      %dd
+        Wednesday April 7, 2010
+    %dl
+      %dt
+        Node Version:
+      %dd
+        %a{ href: "http://github.com/ry/node/tree/v0.1.33" }
+          node v0.1.33
+    %dl
+      %dt
+        Dependency Versions:
+      %dd
+        %ul
+          %li
+            %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
+              haml-js v0.2.2
+          %li
+            %a{ href: "http://github.com/creationix/node-git/tree/c34dab79c8618440fe88a2a2b92f58104322a977" }
+              node-git gc34dab7
+          %li
+            %a{ href: "http://github.com/creationix/node-router/tree/4267eca1c6a4742e6f39cb08e8e4fb76926be59b" }
+              node-router v0.0.2-6-g4267eca
+          %li
+            %a{ href: "http://github.com/creationix/proto/tree/afd66a2bad04f8c79f31cc6b0243dc7613cd9958" }
+              proto gafd66a2
+          %li
+            %a{ href: "http://github.com/creationix/step/tree/a91b456aa79796a36c5bc6ce54647b0666b62b66" }
+              step ga91b456
+    %dl
+      %dt
+        Code Samples:
+      %dd
+        %ul
+          %li
+            %a{ href: "/step-of-conductor/load_article.js" }
+              load_article.js
+          %li
+            %a{ href: "/step-of-conductor/load_authors.js" }
+              load_authors.js
+          %li
+            %a{ href: "/step-of-conductor/step_parallel.js" }
+              step_parallel.js
+    %dl
+      %dt
+        Alternate Versions:
+      %dd
+        %ul
+          %li
+            %a{ href: "a91b456aa79796a36c5bc6ce54647b0666b62b66/step-of-conductor" }
+              node v0.1.32
+          %li
+            %a{ href: "afd66a2bad04f8c79f31cc6b0243dc7613cd9958/step-of-conductor" }
+              node v0.1.90
+  .bubble
+    %h3
+      Related Articles
+    %ul
+      %li
+        %a{ href: "" }
+          What is This?
+        by Tim Caswell
+      %li
+        %a{ href: "" }
+          Facebook Connect with Node
+        by Dominiek ter Heide
+  .bubble= markdownEncode(description)
+
+#main.clearfix
+  %h1&=title
+  =content
