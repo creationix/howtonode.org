@@ -5,15 +5,28 @@
     %dl
       %dt Name:
       %dd&= author.name
-    %dl
-      %dt Github:
-      %dd&= author.github
-    %dl
-      %dt Twitter:
-      %dd&= author.twitter
-    %dl
-      %dt Location:
-      %dd&= author.location
+    :if author.github
+      %dl
+        %dt Github:
+        %dd= github(author.github)
+    :if author.bitbucket
+      %dl
+        %dt BitBucket:
+        %dd= bitbucket(author.bitbucket)
+    :if author.twitter
+      %dl
+        %dt Twitter:
+        %dd= twitter(author.twitter)
+    :if author.location
+      %dl
+        %dt Location:
+        %dd&= author.location
+    :if author.homepage
+      %dl
+        %dt Links:
+        %dd
+          %a{href: author.homepage} Homepage
+          
   .aside
     %h3
       About this Article

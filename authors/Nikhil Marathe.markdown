@@ -1,5 +1,5 @@
-GithubName: nikhilm
-Bitbucket: http://bitbucket.org/nikhilm
+Github: nikhilm
+Bitbucket: nikhilm
 Email: nsm.nikhil@gmail.com
 Homepage: http://kodeclutz.blogspot.com
 
