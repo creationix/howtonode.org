@@ -1,8 +1,8 @@
 body {
   margin: 0;
   padding: 0 10px;
-  font-family: serif;
-  background: #3d5981 url(background.jpg) top center no-repeat;
+  font-family: sans-serif;
+  background: #3d5981 url(dandelion.jpg) top center no-repeat;
 }
 #container {
   max-width: 1200px;
@@ -142,15 +142,16 @@ body {
 #container #main p {
   text-align: justify;
   font-size: 14px;
-  line-height: 1.5em;
+  line-height: 1.6em;
 }
 #container #sidebar {
   float: right;
   width: 350px;
   font-family: sans-serif;
   font-size: 14px;
-  line-height: 1.25em;
+  line-height: 1.6em;
 }
+#container #sidebar dl { margin: 10px 0; }
 #container #sidebar h3 {
   font-size: 18px;
   font-weight: bold;

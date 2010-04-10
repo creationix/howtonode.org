@@ -1,6 +1,5 @@
 GithubName:   creationix
 Email:    tim@creationix.com
-Homepage: http://creationix.com/
 Github: creationix
 Twitter: creationix
 Location: Dallas, TX
