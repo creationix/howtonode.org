@@ -1,6 +1,6 @@
 Title: The Step of the Conductor
 Author: Tim Caswell
-Date: Fri Apr 02 2010 16:28:54 GMT-0500 (CDT)
+Date: Mon Apr 12 2010 13:27:27 GMT-0500 (CDT)
 
 There have been several async management libraries proposed and written.  I'm guilty of at least three of them.  The reason for this proliferation of code is that they're all trying to solve a very real problem with writing non-trivial applications that make heavy use of async callbacks.
 
@@ -21,15 +21,15 @@ Here is a snippet of using `Step` in the [wheat][] blogging engine I'm working o
           Git.readFile(path.join("articles", name + ".markdown"), this);
         },
         function getAuthor(err, markdown) {
-          if (err) return callback(err);
+          if (err) throw err;
           props = markdownPreParse(markdown);
           props.name = name;
           loadAuthor(props.author, this);
         },
         function finish(err, author) {
-          if (err) return callback(err);
+          if (err) throw err;
           props.author = author;
-          callback(null, props);
+          return props;
         }
       );
     }
@@ -48,7 +48,7 @@ How about an example that makes use of the parallel feature of `Step`:
           Git.readDir("authors", this);
         },
         function readFileContents(err, results) {
-          if (err) return callback(err);
+          if (err) throw err;
           var parallel = this.parallel;
           results.files.forEach(function (filename) {
             var name = filename.replace(/\.markdown$/, '');
@@ -56,12 +56,12 @@ How about an example that makes use of the parallel feature of `Step`:
           });
         },
         function parseFileContents(err) {
-          if (err) return callback(err);
+          if (err) throw err;
           var authors = {};
           Array.prototype.slice.call(arguments, 1).forEach(function (author) {
             authors[author.name] = author;
           });
-          callback(null, authors);
+          return authors;
         }
       );
     }
@@ -134,7 +134,16 @@ The example from above that uses `Step` could be rewritten to use `Conduct` (the
 
 At first glance this looks like a classic case of over-engineering.  For this simple case you'd be right, but we're keeping it simple for purposes of explanation.
 
-See the [conductor][] README for details on what all the parameters mean.  Basically you're defining a set of functions and their dependencies.  Here we're saying that the "`M`" function needs the first argument to the `loadArticle` function that get's generated
+There is much to explain about the [conductor][] library, so in an effort to get this article out this year, I'll end here.  It's fully functionally, but need some serious documentation.  Look for more in a future article.
+
+The true power of conductor will be realized when [tmpvar][] finishes his visual interface to it.  For now, read the commented code and have fun.
+
+## Conclusion
+
+So which is better and why do I have three async libraries of my own.  Well I think that's just a testament to the fact that there is no one library that fits all use cases perfectly. Also I've started to dive into the world of node Streams and this opens a whole new can of works.  Expect future articles about node streams now that node v0.1.90 is out!
+
+I tend to use Step mostly in my projects because it fits well with my style.  For some fun working examples of Step check out the source to my new blogging engine [Wheat][].
+
 
 [conductor]: http://github.com/creationix/conductor
 [tmpvar]: http://github.com/tmpvar
