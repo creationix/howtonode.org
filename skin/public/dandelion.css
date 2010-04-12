@@ -28,7 +28,7 @@ body {
   color: #217efa;
   text-decoration: underline;
 }
-#container #header h1 {
+#header h1 {
   font-family: ArtBrushMedium, sans-serif;
   text-shadow: #ffffff 1px 1px 5px;
   font-weight: bold;
@@ -38,23 +38,23 @@ body {
   padding: 0;
   margin: 15px 30px 5px;
 }
-#container #header h1 a {
+#header h1 a {
   color: #000000;
   text-decoration: none;
 }
-#container #header h1 a:link {
+#header h1 a:link {
   color: #000000;
   text-decoration: none;
 }
-#container #header h1 a:active {
+#header h1 a:active {
   color: #000000;
   text-decoration: none;
 }
-#container #header h1 a:hover {
+#header h1 a:hover {
   color: #000000;
   text-decoration: none;
 }
-#container #header .tagline {
+#header .tagline {
   font-family: ArtBrushMedium, sans-serif;
   color: #222222;
   text-shadow: #ffffff 1px 1px 3px;
@@ -64,8 +64,8 @@ body {
   line-height: 1em;
   padding: 0;
 }
-#container #header img { margin: 5px 20px; }
-#container #footer {
+#header img { margin: 5px 20px; }
+#footer {
   font-size: 13px;
   line-height: 1em;
   text-align: center;
@@ -73,22 +73,12 @@ body {
   font-family: sans-serif;
   margin: 20px 0;
 }
-#container #main {
+#main, .aside, .bubble {
   -moz-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
   -webkit-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-#container .aside {
-  -moz-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
-  -webkit-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-#container .bubble {
-  -moz-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
-  -webkit-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3) inset;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-#container #main {
+#main {
   background-color: #fdfeff;
   padding: 10px 30px;
   min-height: 400px;
@@ -98,19 +88,44 @@ body {
   -moz-border-radius: 10px;
   border-radius: 10px;
 }
-#container #main code {
+#main hr {
+  background-color: #f3f3f3;
+  border: 0;
+  height: 1px;
+}
+#main .author {
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.5em;
+}
+#main .date {
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.5em;
+}
+#main .author {
+  margin-top: 8px;
+  float: right;
+  font-weight: bold;
+}
+#main .author img {
+  float: right;
+  margin: 3px 0 0 5px;
+}
+#main .author .date { font-weight: normal; }
+#main code {
   font-family: monaco, consolas, monospace;
   font-size: 90%;
   background-color: #efeeed;
   border: 1px solid #e0e0e0;
 }
-#container #main pre {
+#main pre {
   border: 1px solid #aaaaaa;
   background-color: #f6f5f4;
   margin: 0 -10px;
   display: block;
 }
-#container #main pre code {
+#main pre code {
   font-size: 12px;
   line-height: 1.4em;
   display: block;
@@ -118,27 +133,27 @@ body {
   border: 0;
   background-color: inherit;
 }
-#container #main h1 {
+#main h1 {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
-#container #main h2 {
+#main h2 {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
-#container #main h3 {
+#main h3 {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
-#container #main h4 {
+#main h4 {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
-#container #main h5 {
+#main h5 {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
-#container #main h2 {
+#main h2 {
   margin-top: 20px;
   margin-bottom: 10px;
   padding-bottom: 5px;
@@ -146,38 +161,38 @@ body {
   border-bottom: 2px dotted #aaaaaa;
   color: #1654a7;
 }
-#container #main h3 { color: #72313e; }
-#container #main p {
+#main h3 { color: #72313e; }
+#main p {
   text-align: justify;
   font-size: 14px;
   line-height: 1.6em;
 }
-#container #sidebar {
+#sidebar {
   float: right;
   width: 350px;
   font-family: sans-serif;
   font-size: 14px;
   line-height: 1.6em;
 }
-#container #sidebar dl { margin: 10px 0; }
-#container #sidebar h3 {
+#sidebar dl { margin: 10px 0; }
+#sidebar h3 {
   font-size: 18px;
   font-weight: bold;
   line-height: 1em;
   border-bottom: 1px solid #aaaaaa;
 }
-#container #sidebar dt { font-weight: bold; }
-#container #sidebar dd { margin-left: 20px; }
-#container #sidebar dd ul { padding: 0; }
-#container #sidebar ul { padding-left: 20px; }
-#container #sidebar .headshot {
+#sidebar dt { font-weight: bold; }
+#sidebar dd { margin-left: 20px; }
+#sidebar dd ul { padding: 0; }
+#sidebar ul { padding-left: 20px; }
+#sidebar .headshot {
   float: left;
   width: 200px;
   height: 200px;
   margin: 0 10px 10px 0;
   border: 2px solid rgba(200, 200, 200, 0.2);
 }
-#container #sidebar .aside {
+#sidebar .aside {
   margin-top: 20px;
   -webkit-border-top-right-radius: 20px;
   -webkit-border-bottom-right-radius: 20px;
@@ -191,7 +206,7 @@ body {
   color: #ffffff;
   padding: 10px 10px 10px 20px;
 }
-#container #sidebar .aside h3 {
+#sidebar .aside h3 {
   background-color: rgba(255, 255, 255, 0.4);
   background-color: #a3a2a1;
   text-shadow: #ffffff 1px 1px 3px;
@@ -202,26 +217,26 @@ body {
   margin: -9px -9px 10px -20px;
   padding: 9px 10px 8px 20px;
 }
-#container #sidebar .aside a {
+#sidebar .aside a {
   color: #2ca8ff;
   font-weight: bold;
   text-decoration: none;
 }
-#container #sidebar .aside a:link {
+#sidebar .aside a:link {
   color: #2ca8ff;
   font-weight: bold;
   text-decoration: none;
 }
-#container #sidebar .aside a:active {
+#sidebar .aside a:active {
   color: #2ca8ff;
   font-weight: bold;
   text-decoration: none;
 }
-#container #sidebar .aside a:hover {
+#sidebar .aside a:hover {
   color: #37d2ff;
   text-decoration: underline;
 }
-#container #sidebar .bubble {
+#sidebar .bubble {
   margin: 20px 0 0 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -231,7 +246,7 @@ body {
   background: -webkit-gradient(linear, 0 0, 0 90%, from(#ffffff), to(#bcbab8));
   background-color: #d5d3d2;
 }
-#container #sidebar .bubble h3 {
+#sidebar .bubble h3 {
   text-shadow: #000000 1px 1px 3px;
   -webkit-border-top-left-radius: 10px;
   -moz-border-radius-topleft: 10px;
