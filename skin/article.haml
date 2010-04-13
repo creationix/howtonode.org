@@ -106,5 +106,5 @@
   .bubble= markdownEncode(description)
 
 #main.clearfix
-  %h1&=title
-  =content
+  %h1&=article.title
+  =markdownEncode(article.markdown)
