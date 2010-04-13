@@ -89,13 +89,9 @@ Often you won't be using the node built-in libraries because they are designed t
 
 In order to test this, you will need to install the `node-router` library.  There are two ways to do this.  You can either install it into a path that node recognizes (I create a symlink into ~/.node_libraries) or put the `node-router.js` file in your application and reference it locally.  See the [node docs on modules][] for more details on how modules work.
 
-# Instant Node Wiki
+# Installing Libraries
 
-Now I'll explain how to design and implement a node based wiki engine.  This will be very simple and use a few libraries to help keep us from reinventing the wheel too many times.
-
-## Modules Required
-
-Please install or have otherwise available to your application the following modules:
+I'll install the following libraries that are common to my projects:
 
  - [node-router][] - Wraps the built-in http library with many convenience functions like request routing and message body decoding.
  - [haml-js][] - Template engine that compiles HAML templates into HTML
@@ -112,8 +108,7 @@ You can install these however you please, but here is how I'd do it.  The follow
     cd ~/.node_libraries
     ln -s ~/NodeLibs/*/lib/* ./
 
-## Directory Structure
-
+That's it for now, this article was going to explain more, but it seems it got lost and fell through the cracks.  Hopefully this will help you get started working with node.JS, it's a blast!.
 
 
 [node docs on modules]: http://nodejs.org/api.html#_modules
