@@ -22,54 +22,13 @@ In essence `loadArticle` is a composite asynchronous function that had two other
 
 How about an example that makes use of the parallel feature of `Step`:
 
-    // Reads the authors in the authors directory and returns a data structure
-    function loadAuthors(callback) {
-      var names;
-      Step(
-        function getFileNames() {
-          Git.readDir("authors", this);
-        },
-        function readFileContents(err, results) {
-          if (err) throw err;
-          var parallel = this.parallel;
-          results.files.forEach(function (filename) {
-            var name = filename.replace(/\.markdown$/, '');
-            loadAuthor(name, parallel());
-          });
-        },
-        function parseFileContents(err) {
-          if (err) throw err;
-          var authors = {};
-          Array.prototype.slice.call(arguments, 1).forEach(function (author) {
-            authors[author.name] = author;
-          });
-          return authors;
-        }
-      );
-    }
+<step-of-conductor/step2.js>
 
 This example is similar, but with the new addition of the `this.parallel` function.  This parallel function generates a new callback when called and sets an internal counter in the `Step` system.  Though it's hard to see with this example, the arguments to parseFileContents are first a single `err` and then the second argument to each of the `loadAuthor` callbacks.
 
 Perhaps this example will be more clear:
 
-    Step(
-      function loadData() {
-        Git.getTags(this.parallel());
-        loadAuthors(this.parallel());
-      },
-      function renderContent(err, tags, authors) {
-        if (err) return response.simpleText(500, err.stack);
-        var data = {...}; // Truncated for clarity
-        renderTemplate('index', data, this);
-      },
-      function showPage(err, content) {
-        if (err) return response.simpleText(500, err.stack);
-        render(request, response, {
-          title: "Index",
-          content: content
-        });  
-      }
-    )
+<step-of-conductor/step3.js>
 
 This is the route handler for the front page of the blog.  It needs data from two different async calls and can't render the main template till they're loaded.  Then after the main template is rendered, the layout can be rendered.  Both `Git.getTags` and `loadAuthors` output two arguments, but their errors arguments are compressed into a single `err`.  If both emitted errors that the latter would overwrite the first.
 
@@ -87,32 +46,9 @@ Instead of shoe-horning a problem into a preset pattern to make it easier on the
 
 The example from above that uses `Step` could be rewritten to use `Conduct` (the function exported by the [conductor][] library):
 
+<step-of-conductor/conductor1.js>
+
 <img src="step-of-conductor/example1.dot" style="float:right;margin:0 0 10px 10px" />
-
-    // Define the loadArticle function using Conduct from conductor.
-    var loadArticle = Conduct({
-      M: ["_1", function loadMarkdown(name, callback) {
-        // Async function that loads the contents of the markdown file.
-        var filename = path.join("articles", name + ".markdown");
-        Git.readFile(filename, callback);
-      }],
-      P: ["_1", "M1", function parseMarkdown(name, markdown) {
-        // Sync function that parses the markdown and adds the name property
-        var props = markdownPreParse(markdown);
-        props.name = name;
-        return props;
-      }],
-      A: ["P1", function loadAuthor(props, callback) {
-        // Async function that loads the author based on props.author
-        loadAuthor(props.author, callback);
-      }],
-      F: ["P1", "A1", function finalize(props, author) {
-        // Final sync function that attaches the author object.
-        props.author = author;
-        return props;
-      }]
-    }, "F1");
-
 
 At first glance this looks like a classic case of over-engineering.  For this simple case you'd be right, but we're keeping it simple for purposes of explanation.
 
