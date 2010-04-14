@@ -96,6 +96,49 @@ body {
       font-weight: normal;
     }
   }
+  .snippet {
+    dl {
+      border: 1px solid #aaa;
+      
+      background-color: #f6f5f4;
+      margin: -1px -10px 0;
+      padding: 10px;
+      -webkit-border-bottom-left-radius: 10px;
+      -moz-border-radius-bottomleft: 10px;
+      border-bottom-left-radius: 10px;
+      -webkit-border-bottom-right-radius: 10px;
+      -moz-border-radius-bottomright: 10px;
+      border-bottom-right-radius: 10px;
+      font-family: monaco, consolas, monospace;
+      font-size: 90%;
+    }
+    dt {
+      font-weight: bold;
+      font-family: sans-serif;
+      float: right;
+    }
+    dd {
+      margin: 0;
+      padding: 0;
+      white-space: pre;
+    }
+    .last-expression {
+      font-weight: bold;
+    }
+    .error {
+      background-color: #fff0f0;
+      dt {
+        color: #977;
+      }  
+    }
+    .output {
+      background-color: #f0fff0;
+      dt {
+        color: #797;
+      }  
+      
+    }
+  }
   code {
     font-family: monaco, consolas, monospace;
     font-size: 90%;
@@ -137,30 +180,23 @@ body {
     line-height: 1.6em;
   }
   .code-link {
-    position: relative;
     float: right;
-    font-size: 14px;
-    line-height: 14px;
-    height: 14px;
-    margin: 0 -10px -28px;
-    background-color: #333;
+    font-size: 12px;
+    line-height: 12px;
+    height: 12px;
+    margin: 0 -10px;
+    background-color: #fff;
     border: 1px solid #AAA;
-    padding: 7px 10px;
+    padding: 5px 10px;
     font-weight: bold;
     display: block;
-    -webkit-border-bottom-left-radius: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    border-bottom-left-radius: 10px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-left-radius: 5px;
+    .hash {
+      font-weight: normal;
+    }
     
-  }
-  .code-link, .code-link:link, .code-link:active {
-    color: #1654a7 * 2.0;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  .code-link:hover {
-    color: #1654a7 * 2.5;
-    text-decoration: underline;
   }
 
 

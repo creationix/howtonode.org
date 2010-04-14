@@ -115,6 +115,35 @@ body {
   margin: 3px 0 0 5px;
 }
 #main .author .date { font-weight: normal; }
+#main .snippet dl {
+  border: 1px solid #aaaaaa;
+  background-color: #f6f5f4;
+  margin: -1px -10px 0;
+  padding: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;
+  -webkit-border-bottom-right-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
+  border-bottom-right-radius: 10px;
+  font-family: monaco, consolas, monospace;
+  font-size: 90%;
+}
+#main .snippet dt {
+  font-weight: bold;
+  font-family: sans-serif;
+  float: right;
+}
+#main .snippet dd {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+}
+#main .snippet .last-expression { font-weight: bold; }
+#main .snippet .error { background-color: #fff0f0; }
+#main .snippet .error dt { color: #997777; }
+#main .snippet .output { background-color: #f0fff0; }
+#main .snippet .output dt { color: #779977; }
 #main code {
   font-family: monaco, consolas, monospace;
   font-size: 90%;
@@ -170,40 +199,21 @@ body {
   line-height: 1.6em;
 }
 #main .code-link {
-  position: relative;
   float: right;
-  font-size: 14px;
-  line-height: 14px;
-  height: 14px;
-  margin: 0 -10px -28px;
-  background-color: #333333;
+  font-size: 12px;
+  line-height: 12px;
+  height: 12px;
+  margin: 0 -10px;
+  background-color: #ffffff;
   border: 1px solid #aaaaaa;
-  padding: 7px 10px;
+  padding: 5px 10px;
   font-weight: bold;
   display: block;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-bottomleft: 10px;
-  border-bottom-left-radius: 10px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-left-radius: 5px;
 }
-#main .code-link {
-  color: #2ca8ff;
-  font-weight: bold;
-  text-decoration: none;
-}
-#main .code-link:link {
-  color: #2ca8ff;
-  font-weight: bold;
-  text-decoration: none;
-}
-#main .code-link:active {
-  color: #2ca8ff;
-  font-weight: bold;
-  text-decoration: none;
-}
-#main .code-link:hover {
-  color: #37d2ff;
-  text-decoration: underline;
-}
+#main .code-link .hash { font-weight: normal; }
 #sidebar {
   float: right;
   width: 350px;

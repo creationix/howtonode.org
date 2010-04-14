@@ -1,6 +1,8 @@
 Title: Prototypal Inheritance
 Author: Tim Caswell
 Date: Tue Feb 09 2010 13:44:09 GMT-0600 (CST)
+NodeVersion: v0.1.90
+
 
 In almost all modern programming languages we use the concept of Object Oriented Programming (OOP) to help manage the complexity of today's software.  The biggest challenge in modern software is in fact managing the complexity of it.
 
@@ -14,7 +16,7 @@ From what I hear (I wasn't there at the time), JavaScript was initially a protot
 
 ### Classical OOP
 
-<prototypal-inheritance/classical.js>
+<prototypal-inheritance/classical.js*>
 
 Here we have a class like object `Person`.  Actually it's just a regular JavaScript function, but that's how it works, there are no real classes.  There are many ways to emulate classical OOP, but the most straightforward and the one designed into the language is this pattern.  Only functions can have prototypes and prototypes hold instance methods.  Then instances are `new` instances of the function which is now dubbed a constructor.
 
@@ -24,24 +26,19 @@ I don't like the `new` keyword, it overloads the meaning of functions and is dan
 
 Instead try this on for size:
 
-<prototypal-inheritance/prototypal.js#intro-to-style>
+<prototypal-inheritance/prototypal.js#intro-to-style*>
 
 `Object.create` is new to JavaScript (it's part of [ES5]), but [node supports it][] so we can safely use it.  This creates a new object that inherits from another object.  `Object.create` actually can set properties right away, but the syntax is rather verbose:
 
-<prototypal-inheritance/prototypal.js#object-create>
+<prototypal-inheritance/prototypal.js#object-create*>
 
 There is more you can set, but `value` and `enumerable` are the interesting ones.  What `enumerable` does is tell operators like `for ... in` if they should enumerate over that key.  When you set a property directly, it's enumerable property is set to `true` automatically.  `Object.create` actually defaults to false, so we could write this as:
 
-<prototypal-inheritance/prototypal.js#object-create-ii>
+<prototypal-inheritance/prototypal.js#object-create-ii*>
 
 Just make sure you understand that most functions like `sys.inspect` and `JSON.stringify` won't show the name property of frank now that it's hidden.  If you pass `true` as the second argument to `sys.inspect`, it will show hidden properties using `Object.getOwnPropertyNames`.
 
-    sys.puts(sys.inspect(frank));
-    // {}
-    sys.puts(sys.inspect(frank, true));
-    // {
-    //  [name]: "Frank Dijon"
-    // }
+<prototypal-inheritance/prototypal.js#object-create-iii*>
 
 ## Using `Object.spawn`
 
