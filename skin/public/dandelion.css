@@ -64,7 +64,6 @@ body {
   line-height: 1em;
   padding: 0;
 }
-#header img { margin: 5px 20px; }
 #footer {
   font-size: 13px;
   line-height: 1em;
@@ -312,11 +311,6 @@ pre.prettyprint {
 }
 @media print .atn { color: #440044; }
 @media print .atv { color: #006600; }
-@font-face {
-  font-family: 'JungleFeverRegular';
-  src: url('JungleFever.eot');
-  src: local('JungleFever'), local('JungleFever'), url('JungleFever.woff') format('woff'), url('JungleFever.ttf') format('truetype'), url('JungleFever.svg#JungleFever') format('svg');
-}
 @font-face {
   font-family: 'ArtBrushMedium';
   src: url('Artbrush.eot');
