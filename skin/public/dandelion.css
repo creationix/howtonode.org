@@ -169,6 +169,41 @@ body {
   font-size: 14px;
   line-height: 1.6em;
 }
+#main .code-link {
+  position: relative;
+  float: right;
+  font-size: 14px;
+  line-height: 14px;
+  height: 14px;
+  margin: 0 -10px -28px;
+  background-color: #333333;
+  border: 1px solid #aaaaaa;
+  padding: 7px 10px;
+  font-weight: bold;
+  display: block;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;
+}
+#main .code-link {
+  color: #2ca8ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+#main .code-link:link {
+  color: #2ca8ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+#main .code-link:active {
+  color: #2ca8ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+#main .code-link:hover {
+  color: #37d2ff;
+  text-decoration: underline;
+}
 #sidebar {
   float: right;
   width: 350px;

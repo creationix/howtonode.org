@@ -14,25 +14,7 @@ A very small library that I've been using for these simple cases is based on the
 
 Here is a snippet of using `Step` in the [wheat][] blogging engine I'm working on:
 
-    function loadArticle(name, callback) {
-      var props;
-      Step(
-        function readFile() {
-          Git.readFile(path.join("articles", name + ".markdown"), this);
-        },
-        function getAuthor(err, markdown) {
-          if (err) throw err;
-          props = markdownPreParse(markdown);
-          props.name = name;
-          loadAuthor(props.author, this);
-        },
-        function finish(err, author) {
-          if (err) throw err;
-          props.author = author;
-          return props;
-        }
-      );
-    }
+<step-of-conductor/step1.js>
 
 In this example, I pass three steps as functions to the `Step` helper.  The first two end in a call to an asynchronous function.  I pass the value `this` as the callback.  This hooks's into `Step`'s system so that it know to call the next step when the first is done.  The parameters given to the callback are passed through to the next step.  Notice that I created a closure variable `props`.  This is so that the third step has access to the props defined in the second step, but not passed through by the `loadAuthor` call.  The third step then does some final processing and calls the main callback to the outer function.
 
