@@ -285,10 +285,6 @@ html[xmlns] .clearfix { display: block; }
 .atn { color: #660066; }
 .atv { color: #008800; }
 .dec { color: #660066; }
-pre.prettyprint {
-  padding: 2px;
-  border: 1px solid #888888;
-}
 @media print .str { color: #006600; }
 @media print .kwd {
   color: #000066;
