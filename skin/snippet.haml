@@ -5,10 +5,6 @@
       %span.hash ##{snippet.name}
   %pre
     %code&= snippet.code
-  :if snippet.error
-    %dl.error
-      %dt Error
-      %dd&= snippet.error
   :if snippet.output || snippet.lastExpression !== undefined
     %dl.output
       %dt Output
@@ -17,3 +13,7 @@
           &= snippet.output
         :if snippet.lastExpression !== undefined
           .last-expression&= "=> " + inspect(snippet.lastExpression)
+  :if snippet.error
+    %dl.error
+      %dt Error
+      %dd&= snippet.error
