@@ -5,13 +5,13 @@
     %h3
       Articles
     %ul
-      :each article in articles
+      :each article in articles.slice(0,20)
         %li
           %a{href: "/" + article.name}&=article.title
           &=" by " + article.author.name
           
 #main.clearfix
-  :each article in articles
+  :each article in articles.slice(0,6)
     .author 
       %img{src:gravitar(article.author.email, 30)}
       By #{article.author.name}

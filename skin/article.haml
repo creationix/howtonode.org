@@ -82,16 +82,17 @@
   :if article.related && article.related.length > 0
     .bubble
       %h3
-        Related Articles
+        Other Articles by this Author
       %ul
         :each related in article.related
           %li
-            %a{ href: related.url }&= related.title
-            &= related.authorName
+            %a{href: "/" + related.name}&=related.title
 
   .bubble= markdownEncode(description)
 
 #main.clearfix
+  :if article.version
+    %a.sha-version{ href: "/#{article.version}/#{article.name}" } Static Version
   %h1&= article.title
   = markdownEncode(article.markdown)
   %hr
