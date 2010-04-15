@@ -1,7 +1,9 @@
+var sys = require('sys');
+
 //person
 var Person = {
   name: "Tim",
-  age: 27,
+  age: 28,
   greeting: function () {
     return "Hello " + this.name + ".  Wow, you are " + this.age + " years old.";
   }

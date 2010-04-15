@@ -1,3 +1,5 @@
+var sys = require('sys');
+
 var name = "outer";
 function one() {
   var name = "middle";
