@@ -26,7 +26,69 @@
         %dt Links:
         %dd
           %a{href: author.homepage} Homepage
-          
+
+  .aside
+    %h3
+      About this Article
+    :if article.date
+      %dl{title: article.date}
+        %dt
+          Date Released:
+        %dd
+          &= formatDate(article.date, "%l %F %j, %Y")
+    :if article.lastUpdated
+      %dl{title: article.lastUpdated}
+        %dt
+          Last Updated:
+        %dd
+          &= formatDate(article.lastUpdated, "%l %F %j, %Y")
+    :if article.node
+      %dl
+        %dt
+          Node Version:
+        %dd
+          %a{ href: "http://github.com/ry/node/tree/" + article.node }
+            node #{article.node}
+    :if article.dependencies && article.dependencies.length > 0
+      %dl
+        %dt
+          Dependency Versions:
+        %dd
+          %ul
+            :each dependency in article.dependencies
+              %li
+                %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
+                  haml-js v0.2.2
+    :if article.snippets && article.snippets.length > 0
+      %dl
+        %dt
+          Code Samples:
+        %dd
+          %ul
+            :each snippet in article.snippets
+              %li
+                %a{ href: snippet.url }&= snippet.name
+    :if article.alternates && article.alternates.length > 0
+      %dl
+        %dt
+          Alternate Versions:
+        %dd
+          %ul
+            :each alternate in article.alternates
+              %li
+                %a{ href: "/#{alternate.sha}/#{article.name}" }
+                  node #{alternate.tag}
+
+  :if article.related && article.related.length > 0
+    .bubble
+      %h3
+        Related Articles
+      %ul
+        :each related in article.related
+          %li
+            %a{ href: related.url }&= related.title
+            &= related.authorName
+
   .bubble= markdownEncode(description)
 
 #main.clearfix

@@ -15,7 +15,7 @@
     .author 
       %img{src:gravitar(article.author.email, 30)}
       By #{article.author.name}
-      .date{title: article.date}&= format_date(article.date, "%Y.%m.%d")
+      .date{title: article.date}&= formatDate(article.date, "%Y.%m.%d")
     %h1{style: "margin-right: 150px"}
       %a{href: "/" + article.name}&= article.title
     = intro(article.markdown)
