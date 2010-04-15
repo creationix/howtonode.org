@@ -4,3 +4,6 @@
 [submodule "articles/step-of-conductor/conductor"]
 	path = articles/step-of-conductor/conductor
 	url = git://github.com/creationix/conductor.git
+[submodule "articles/hello-node/node-router"]
+	path = articles/hello-node/node-router
+	url = git://github.com/creationix/node-router.git

@@ -10,7 +10,7 @@ var server = net.createServer(function (socket) {
   socket.addListener("connect", function () {
     sys.puts("Connection from " + socket.remoteAddress);
     socket.write("Hello World\n");
-    socket.close();
+    socket.end();
   });
   
 });
