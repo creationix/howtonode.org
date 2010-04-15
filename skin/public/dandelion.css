@@ -139,7 +139,6 @@ body {
   padding: 0;
   white-space: pre;
 }
-#main .snippet .last-expression { font-weight: bold; }
 #main .snippet .error { background-color: #fff0f0; }
 #main .snippet .error dt { color: #997777; }
 #main .snippet .output { background-color: #f0fff0; }

@@ -16,4 +16,4 @@
         :if snippet.output !== undefined
           &= snippet.output
         :if snippet.lastExpression !== undefined
-          .last-expression&= inspect(snippet.lastExpression)
+          .last-expression&= "=> " + inspect(snippet.lastExpression)

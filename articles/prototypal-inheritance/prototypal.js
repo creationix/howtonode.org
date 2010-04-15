@@ -8,7 +8,7 @@ var Person = {
 };
 var frank = Object.create(Person);
 frank.name = "Frank Dijon";
-sys.puts(frank.greet());
+frank.greet();
 
 //object-create
 Object.create(Person, {name: {value: "Frank Dijon", enumerable: true}})
