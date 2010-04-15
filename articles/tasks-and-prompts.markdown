@@ -23,7 +23,7 @@ The other day I was converting a couple Bash installer scripts to node scripts. 
 
 A simple JavaScript array works fine as a first in first out queue (i.e. shift() pops the zeroth position off). An object's properties can keep track of what text I wanted to displayed; the callback to be fired; and if I need to show a prompt or get a response when firing a callback. tasks-and-prompts.js is a simple example of doing that:
 
-<tasks-and-prompts/tasks-and-prompts.js*>
+<tasks-and-prompts/tasks-and-prompts.js>
 
 ## Explanations
 
