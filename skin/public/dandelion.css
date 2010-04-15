@@ -28,6 +28,22 @@ body {
   color: #217efa;
   text-decoration: underline;
 }
+#header a {
+  color: #000000;
+  text-decoration: none;
+}
+#header a:link {
+  color: #000000;
+  text-decoration: none;
+}
+#header a:active {
+  color: #000000;
+  text-decoration: none;
+}
+#header a:hover {
+  color: #000000;
+  text-decoration: none;
+}
 #header h1 {
   font-family: ArtBrushMedium, sans-serif;
   text-shadow: #ffffff 1px 1px 5px;
@@ -37,22 +53,6 @@ body {
   color: #000000;
   padding: 0;
   margin: 15px 30px 5px;
-}
-#header h1 a {
-  color: #000000;
-  text-decoration: none;
-}
-#header h1 a:link {
-  color: #000000;
-  text-decoration: none;
-}
-#header h1 a:active {
-  color: #000000;
-  text-decoration: none;
-}
-#header h1 a:hover {
-  color: #000000;
-  text-decoration: none;
 }
 #header .tagline {
   font-family: ArtBrushMedium, sans-serif;
@@ -195,15 +195,16 @@ body {
   font-family: sans-serif;
   margin: 0.5em 0;
 }
+#main h1 { color: #222222; }
 #main h2 {
   margin-top: 20px;
   margin-bottom: 10px;
   padding-bottom: 5px;
   line-height: 1em;
   border-bottom: 2px dotted #aaaaaa;
-  color: #1654a7;
+  color: #444444;
 }
-#main h3 { color: #72313e; }
+#main h3 { color: #666666; }
 #main p {
   text-align: justify;
   font-size: 14px;
@@ -244,6 +245,18 @@ body {
 #sidebar dd { margin-left: 20px; }
 #sidebar dd ul { padding: 0; }
 #sidebar ul { padding-left: 20px; }
+#sidebar .versiontag {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 1px 3px;
+  border: 1px solid #888888;
+  background-color: #88bbff;
+  font-size: 10px;
+  line-height: 1em;
+  margin: 0 5px;
+  font-weight: normal;
+}
 #sidebar .headshot {
   float: left;
   width: 200px;

@@ -23,6 +23,10 @@ body {
 }
 
 #header {
+  a, a:link, a:active, a:hover {
+    color: #000;
+    text-decoration: none;
+  }
   h1 {
     font-family: ArtBrushMedium, sans-serif;
     text-shadow: #fff 1px 1px 5px;
@@ -32,10 +36,6 @@ body {
     color: #000;
     padding: 0;
     margin: 15px 30px 5px;
-    a, a:link, a:active, a:hover {
-      color: #000;
-      text-decoration: none;
-    }
   }
   .tagline {
     font-family: ArtBrushMedium, sans-serif;
@@ -172,16 +172,20 @@ body {
     font-family: sans-serif;
     margin: .5em 0;
   }
+  h1 {
+    color: #222;
+  }
+  
   h2 {
     margin-top: 20px;
     margin-bottom: 10px;
     padding-bottom: 5px;
     line-height: 1em;
     border-bottom: 2px dotted #aaa;
-    color: #1654a7;
+    color: #444;
   }
   h3 {
-    color: #72313e;
+    color: #666;
   }
   p {
     text-align: justify;
@@ -242,6 +246,19 @@ body {
     padding-left: 20px;
   }
 
+  .versiontag {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 1px 3px;
+    border: 1px solid #888;
+    background-color: #8bf;
+    font-size: 10px;
+    line-height: 1em;
+    margin: 0 5px;
+    font-weight: normal;
+  }
+  
   .headshot {
     float: left;
     width: 200px;

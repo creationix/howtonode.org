@@ -9,6 +9,8 @@
         %li
           %a{href: "/" + article.name}&=article.title
           &=" by " + article.author.name
+          :if article.node
+            %span.versiontag&= article.node
           
 #main.clearfix
   :each article in articles.slice(0,6)

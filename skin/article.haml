@@ -87,13 +87,16 @@
         :each related in article.related
           %li
             %a{href: "/" + related.name}&=related.title
+            :if article.node
+              %span.versiontag&= article.node
 
   .bubble= markdownEncode(description)
 
 #main.clearfix
   :if article.version
     %a.sha-version{ href: "/#{article.version}/#{article.name}" } Static Version
-  %h1&= article.title
+  %h1
+    %a{href: "/" + article.name}&= article.title
   = markdownEncode(article.markdown)
   %hr
   #disqus_thread.body
