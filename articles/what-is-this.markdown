@@ -114,11 +114,7 @@ This is especially dangerous in things like for loops:
 
 The `i` variable in both loops is the **same** variable and so the inner loop will break the outer loop and give the wrong answer.  Also if I had not put var statements before the two `n` variables, then they would walk over each other and give a wrong answer too.
 
----
-
-**UPDATE**:  Some astute readers have pointed out that the next section is not true for modern browsers and node.JS.  I'm not sure where I've seen it, but I'm sure I've this undesirable behavior somewhere.
-
-There is one word of caution for `var` users.  It doesn't matter where in the function body you put the `var` word.  It only matters which function body you put it in.  And it's scope in inner to function parameters. For example:
+There is one word of caution for `var` users.  It doesn't matter where in the function body you put the `var` word.  It only matters which function body you put it in.  And it's scope is inner to function parameters. For example:
 
 <what-is-this/var.js#onevar*>
 
