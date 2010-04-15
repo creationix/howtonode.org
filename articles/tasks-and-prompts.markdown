@@ -1,6 +1,8 @@
 Title: Tasks and Prompts -- Implementing Simple Work Queues
 Author: R. S. Doiel
 Date: Sun, 28 Feb 2010 00:50:22 GMT
+Node: v0.1.90
+
 
 Sometimes all you really need is orderly execution not blocking I/O to get the job done.  Tasks and prompts is a light weight implementation of the work queue design pattern.
 

@@ -1,4 +1,4 @@
-var Step = require('step')
+var Step = require('step');
 
 Step(
   function loadData() {
