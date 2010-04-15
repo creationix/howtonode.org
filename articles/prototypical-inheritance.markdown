@@ -1,8 +1,7 @@
 Title: Prototypal Inheritance
 Author: Tim Caswell
 Date: Tue Feb 09 2010 13:44:09 GMT-0600 (CST)
-NodeVersion: v0.1.90
-
+Node: v0.1.90
 
 In almost all modern programming languages we use the concept of Object Oriented Programming (OOP) to help manage the complexity of today's software.  The biggest challenge in modern software is in fact managing the complexity of it.
 
@@ -44,77 +43,21 @@ Just make sure you understand that most functions like `sys.inspect` and `JSON.s
 
 While Object.create is nice, it's still too verbose for my taste.  On my projects I made a new function called `Object.spawn`.  Here is the source for reference:
 
-    Object.spawn = function (parent, props) {
-      var defs = {}, key;
-      for (key in props) {
-        if (props.hasOwnProperty(key)) {
-          defs[key] = {value: props[key], enumerable: true};
-        }
-      }
-      return Object.create(parent, defs);
-    }
+<prototypal-inheritance/spawn.js#object-spawn*>
 
 Then you can create hierarchies of objects easily:
 
-    var Animal = {
-      eyes: 2,
-      legs: 4,
-      name: "Animal",
-      toString: function () {
-        return this.name + " with " + this.eyes + " eyes and " + this.legs + " legs."
-      }
-    }
-    var Dog = Object.spawn(Animal, {
-      name: "Dog"
-    });
-    var Insect = Object.spawn(Animal, {
-      name: "Insect",
-      legs: 6
-    });
-    var fred = Object.spawn(Dog);
-    var pete = Object.spawn(Insect);
-    puts(fred);
-    puts(pete);
-
-The output would be:
-
-    #!html
-    Dog with 2 eyes and 4 legs.
-    Insect with 2 eyes and 6 legs.
+<prototypal-inheritance/spawn.js#animals*>
 
 ## Using `Object.prototype.spawn`
 
 If you're really brave and don't mind messing with `Object.prototype`, then there is an even shorter way:
 
-    Object.prototype.spawn = function (props) {
-      var defs = {}, key;
-      for (key in props) {
-        if (props.hasOwnProperty(key)) {
-          defs[key] = {value: props[key], enumerable: true};
-        }
-      }
-      return Object.create(this, defs);
-    }
+<prototypal-inheritance/spawn.js#proto-spawn*>
 
 Which is used as:
 
-    var Animal = {
-      eyes: 2,
-      legs: 4,
-      name: "Animal",
-      toString: function () {
-        return this.name + " with " + this.eyes + " eyes and " + this.legs + " legs."
-      }
-    }
-    var Dog = Animal.spawn({
-      name: "Dog"
-    });
-    var Insect = Animal.spawn({
-      name: "Insect",
-      legs: 6
-    });
-    var fred = Dog.spawn({});
-    var pete = Insect.spawn({});
+<prototypal-inheritance/spawn.js#animals2*>
 
 Just make sure to understand that adding enumerable properties to Object.prototype breaks all `for ... in` loops that don't have a `hasOwnProperty` check in them.  You've been warned.
 
