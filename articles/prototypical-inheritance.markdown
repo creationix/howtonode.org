@@ -67,8 +67,5 @@ I'm not sure if this is a good idea or not.  You give up a lot by not having con
 
 I plan on using this technique with some upcoming projects. I'm not sure what will come of it.
 
-You can see the full source of `Object.spawn` and `Object.prototype.spawn` on [github][].
-
-[github]: http://github.com/creationix/howtonode.org/tree/master/articles/prototypal-inheritance
 [node supports it]: http://wiki.github.com/ry/node/ecma-5mozilla-features-implemented-in-v8
 [ES5]: http://www.ecma-international.org/publications/standards/Ecma-262.htm
