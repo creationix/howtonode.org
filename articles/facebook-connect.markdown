@@ -91,7 +91,7 @@ First we start out with a simple skeleton that loads jQuery and the Facebook JS 
       </body> 
     </html>
   
-Now let's implement a basic UI ([index.html][]):
+Now let's implement a basic UI:
 
 <facebook-connect/index.html>
 
@@ -110,7 +110,7 @@ Next we need to implement 3 AJAX actions to make jquery.facebook.js work:
 * **POST /fbSession** - Update additional information about the user (name, picture, etc)
 * **POST /fbLogout** - Called after logout from the Facebook Application took place
 
-Here is an example Express application that uses no persistent storage ([app.js][]):
+Here is an example Express application that uses no persistent storage:
 
 <facebook-connect/app.js>
 
@@ -151,8 +151,6 @@ Debugging Facebook Application problems can be a real pain in the neck, here is 
 [jquery.facebook.js]: http://github.com/dominiek/node-facebook/raw/master/lib/jquery.facebook.js
 [xd_receiver.htm]: http://github.com/dominiek/node-facebook/raw/master/examples/fb_iframe/public/xd_receiver.htm
 [Cross-domain Communication Channel]: http://wiki.developers.facebook.com/index.php/Cross_Domain_Communication_Channel
-[index.html]: http://github.com/dominiek/node-facebook/raw/master/examples/fb_connect/public/index.html
-[app.js]: http://github.com/dominiek/node-facebook/raw/master/examples/fb_connect/app.js
 [cookie hacks]: http://saizai.livejournal.com/897522.html
 [more about verifying the signature]: http://wiki.developers.facebook.com/index.php/Verifying_The_Signature
 [node-facebook repository]: http://github.com/dominiek/node-facebook
