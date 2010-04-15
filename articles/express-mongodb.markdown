@@ -719,5 +719,5 @@ __Fin__.
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
 [surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
 [natural]: http://en.wikipedia.org/wiki/Natural_key
-[Checkpoint 1]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/0001-Checkpoint-1.patch
-[Checkpoint 2]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/0001-Checkpoint-2.patch
+[Checkpoint 1]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/express-mongodb-1.zip
+[Checkpoint 2]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/express-mongodb-2.zip
