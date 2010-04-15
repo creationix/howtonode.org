@@ -1,3 +1,5 @@
+var Conduct = require('conductor');
+
 // Define the loadArticle function using Conduct from conductor.
 var loadArticle = Conduct({
   M: ["_1", function loadMarkdown(name, callback) {

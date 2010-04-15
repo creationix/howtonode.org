@@ -1,3 +1,5 @@
+var Step = require('step')
+
 Step(
   function loadData() {
     Git.getTags(this.parallel());
