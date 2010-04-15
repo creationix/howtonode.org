@@ -1,7 +1,7 @@
 Title: Prototypal Inheritance
 Author: Tim Caswell
 Date: Tue Feb 09 2010 13:44:09 GMT-0600 (CST)
-Node: v0.1.90
+Node: v0.1.91
 
 In almost all modern programming languages we use the concept of Object Oriented Programming (OOP) to help manage the complexity of today's software.  The biggest challenge in modern software is in fact managing the complexity of it.
 

@@ -1,7 +1,7 @@
 Title: What is "this"?
 Author: Tim Caswell
 Date: Mon Mar 08 2010 12:59:10 GMT-0600 (CST)
-Node: v0.1.90
+Node: v0.1.91
 
 Most people that learn JavaScript are coming from a background in another language.  This brings with it a view of how the world works that may be different from how it really works in JavaScript.  For this and other reasons, JavaScript is often misunderstood.  It's not entirely our fault, the language was designed to work like one thing (scheme-like), but look like another (c-like).  This article will describe lexical scope and the "`this`" variable and how to control them rather than be controlled by them when in coding JavaScript.
 

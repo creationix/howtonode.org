@@ -1,7 +1,7 @@
 Title: The Step of the Conductor
 Author: Tim Caswell
 Date: Mon Apr 12 2010 13:27:27 GMT-0500 (CDT)
-Node: v0.1.90
+Node: v0.1.91
 
 There have been several async management libraries proposed and written.  I'm guilty of at least three of them.  The reason for this proliferation of code is that they're all trying to solve a very real problem with writing non-trivial applications that make heavy use of async callbacks.
 

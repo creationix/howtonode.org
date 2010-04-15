@@ -1,6 +1,7 @@
 Title: "Do" it fast!
 Author: Tim Caswell
 Date: Mon Feb 22 2010 10:52:08 GMT-0600 (CST)
+Node: v0.1.91
 
 Now with the release of [Node v0.1.30][] there is even more need for a library like [Do][].  While working with the node community to decide on the best alternative to node promises, we decided that it's best left to library developers.  So as of this morning, node no longer ships with promises, but uses a simple callback interface for all async functions.
 
@@ -10,41 +11,13 @@ I took my async library that I've been developing throughout the Control Flow se
 
 All async functions in node now use a simple callback based interface:
 
-    fs.readdir("/usr", function (err, files) {
-      if (err) throw err;
-      puts("/usr files: " + files);
-    });
+<do-it-fast/async.js*>
 
 That is, after the arguments, there is a callback function expected.  This callback function will be given the error if there was one, and if not, the result after that.
 
 Creating an async function that exports this interface is simple too [plain_callbacks.js][]:
 
-    // Load 'fs', a built-in node library that has async functions
-    var fs = require('fs');
-
-    function safeRead(filename, callback) {
-      fs.readFile(filename, function (err, data) {
-        if (err) {
-          if (error.errno === process.ENOENT) {
-            // Ignore file not found errors and return an empty result
-            callback(null, "");
-          } else {
-            // Pass other errors through as is
-            callback(err);
-          }
-        } else {
-          // Pass successes through as it too.
-          callback(null, data);
-        }
-      })
-    }
-
-    safeRead(__filename, function (err, text) {
-      if (err) {
-        throw err;
-      }
-      puts(text);
-    })
+<do-it-fast/safe-read.js*>
 
 These callbacks are fast, simple, and to-the-point.  However, your code can get pretty hairy when you start expanding beyond these trivial examples.  These simple callback based functions can't be used with aggregate utilities, they can't be implicitly chained or grouped either.
 
