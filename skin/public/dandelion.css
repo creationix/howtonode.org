@@ -158,6 +158,8 @@ body {
   display: block;
 }
 #main pre code {
+  overflow-x: auto;
+  max-height: 600px;
   font-size: 12px;
   line-height: 1.4em;
   display: block;
@@ -200,11 +202,12 @@ body {
   line-height: 1.6em;
 }
 #main .code-link {
+  position: relative;
   float: right;
   font-size: 12px;
   line-height: 12px;
   height: 12px;
-  margin: 0 -10px;
+  margin: 0 -10px -24px;
   background-color: #ffffff;
   border: 1px solid #aaaaaa;
   padding: 5px 10px;

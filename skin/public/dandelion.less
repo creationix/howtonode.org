@@ -89,7 +89,7 @@ body {
     img {
       width: 30px;
       height: 30px;
-      float:right;
+      float: right;
       margin: 3px 0 0 5px
     }
     .date {
@@ -150,6 +150,8 @@ body {
     margin: 0 -10px;
     display: block;
     code {
+      overflow-x: auto;
+      max-height: 600px;
       font-size: 12px;
       line-height: 1.4em;
       display: block;
@@ -179,11 +181,12 @@ body {
     line-height: 1.6em;
   }
   .code-link {
+    position: relative;
     float: right;
     font-size: 12px;
     line-height: 12px;
     height: 12px;
-    margin: 0 -10px;
+    margin: 0 -10px -24px;
     background-color: #fff;
     border: 1px solid #AAA;
     padding: 5px 10px;
