@@ -51,15 +51,13 @@ Then you can create hierarchies of objects easily:
 
 ## Using `Object.prototype.spawn`
 
-If you're really brave and don't mind messing with `Object.prototype`, then there is an even shorter way:
+Now that node supports `Object.defineProperty`, we can add methods to `Object.prototype` that are not enumerable and thus don't break stuff.
 
 <prototypal-inheritance/spawn.js#proto-spawn*>
 
 Which is used as:
 
 <prototypal-inheritance/spawn.js#animals2*>
-
-Just make sure to understand that adding enumerable properties to Object.prototype breaks all `for ... in` loops that don't have a `hasOwnProperty` check in them.  You've been warned.
 
 ## Where do we go from here?
 

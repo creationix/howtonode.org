@@ -36,7 +36,7 @@ sys.puts(pete);
 
 
 //proto-spawn
-Object.prototype.spawn = function (props) {
+Object.defineProperty(Object.prototype, "spawn", {value: function (props) {
   var defs = {}, key;
   for (key in props) {
     if (props.hasOwnProperty(key)) {
@@ -44,7 +44,7 @@ Object.prototype.spawn = function (props) {
     }
   }
   return Object.create(this, defs);
-}
+}});
 
 //animals2
 var Animal = {
