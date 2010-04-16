@@ -11,7 +11,7 @@
         %title&= article.title
         %link&= "http://howtonode.org/" + article.name
         %comments&= "http://howtonode.org/" + article.name + "#disqus_thread"
-        %pubDate= article.date
+        %pubDate&= article.date
         %guid(isPermaLink="true")&= "http://howtonode.org/" + article.name
         %description&= markdownEncode(article.markdown)
         %author&= article.author && article.author.name

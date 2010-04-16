@@ -244,7 +244,10 @@ body {
 #sidebar dt { font-weight: bold; }
 #sidebar dd { margin-left: 20px; }
 #sidebar dd ul { padding: 0; }
-#sidebar ul { padding-left: 20px; }
+#sidebar ul {
+  padding: 0 0 0 20px;
+  margin: 0;
+}
 #sidebar .versiontag {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
