@@ -5,7 +5,7 @@ Node: v0.1.91
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
-The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [haml-js][] and [sass.js][] for driving the templated views and styling!
+The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [haml-js][] and [sass.js][] for driving the templated views and styling! We will be using [kiwi][] to easy the package management and installation issues.
 
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
@@ -133,6 +133,8 @@ Now we have a way of reading and storing data (patience, memory is only the begi
 
 <express-mongodb/views/layout.html.haml>
 
+and
+
 <express-mongodb/views/blogs_index.html.haml>
 
 Next change your `get('/')` routing rule in your `app.js` to be as follows:
@@ -192,9 +194,11 @@ To do this we need to install a dependency on [node-mongodb-native][], which wil
     #!sh
     kiwi install mongodb-native 0.7.0
 
-Now we need to replace our old memory based data provider with one thats capable of using mongodb, this will also require a minor change to `app.js` to use the replacement provider.
+Now we need to replace our old memory based data provider with one thats capable of using mongodb:
 
 <express-mongodb/articleprovider-mongodb.js>
+
+We will also require a minor change to `app.js` to use this new replacement provider.                                                                 
 
 <express-mongodb/app.js>
 
@@ -202,12 +206,7 @@ As you can see we had to make only the smallest of changes to move away from a t
 
 Let us pause for a second to take a look at two of the methods we've just written to access [mongoDB][], it is perhaps not immediately obvious what is happening as there are a *lot* of different things going on:
 
-    ArticleProvider.prototype.getCollection= function(callback) {
-      this.db.collection('articles', function(error, article_collection) {
-        if( error ) callback(error);
-        else callback(null, article_collection);
-      });
-    };
+<express-mongodb/articleprovider-mongodb-final.js#getCollection>
 
 1. Declares the `getCollection` method on the provider's `prototype`. This method only accepts one mandatory argument, a function that will be called back with the the results upon completion (or error in the case of an error.)  This approach is a common idiom in [node][] but can be confusing to look at initially.
 2. In mongoDB there are no tables as such, (hence schema-less) but there are `collections`. A `collection` is a logical grouping of similar documents, but there are very few constraints on what types of document is put in these `collections`. For our purpose we will have a single `collection` called `articles`. By calling `collection` on the `db` object and passing in our collection name `articles` and a callback to deal with the response mongoDb will quietly create the collection from scratch and return it if there wasn't a collection of that name already or it will just return a reference to an existing collection. (This behaviour can actually be controlled by configuring mongoDB to be `strict`.)
@@ -216,17 +215,7 @@ Let us pause for a second to take a look at two of the methods we've just writte
 
 and
 
-ArticleProvider.prototype.findById = function(id, callback) {
-    this.getCollection(function(error, article_collection) {
-      if( error ) callback(error)
-      else {
-        article_collection.findOne({_id: ObjectID.createFromHexString(id)}, function(error, result) {
-          if( error ) callback(error)
-          else callback(null, result)
-        });
-      }
-    });
-};
+<express-mongodb/articleprovider-mongodb-final.js#addCommentToArticle>
 
 1. Declares the `findById` method on the provider's `prototype`. This method is going to take in one argument the `id` of the article we wish to retrieve and a callback that will receive the data.
 2. We call the previously defined method `getCollection` to retrieve our collection of records from the [mongoDB][] server, this method is asynchronous so we have to pass in the callback that will be called when it completes.
@@ -236,7 +225,7 @@ ArticleProvider.prototype.findById = function(id, callback) {
 5a. This line also contains the `specification` argument (think `criteria` or `WHERE clause`) used by the `findOne` method, here we're using the passed in `id` (which is a hexadecimal string ultimately coming from the browser so needs to be converted to the real type that our `_id` fields are being stored as.) It basically states 'Find me the document in the collection who has a property named `_id` and a value equivalent to an `ObjectId` constructed with the passed in hexadecimal string.
 6. If there was an error we give up here and pass it back to the callback.
 7. Now we have the record we searched for in the database we pass it back to the callback we originally passed into the  (in our case this callback would do the page rendering.)
-8,9,10 & 11. Meh! some brackets and stuff :)
+8. ,9,10 & 11. Meh! some brackets and stuff :)
 
 I hope this explains a little better what is now going on inside our new provider code.
 
@@ -266,95 +255,21 @@ We'll also need a new route to allow the article to be referenced by a URL and w
 >
 > Normally this wouldn't be that much of an issue as [surrogate][] keys are usually fairly sane things like auto-incremented integers, unfortunately the *default* primary key provider that we're using generates universally unique (and universally opaque) binary objects / large numbers in byte arrays. These 'numbers' don't really translate well into HTML so we need to use some utility methods on the `ObjectId` class to translate to and from a hex-string into the id that can located on the database.
 
-    -# views/blogs_index.html.haml
-    %h1= title
-    #articles
-      - each article in articles
-        %div.article
-          %div.created_at= article.created_at
-          %div.title
-            %a{href:"/blog/"+article._id.toHexString()}= article.title
-          %div.body= article.body
+We need to update the index page's view:
 
+<express-mongodb/views/blogs_index-final.html.haml>
 
-    -# views/blog_show.html.haml
-    %h1= title
-    %div.article
-      %div.created_at= article.created_at
-      %div.title= article.title
-      %div.body= article.body
-      - each comment in article.comments
-        %div.comment
-          %div.person= comment.person
-          %div.comment= comment.comment
-      %div
-        %form{ method: 'post', action:"/blog/addComment" }
-          %input{ type: "hidden", name:"_id", value: article._id.toHexString()}
-          %div
-            %span Author :
-            %input{ type: 'text', name: 'person', id: 'addCommentPerson' }
-          %div
-            %span Comment :
-            %textarea{ name: 'comment', rows: 5, id: 'addCommentComment' }
-          %div#editArticleSubmit
-            %input{ type: 'submit', value: 'Send' }
+The page that shows a single blog entry:
 
+<express-mongodb/views/blog_show-final.html.haml>
 
-    -# views/style.css.sass
-    body
-      :font-family "Helvetica Neue", "Lucida Grande", "Arial"
-      :font-size 13px
-      :text-align center
-      =text-stroke 1px rgba(255, 255, 255, 0.1)
-      :color #555
-    h1, h2
-      :margin 0
-      :font-size 22px
-      :color #343434
-    h1
-      :text-shadow 1px 2px 2px #ddd
-      :font-size 60px
-    #articles
-      :text-align left
-      :margin-left auto
-      :margin-right auto
-      :width 320px
-      .article
-        :margin 20px
-        .created_at
-          :display none
-        .title
-          :font-weight bold
-          :text-decoration underline
-          :background-color #eee
-        .body
-          :background-color #ffa
-    #article
-      .created_at
-        :display none
-      input[type =text]
-        :width 490px
-        :margin-left 16px
-      input[type =button]
-        :text-align left
-        :margin-left 440px
-      textarea
-        :width 490px
-        :height 90px
+The stylesheet that renders these pages:
+
+<express-mongodb/views/style-final.css.sass>
 
 We also need to add a new rule to `app.js` for serving these view requests:
 
-    get('/blog/*', function(id){
-      var self = this;
-      articleProvider.findById(id, function(error, article) {
-        self.render('blog_show.html.haml', {
-          locals: {
-            title: article.title,
-            article:article
-          }
-        });
-      });
-    });
+<express-mongodb/app-final.js#getBlogs>
 
 Now if you browse to [localhost:3000][] the previous articles you added (click [new post] to create a new one if you have none) should now be visible (apologies for the lack of style once again!) The titles of these articles are now hyperlinks to individual pages that display the article in all itself original glory, comments and all (but alas no comments have been added so far.)
 
@@ -364,38 +279,13 @@ Commenting on an article is a simple extension upon everything we've already gon
 
 Transactions are largely non-existent in mongoDB but there are several approaches to achieving atomicity in certain scenarios. For comment addition we're going to use a `$push` update that allows us to add an element to the end of an array property of an existing document atomically    (which is absolutely perfect for our needs!)
 
-All the views/stylesheet changes we need were made in the last set of changes but we need to add in a new route to handle the POST and a method to our provider to make the change on the persistent store:
+All the views/stylesheet changes we need were made in the last set of changes but we need to add in a new route to handle the POST:
 
-    // app.js
+<express-mongodb/app-final.js#addComment>
 
-    post('/blog/addComment', function() {
-      var self = this;
-      articleProvider.addCommentToArticle(this.param('_id'), {
-        person: self.param('person'),
-        comment: self.param('comment'),
-        created_at: new Date()
-      }, function(error, docs) {
-        self.redirect('/blog/' + self.param('_id'))
-      });
-    });
+and a method to our provider to make the change on the persistent store:                                                                           
 
-
-    // articleprovider-mongodb.js
-
-    ArticleProvider.prototype.addCommentToArticle = function(articleId, comment, callback) {
-      this.getCollection(function(error, article_collection) {
-        if( error ) callback( error );
-        else {
-          article_collection.update(
-            {_id: ObjectID.createFromHexString(articleId)},
-            {"$push": {comments: comment}},
-            function(error, article){
-              if( error ) callback(error);
-              else callback(null, article)
-            });
-        }
-      });
-    };
+<express-mongodb/articleprovider-mongodb-final.js#addCommentToArticle>
 
 After restarting and browsing to a blog article (any one will do) you should now be able to add comments to your articles ad-infinitum. How easy was that?
 
@@ -419,6 +309,7 @@ __Fin__.
 
 [git]: http://git-scm.com/
 [node]: http://nodejs.org
+[kiwi]: http://wiki.github.com/visionmedia/kiwi
 [kiwi package manager]: http://wiki.github.com/visionmedia/kiwi/getting-started
 [express]: http://github.com/visionmedia/express
 [mongoDB]: http://www.mongodb.org
