@@ -42,6 +42,7 @@
           Last Updated:
         %dd
           &= formatDate(article.lastUpdated, "%l %F %j, %Y")
+
     :if article.node
       %dl
         %dt
@@ -49,7 +50,8 @@
         %dd
           %a{ href: "http://github.com/ry/node/tree/" + article.node }
             node #{article.node}
-    :if article.dependencies && article.dependencies.length > 0
+
+    :if article.dependencies
       %dl
         %dt
           Dependency Versions:
@@ -59,7 +61,8 @@
               %li
                 %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
                   haml-js v0.2.2
-    :if article.snippets.length > 0
+
+    :if article.uniqueSnippets
       %dl
         %dt
           Code Samples:
@@ -69,6 +72,7 @@
               %li
                 %a{ href: snippet.filename}
                   &= base
+
     %dl
       %dt
         Revisions:
