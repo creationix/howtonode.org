@@ -49,14 +49,7 @@ I'll install the following libraries that are common to my projects:
 
 You can install these however you please, but here is how I'd do it.  The following code will clone the four libraries and install them into your local node library search path:
 
-    mkdir ~/NodeLibs
-    cd ~/NodeLibs
-    git clone git://github.com/creationix/node-router.git
-    git clone git://github.com/creationix/haml-js.git
-    git clone git://github.com/creationix/proto.git
-    mkdir ~/.node_libraries
-    cd ~/.node_libraries
-    ln -s ~/NodeLibs/*/lib/* ./
+<hello-node/install.sh>
 
 That's it for now, this article was going to explain more, but it seems it got lost and fell through the cracks.  Hopefully this will help you get started working with node.JS, it's a blast!.
 

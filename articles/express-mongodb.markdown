@@ -299,7 +299,7 @@ Clearly this blogging application is very rough and ready (there is no style to 
  * Security, authentication etc.
  * An administrative interface
  * Multiple blog-support.
- * Decent styling <g> (inc. themes)
+ * Decent styling &lt;g&gt; (inc. themes)
 
 I hope this helps at least someone out there get to grips with how you might start actually writing web apps with [node][], [express][] and [mongoDB][].
 

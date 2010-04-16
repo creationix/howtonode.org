@@ -18,7 +18,7 @@ This was nice. It was short. It worked but I wanted to procrastinate a little mo
 
 The page count problems are basically a simple analysis of text with some accounting. Could I quickly write a program using node to do something so mundane? Yes and it was surprisingly straight forward. I fired up node-repl and started playing around before typing up this:
 
-<node-for-everyday-things/word-count.js*>
+<node-for-everyday-things/word-count.js>
 
 
 `pagecount` reports the plain text version of this essay is 636 words or 1.82 pages including the source code examples. It's a little longer than my shell script. On the other hand it is easier to read and with a little modification I can embed it as a web service or put it into a web page.
