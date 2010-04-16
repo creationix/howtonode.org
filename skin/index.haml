@@ -13,7 +13,7 @@
             %span.versiontag&= article.node
           
 #main.clearfix
-  :each article in articles.slice(0,6)
+  :each article in articles.slice(0,15)
     .author 
       %img{src:gravitar(article.author.email, 30)}
       By #{article.author.name}
