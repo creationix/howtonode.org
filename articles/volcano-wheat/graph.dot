@@ -1,0 +1,21 @@
+digraph finite_state_machine {
+	size="8,5"
+	node [shape = doublecircle]; 
+	LR_1[color=red]
+	LR_7[color=blue]
+	LR_8[color=green]
+	LR_5[color=orange]
+	node [shape = circle];
+	LR_0 -> LR_2 [ label = "Hear about JSConf" ];
+	LR_0 -> LR_1;
+	LR_2 -> LR_1 [ label = "You're Lame" ];
+	LR_2 -> LR_3 [ label = "Submit a Talk" ];
+	LR_2 -> LR_4 [ label = "Buy a Ticket" ];
+	LR_3 -> LR_4 [ label = "Talk Accepted" ];
+	LR_3 -> LR_6 [ label = "Rejection" ];
+	LR_4 -> LR_5 [ label = "Volcano" ];
+	LR_4 -> LR_8 [ label = "Bacon" ];
+	LR_6 -> LR_3 [ label = "Try Again?" ];
+	LR_6 -> LR_2 [ label = "Accept Fate" ];
+	LR_6 -> LR_7 [ label = "Redesign HowToNode" ];
+}
