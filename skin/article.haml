@@ -68,16 +68,15 @@
             :each snippet in article.snippets
               %li
                 %a{ href: snippet.url }&= snippet.name
-    :if article.alternates && article.alternates.length > 0
-      %dl
-        %dt
-          Alternate Versions:
-        %dd
-          %ul
-            :each alternate in article.alternates
-              %li
-                %a{ href: "/#{alternate.sha}/#{article.name}" }
-                  node #{alternate.tag}
+    %dl
+      %dt
+        Revisions:
+      %dd
+        %ul
+          :each version, stat in article.log
+            %li{title: stat.message}
+              %a{ href: "/#{version}/#{article.name}" }
+                &= new Date(stat.date).toUTCString()
 
   :if article.related && article.related.length > 0
     .bubble
