@@ -17,7 +17,7 @@ This means that several people who were attending JSConf had their flights cance
 
 ## Wheat
 
-As you may have noticed, the site looks completely different.  It works completely different under the hood as well.  Instead of pre-generating static html using [node-blog][], it runs on a node-powered web server using [wheat][].  The actual files don't exists anywhere in the file-system.  Wheat instead implements a mini virtual filesystem that can read local bare git repositories and serve files from them git the "`git show`" command.
+As you may have noticed, the site looks completely different.  It works completely different under the hood as well.  Instead of pre-generating static html using [node-blog][], it runs on a node-powered web server using [wheat][].  The actual files don't exist anywhere in the file-system.  Wheat instead implements a mini virtual filesystem that can read local bare git repositories and serve files from them git the "`git show`" command.
 
 Thanks to some tips from the [github][] guys I was able to implement a caching system that is very efficient and responsive.  In synthetic benchmarks, most pages render at a rate around 2000 requests/second using a pure node server.
 
