@@ -10,18 +10,23 @@ The technology stack that we'll be using will be [node][] + [express][] + [mongo
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
 ## Getting Started / Pre-Requisites
+
 Before we start with the code it's important to make sure you have [git][] installed, an up-to-date installation of [node][] and a running [mongodb][] server on your development environment.
 
 ###git###
+
 Whilst not a mandatory requirement I will be using git to pull down code from various location. Sadly the installation, configuration and setup of git is way beyond the scope of this article and I recommend reading up on that before embarking on this article if you're not familiar with git!
 
 ###mongoDB###
+
 Installation is as simple as downloading the [installer from here][]. For this tutorial I've been using v1.2.2 on MacOSX but any recent version should work. Once installed you can just execute 'mongod' to have a local instance up and running.
 
 ###node.js###
+
 I'll assume that you already have an installed version of node.js (why else would you be looking at a how-to?! ;) ) However as [node][] is subject to a reasonably high rate of change for the purposes of this article everything has been written to run against the ['v0.1.91' tag][].
 
 ###kiwi###
+
 The original version of this article required various dependencies to be installed by hand from github repositories, package management has moved on within node.js since that time and we will use this to our advantage by following the instructions on how to install the [kiwi package manager][].
 Once kiwi is installed you should be able to execute:
 
@@ -85,7 +90,6 @@ The above code declares a single `route` that operates on `GET` requests to the 
 
 Convention seems to be to place this code into a file named `app.js` at the root of your express folder. If you do this and then execute it:
 
-    #!sh
     node app.js
 
 When you browse to [localhost:3000][] you should see that old favourite 'Hello World!'. This file is the starting point of the blogging application and we shall build on it now :)
