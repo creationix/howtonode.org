@@ -59,15 +59,16 @@
               %li
                 %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
                   haml-js v0.2.2
-    :if article.snippets && article.snippets.length > 0
+    :if article.snippets.length > 0
       %dl
         %dt
           Code Samples:
         %dd
           %ul
-            :each snippet in article.snippets
+            :each base, snippet in article.uniqueSnippets
               %li
-                %a{ href: snippet.url }&= snippet.name
+                %a{ href: snippet.filename}
+                  &= base
     %dl
       %dt
         Revisions:
