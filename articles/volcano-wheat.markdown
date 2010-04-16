@@ -27,7 +27,7 @@ Once an article is ready, you only have to push to your git repo on your server 
 
 <volcano-wheat/test.js*>
 
-As you can see, it supports pulling in external code snippets and running them in a node sandbox.  This will help keep syntax errors and code samples that just plain wrong at bay.
+As you can see, it supports pulling in external code snippets and running them in a node sandbox.  This will help keep syntax errors and code samples that are just plain wrong at bay.
 
 ![graph](volcano-wheat/graph.dot)
 
