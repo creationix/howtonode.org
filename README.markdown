@@ -19,6 +19,7 @@ Every article is a markdown file with some meta-data at the top of the file.
     Title: Control Flow in Node Part II
     Author: Tim Caswell
     Date: Thu Feb 04 2010 02:24:35 GMT-0600 (CST)
+    Node: v0.1.91
 
     I had so much fun writing the last article on control flow, that I decided to...
 
