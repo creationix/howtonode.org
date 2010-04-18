@@ -1,6 +1,7 @@
 Title: Control Flow in Node
 Author: Tim Caswell
 Date: Wed Feb 03 2010 00:34:10 GMT-0600 (CST)
+Node: v0.1.91
 
 One of the unique aspects of programming in an async framework like node is the ability to decide between which function will run in serial and which will run in parallel.  While there are no built-in methods for managing this in node, I'll discuss some of the tricks I came up with while writing the node-blog engine that generates this site.
 
@@ -32,21 +33,9 @@ As you can see, there are several items that can be run independent of each othe
 
 For the simple case of scanning a directory and reading all the files into one object, we can employ a simple counter.
 
-    Posix.readdir(".").addCallback(function (files) {
-      var count = files.length,
-          results = {};
-      files.forEach(function (filename) {
-        File.read(filename).addCallback(function (data) {
-          results[filename] = data;
-          count--;
-          if (count <= 0) {
-            // Do something once we know all the files are read.
-          }
-        });
-      });
-    });
+<control-flow/simple-scanner.js>
 
-Nesting callbacks is a great way to ensure they run synchronously.  So inside the callback of `readdir`, we set a countdown to the number of files to read.  Then we start a `read` for each of the files.  These will run in parallel and finish in any arbitrary order.  The important thing is that we're decrementing the counter after each one finishes.  When the counter goes back to 0 we know that was the last file to read.
+Nesting callbacks is a great way to ensure they run synchronously.  So inside the callback of `readdir`, we set a countdown to the number of files to read.  Then we start a `readFile` for each of the files.  These will run in parallel and finish in any arbitrary order.  The important thing is that we're decrementing the counter after each one finishes.  When the counter goes back to 0 we know that was the last file to read.
 
 ## Passing callbacks to avoid excessive nesting ##
 
@@ -54,40 +43,7 @@ Now, if we wanted to execute more code now that we have the contents of the file
 
 So let's modify the example to pass callbacks:
 
-    function read_directory(path, next) {
-      Posix.readdir(path).addCallback(function (files) {
-        var count = files.length,
-            results = {};
-        files.forEach(function (filename) {
-          File.read(filename).addCallback(function (data) {
-            results[filename] = data;
-            count--;
-            if (count <= 0) {
-              next(results);
-            }
-          });
-        });
-      });
-    }
-
-    function read_directories(paths, next) {
-      var count = paths.length,
-          data = {};
-      paths.forEach(function (path) {
-        read_directory(path, function (results) {
-          data[path] = results;
-          count--;
-          if (count <= 0) {
-            next(data);
-          }
-        });
-      });
-    }
-
-    read_directories(['articles', 'authors', 'skin'], function (data) {
-      // Do something
-    });
-
+<control-flow/scanner-with-callback.js>
 
 Now we have made a composite asynchronous function.  It takes some arguments (the path in this case), and calls a callback when everything inside is done.  All the logic inside it, and importantly the several levels of nesting are now compressed into a single unnested callback.
 
@@ -95,28 +51,7 @@ Now we have made a composite asynchronous function.  It takes some arguments (th
 
 I made a simple `Combo` library the other day.  It basically wraps up the task of counting events and calling a callback when the last one finishes.  Also it preserves the original order of callbacks registered irrespective of their actual response time.
 
-    function Combo(callback) {
-      this.callback = callback;
-      this.items = 0;
-      this.results = [];
-    }
-    Combo.prototype = {
-      add: function () {
-        var self = this,
-            id = this.items;
-        this.items++;
-        return function () {
-          self.check(id, arguments);
-        };
-      },
-      check: function (id, arguments) {
-        this.results[id] = Array.prototype.slice.call(arguments);
-        this.items--;
-        if (this.items == 0) {
-          this.callback.apply(this, this.results);
-        }
-      }
-    };
+<control-flow/Combo.js>
 
 Suppose you wanted to read some data from a database and read some more data from a file, and then do something else once the two were completed.
 
@@ -125,9 +60,9 @@ Suppose you wanted to read some data from a database and read some more data fro
       // Do something
     });
     // Fire off the database query
-    people.find({name: "Tim", age: 27}).addCallback(both.add());
+    people.find({name: "Tim", age: 27}, both.add());
     // Fire off the file read
-    File.read('famous_quotes.txt').addCallback(both.add());
+    fs.readFile('famous_quotes.txt', both.add());
 
 The database query and the file read will happen at the same time.  When they are both done, then the callback given to the `Combo` constructor will get called.  The first argument will be the database result and the second will be the file contents.
 
