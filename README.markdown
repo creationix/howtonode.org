@@ -23,7 +23,13 @@ Every article is a markdown file with some meta-data at the top of the file.
 
     I had so much fun writing the last article on control flow, that I decided to...
 
-    ## First section
+    ## First section: Display JavaScript files
+    
+    * display contents of external JavaScript file (path is relative to .markdown file)
+    <test-code/test-file.js>
+
+    * display contents of external JavaScript file and evaluate its contents 
+    <test-code/evaluate-file.js*>
 
     More content goes here.
 
