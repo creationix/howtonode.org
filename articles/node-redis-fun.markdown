@@ -50,7 +50,17 @@ to test our application, we will be using this shell script, so that we can dire
   
 and have it work 
 
-<node-redis-fun/run>
+    #!/usr/bin/env sh
+    export SNIP_PATH=$(dirname `readlink -f $0`)
+
+    export NODE_PATH=\
+    $NODE_PATH\
+    :$SNIP_PATH\
+    :$SNIP_PATH/deps/redis-node-client/lib\
+    :$SNIP_PATH/deps/nerve/lib\
+    :$SNIP_PATH/deps/ #underscore.js
+
+    node "$@"
 
 ## The Big Picture ##
 
