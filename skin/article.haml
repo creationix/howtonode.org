@@ -1,23 +1,126 @@
-=partial("_article", {date: date, link: link, author: author, title: title, content: content, full: true})
-.post
+#sidebar
+  .aside.clearfix
+    %h3 About the Author
+    %img.headshot{src: gravitar(author.email) }
+    %dl
+      %dt Name:
+      %dd&= author.name
+    :if author.github
+      %dl
+        %dt Github:
+        %dd= github(author.github)
+    :if author.bitbucket
+      %dl
+        %dt BitBucket:
+        %dd= bitbucket(author.bitbucket)
+    :if author.twitter
+      %dl
+        %dt Twitter:
+        %dd= twitter(author.twitter)
+    :if author.location
+      %dl
+        %dt Location:
+        %dd&= author.location
+    :if author.homepage
+      %dl
+        %dt Links:
+        %dd
+          %a{href: author.homepage} Homepage
+
+  .aside
+    %h3
+      About this Article
+    :if article.date
+      %dl{title: article.date}
+        %dt
+          Date Released:
+        %dd
+          &= formatDate(article.date, "%l %F %j, %Y")
+    :if article.lastUpdated
+      %dl{title: article.lastUpdated}
+        %dt
+          Last Updated:
+        %dd
+          &= formatDate(article.lastUpdated, "%l %F %j, %Y")
+
+    :if article.node
+      %dl
+        %dt
+          Node Version:
+        %dd
+          %a{ href: "http://github.com/ry/node/tree/" + article.node }
+            node #{article.node}
+
+    :if article.dependencies
+      %dl
+        %dt
+          Dependency Versions:
+        %dd
+          %ul
+            :each dependency in article.dependencies
+              %li
+                %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
+                  haml-js v0.2.2
+
+    :if article.uniqueSnippets
+      %dl
+        %dt
+          Code Samples:
+        %dd
+          %ul
+            :each base, snippet in article.uniqueSnippets
+              %li
+                %a{ href: snippet.filename}
+                  &= base
+
+    %dl
+      %dt
+        Revisions:
+      %dd
+        %ul
+          :each version, stat in article.log
+            %li{title: stat.message}
+              %a{ href: "/#{version}/#{article.name}" }
+                &= new Date(stat.date).toUTCString()
+
+  :if article.related && article.related.length > 0
+    .bubble
+      %h3
+        Other Articles by this Author
+      %ul
+        :each related in article.related
+          %li
+            %a{href: "/" + related.name}&=related.title
+            :if article.node
+              %span.versiontag&= article.node
+
+  .bubble= markdownEncode(description)
+
+#main.clearfix
+  :if article.version
+    %a.sha-version{ href: "/#{article.version}/#{article.name}" } Static Version
+  %h1
+    %a{href: "/" + article.name}&= article.title
+  = markdownEncode(article.markdown)
+  %hr{style:"clear:both"}
   #disqus_thread.body
-:script
-  var disqus_url = "http://howtonode.org/#{link}";
-%script(src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript")
-%a(href="http://disqus.com/forums/howtonodeorg/?url=ref")
-  View the discussion thread.
-%a.dsq-brlink(href="http://disqus.com")
-  blog comments powered by
-  %span.logo-disqus
-    Disqus
-:script
-  (function() {
-    var links = document.getElementsByTagName('a');
-    var query = '?';
-    for(var i = 0; i < links.length; i++) {
-      if(links[i].href.indexOf('#disqus_thread') >= 0) {
-        query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+  :script
+    var disqus_url = "http://howtonode.org/#{article.name}";
+  %script(src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript")
+  %a(href="http://disqus.com/forums/howtonodeorg/?url=ref")
+    View the discussion thread.
+  %a.dsq-brlink(href="http://disqus.com")
+    blog comments powered by
+    %span.logo-disqus
+      Disqus
+  :script
+    (function() {
+      var links = document.getElementsByTagName('a');
+      var query = '?';
+      for(var i = 0; i < links.length; i++) {
+        if(links[i].href.indexOf('#disqus_thread') >= 0) {
+          query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+        }
       }
-    }
-    document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
-  })();
+      document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+    })();

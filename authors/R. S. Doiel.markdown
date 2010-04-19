@@ -1,4 +1,4 @@
-GithubName:   rsdoiel
+Github:   rsdoiel
 Email:    rsdoiel@gmail.com
 Homepage: http://phizcode.blogspot.com/
 

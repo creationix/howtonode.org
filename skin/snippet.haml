@@ -1,0 +1,19 @@
+.snippet
+  %a.code-link{ href: snippet.filename}
+    &= snippet.base
+    :if snippet.name
+      %span.hash ##{snippet.name}
+  %pre
+    %code&= snippet.code
+  :if snippet.output || snippet.lastExpression !== undefined
+    %dl.output
+      %dt Output
+      %dd
+        :if snippet.output !== undefined
+          &= snippet.output
+        :if snippet.lastExpression !== undefined
+          .last-expression&= "=> " + inspect(snippet.lastExpression)
+  :if snippet.error
+    %dl.error
+      %dt Error
+      %dd&= snippet.error

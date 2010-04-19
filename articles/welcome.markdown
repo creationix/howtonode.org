@@ -1,6 +1,7 @@
 Title: Welcome to HowToNode.org
 Author: Tim Caswell
 Date: Tue Feb 02 2010 10:16:51 GMT-0600 (CST)
+Node: v0.1.91
 
 **How To Node** is a blog featuring projects and tutorials relating to the Node.js project.
 
@@ -33,9 +34,9 @@ We'll start with a small HTTP server.  Almost straight from the docs.
 
     http.createServer(function (req, res) {
       setTimeout(function () {
-        res.sendHeader(200, {'Content-Type': 'text/plain'});
-        res.sendBody('Hello World');
-        res.finish();
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write('Hello World');
+        res.end();
       }, 2000);
     }).listen(8000);
 
@@ -63,9 +64,9 @@ So to convert this to a Github POST hook, we'll keep it simple and assume all th
 
     http.createServer(function (req, res) {
       rebuild(function (output) {
-        res.sendHeader(200, {'Content-Type': 'text/plain'});
-        res.sendBody(output);
-        res.finish();
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write(output);
+        res.end();
       })
     }).listen(8000);
 

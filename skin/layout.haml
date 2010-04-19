@@ -1,68 +1,24 @@
 !!! Strict
-%html{ lang: "en" }
+%html(lang="en" xmlns="http://www.w3.org/1999/xhtml")
   %head
-    %meta{ content: "text/html; charset=utf-8", http-equiv: "Content-Type" }
-    %title&= title + " - How To Node"
-    %link{ href: "screen.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
-    %link{ href: "sh_highlight.css", rel: "stylesheet", type: "text/css", media: "screen", charset: "utf-8" }
-    %link(rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml")
+    %meta(http-equiv="content-type" content="text/html; charset=UTF-8")
+    %title #{(title ? title + " - " : "")}How To Node
+    %link(href="/volcano.css" rel="stylesheet")
+    %link(rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feed.xml")
     %link(href="/favicon.ico" rel="icon" type="image/x-icon")
-    %script{ src: "sh_highlight.js", type: "text/javascript" }
-    :script
-      function onload() {
-        var items = document.getElementsByTagName("pre");
-        for (var i=0, l = items.length; i < l; i++) {
-          var code = items[i].innerHTML;
-          console.log(code);
-          var match = code.match(/^<code>\#\!([a-z]+)\n/);
-          console.log(match);
-          if (match) {
-            items[i].className = "sh_" + match[1];
-            items[i].innerHTML = "<code>" + code.substr(match[0].length);
-          } else {
-            items[i].className = "sh_javascript";
-          }
-        };
-        sh_highlightDocument();
-      };
-
-  %body{onload: "onload()"}
-    %a#ribbon{ href: "http://github.com/creationix/howtonode.org" }
-      %img{ src: "http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png", alt: "Fork me on GitHub" }
-    #wrapper
+  %body
+    #container
       #header
-        %h2
-          %a{ href: "./" }
+        %a{href: "/"}
+          %h1
             How To Node
-        %p
-          Node:
-          %em (verb)
-          to connect and share ideas about a point.
-      #content
-        = content
-        %hr
-        .block
-          %h2
-            About
-          %p
-            %strong
-              How To Node
-            is a blog featuring projects and tutorials relating to the Node.js project.
-          %p
-            This blog is powered by Node.js. It was developed by
-            %a{ href: "http://github.com/creationix" }
-              Tim Caswell
-            \. It was later redesigned by
-            %a{ href: "http://github.com/miksago" }
-              Micheil Smith
-            \. Go have a read of the
-            %a{ href: "http://github.com/creationix/howtonode.org" }
-              source code!
-          %p
-            Powered by
-            %a{ href: "http://github.com/creationix/node-blog" }
-              node-blog
-            \.
+          .tagline
+            The zen of coding in node.JS
+      = content
+      #footer
+        Site Design and code is &copy; 2010 to Tim Caswell under the MIT license. Content and articles are copyrighted to the individual authors. All code snippets used in the examples are in the public domain.
+        %br
+        Wheat running on node #{process.version}
     :script
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
       document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

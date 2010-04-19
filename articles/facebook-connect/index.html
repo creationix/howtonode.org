@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+ <head> 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.facebook.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $.fbInit('FACEBOOK_API_KEY');
+    
+        // FB Connect action
+        $('#fb-connect').bind('click', function () {
+          $.fbConnect({'include': ['first_name', 'last_name', 'name', 'pic']}, function (fbSession) {
+            $('.not_authenticated').hide();
+            $('.authenticated').show();
+            $('#fb-first_name').html(fbSession.first_name);
+          });
+          return false;
+        });
+    
+        // FB Logout action
+        $('#fb-logout').bind('click', function () {
+          $.fbLogout(function () {
+            $('.authenticated').hide();
+            $('.not_authenticated').show();
+          });
+          return false;
+        });
+    
+        // Check whether we're logged in and arrange page accordingly
+        $.fbIsAuthenticated(function (fbSession) {
+          // Authenticated!
+          $('.authenticated').show();
+          $('#fb-first_name').html(fbSession.first_name);
+        }, function () {
+          // Not authenticated
+          $('.not_authenticated').show();
+        });
+    
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="fb-root"></div>
+    <script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php"></script>
+
+    <div id="my-account">
+      <div class="authenticated" style="display: none">
+        Hi there <span id="fb-first_name"></span>!
+        <a href="#" id="fb-logout">Logout</a>
+      </div>
+      <div class="not_authenticated" style="display: none">
+        <a href="#" id="fb-connect">Connect with Facebook</a>
+      </div>
+    </div>
+  </body> 
+</html> 

@@ -2,9 +2,11 @@
 
 This is a community supported blog about how to program in nodejs.
 
-When this github repo is pushed to, the site at <http://howtonode.org> is automatically updated.  This is powered by a new static site generator written in node called [node-blog][].
+This is powered by a new static blog engine written in node called [wheat][].
 
-[node-blog]: http://github.com/creationix/node-blog
+To run a local version of the blog, simply install [wheat][], node.JS v0.1.33-205-g2ff20d8 or later and then run the included `server.js` script.
+
+[wheat]: http://github.com/creationix/wheat
 
 ## Contributing
 
@@ -17,10 +19,17 @@ Every article is a markdown file with some meta-data at the top of the file.
     Title: Control Flow in Node Part II
     Author: Tim Caswell
     Date: Thu Feb 04 2010 02:24:35 GMT-0600 (CST)
+    Node: v0.1.91
 
     I had so much fun writing the last article on control flow, that I decided to...
 
-    ## First section
+    ## First section: Display JavaScript files
+    
+    * display contents of external JavaScript file (path is relative to .markdown file)
+    <test-code/test-file.js>
+
+    * display contents of external JavaScript file and evaluate its contents 
+    <test-code/evaluate-file.js*>
 
     More content goes here.
 

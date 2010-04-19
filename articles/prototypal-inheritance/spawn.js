@@ -1,5 +1,6 @@
-process.mixin(require('sys'))
+var sys = require('sys');
 
+//object-spawn
 Object.spawn = function (parent, props) {
   var defs = {}, key;
   for (key in props) {
@@ -10,12 +11,15 @@ Object.spawn = function (parent, props) {
   return Object.create(parent, defs);
 }
 
+//animals
 var Animal = {
   eyes: 2,
   legs: 4,
   name: "Animal",
   toString: function () {
-    return this.name + " with " + this.eyes + " eyes and " + this.legs + " legs."
+    return this.name + " with " +
+      this.eyes + " eyes and " +
+      this.legs + " legs.";
   }
 }
 var Dog = Object.spawn(Animal, {
@@ -27,13 +31,12 @@ var Insect = Object.spawn(Animal, {
 });
 var fred = Object.spawn(Dog);
 var pete = Object.spawn(Insect);
-puts(fred);
-puts(pete);
-// Output:
-// Dog with 2 eyes and 4 legs.
-// Insect with 2 eyes and 6 legs.
+sys.puts(fred);
+sys.puts(pete);
 
-Object.prototype.spawn = function (props) {
+
+//proto-spawn
+Object.defineProperty(Object.prototype, "spawn", {value: function (props) {
   var defs = {}, key;
   for (key in props) {
     if (props.hasOwnProperty(key)) {
@@ -41,9 +44,9 @@ Object.prototype.spawn = function (props) {
     }
   }
   return Object.create(this, defs);
-}
+}});
 
-
+//animals2
 var Animal = {
   eyes: 2,
   legs: 4,
@@ -61,5 +64,5 @@ var Insect = Animal.spawn({
 });
 var fred = Dog.spawn({});
 var pete = Insect.spawn({});
-puts(fred);
-puts(pete);
+sys.puts(fred);
+sys.puts(pete);
