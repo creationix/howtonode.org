@@ -123,7 +123,7 @@ Because the intention of this article is to show how one might use a persistent 
 
 If the above code is saved to a file named `articleprovider-memory.js` in the same folder as the `app.js` we created earlier and `app.js` is modified to look as follows:
 
-<express-mongodb/app.js>
+<express-mongodb/app-simple.js>
 
 If the app is re-run and you browse to [localhost:3000][] you will see the object structure of 3 blog posts that the memory provider starts off with, magic!
 
