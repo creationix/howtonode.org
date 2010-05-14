@@ -153,7 +153,11 @@ The second is the usage of a 'layout' [haml-js][] file `layout.html.haml`. This 
 >
 > [haml-js][] is a server-side JavaScript partial/mostly-complete implementation of [Haml][]. Reading a [haml-js][] template is simple. The hierarchy of elements is expressed as indentation on the left hand-side; that is, everything that starts in a given column shares the same parent. Each line of [Haml][] represents either a new element in the (eventual) HTML document or a function within [Haml][] (which offers conditions and loops etc). Effectively [haml-js][] takes a JSON object and binds it to any `literal` text in the [haml-js][] template, applies the rules that define [Haml][] and then processes the resulting bag of stuff to produce a well-formed and valid HTML document of the specified DOCTYPE. (Yay!)
 
-As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet, add a new rule to service this request and add a Sass template to the `views` folder in order to generate the css.
+As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet:
+
+<express-mongodb/views/layout2.html.haml>
+
+Add a Sass template to the `views` folder in order to generate the css:
 
 <express-mongodb/views/style.css.sass>
 
