@@ -219,7 +219,7 @@ Let us pause for a second to take a look at two of the methods we've just writte
 
 and
 
-<express-mongodb/articleprovider-mongodb-final.js#addCommentToArticle>
+<express-mongodb/articleprovider-mongodb-final.js#findById>
 
 1. Declares the `findById` method on the provider's `prototype`. This method is going to take in one argument the `id` of the article we wish to retrieve and a callback that will receive the data.
 2. We call the previously defined method `getCollection` to retrieve our collection of records from the [mongoDB][] server, this method is asynchronous so we have to pass in the callback that will be called when it completes.
