@@ -113,7 +113,7 @@ Connect is cool, I gave two presentations on it in the past week at [txjs][] and
  - Send feedback through [github][] and the normal node community channels. (irc and mailing list)
  - Tweet about it to spread the word. (This only works if everyone uses it)
 
-[Connect]: http://github/com/extjs/Connect
+[Connect]: http://github.com/extjs/Connect
 [Ext JS]: http://extjs.com/
 [TJ Holowaychuk]: http://github.com/visionmedia
 [ejsgi]: http://github.com/isaacs/ejsgi
