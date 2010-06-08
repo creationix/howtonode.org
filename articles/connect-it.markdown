@@ -3,7 +3,7 @@ Author: Tim Caswell
 Date: Mon Jun 07 2010 12:22:52 GMT-0700 (PDT)
 Node: v0.1.97
 
-Now that the core API's of node are really starting to stabilize, I'm moving my attention to helping stabilize the framework scene.  One of the things I found really neat from Ruby was the [Rack][] server interface.  It allowed any server that followed the spec to host any app that followed the spec.  Also (and this is the important part for node) is allowed for generic middleware libraries to do common tasks and functions in a very aspect oriented manner.
+Now that the core APIs of node are really starting to stabilize, I'm moving my attention to helping stabilize the framework scene.  One of the things I found really neat from Ruby was the [Rack][] server interface.  It allowed any server that followed the spec to host any app that followed the spec.  Also (and this is the important part for node) is allowed for generic middleware libraries to do common tasks and functions in a very aspect oriented manner.
 
 My employer, [Ext JS][], has sponsored [TJ Holowaychuk][] and I to write a middleware system for node called [Connect][] in an effort to foster common development in the node community.
 
@@ -28,7 +28,7 @@ And all requests will be served:
 
     Hello Connect
 
-This works great for when you want fast synthetic benchmarks or always want to return the same response for every HTTP request.  In most apps, however, this isn't the case.  You want some form on request routing.  Also you'll want nice enhancements like response body gzipping, smart caching, request logging, pretty error handlers, etc...
+This works great for when you want fast synthetic benchmarks or always want to return the same response for every HTTP request.  In most apps, however, this isn't the case.  You want some form of request routing.  Also you'll want nice enhancements like response body gzipping, smart caching, request logging, pretty error handlers, etc...
 
 Implementing all these things over and over for each project is a royal pain since they are somewhat non-trivial and usually a project in and of themselves.  So ideally the node community has a collection of modules that we can use in common to solve these common tasks.  The only problem is that there is no accepted spec to follow.  All these libraries have their own style and way to integrate.  This is great for innovation, terrible for someone trying to just get work done and quickly.
 
@@ -38,7 +38,7 @@ Implementing all these things over and over for each project is a royal pain sin
 
 So taking the ideas from [Rack][] and [ejsgi][], we introduce the idea of layers to the code handling the HTTP request and response.  An app is structured like an onion.  Every request enters the onion at the outside and traverses layer by layer till it hits something that handles it and generates a response.  In [Connect][] terms, these are called filters and providers.  Once a layer provides a response, the path happens in reverse.
 
-The [Connect][] framework simply takes the initial `request` and `response` objects that come from node's http callback and pass then layer by layer to the configured middleware modules in an application.
+The [Connect][] framework simply takes the initial `request` and `response` objects that come from node's http callback and pass them layer by layer to the configured middleware modules in an application.
 
 
 The example from above, converted to a [Connect][] app looks as follows:
@@ -78,7 +78,7 @@ Whenever there is a problem with a server, it's really great to have a log-file 
 
 <connect-it/log-it.js>
 
-Connect modules also support a `setup` function that get's called once on server startup.  This is a great place to setup variables used by the middleware.  In this case we're initializing the counter for the logger.
+Connect modules also support a `setup` function that gets called once on server startup.  This is a great place to setup variables used by the middleware.  In this case we're initializing the counter for the logger.
 
 In `handle` we are using a wrapping idiom to hook into the call to `writeHead`.  In JavaScript functions are values just like anything else.  So a great way to wrap functions is to store a reference to the original implementation in a closure variable.  Replace the function with a new one, and in the first line of the new function, put the old function definition back.  Then on the last line of the replacement function call the original.  This is a simple and efficient way to hook into existing object methods since they just look for properties by name and not references to actual function objects.
 
