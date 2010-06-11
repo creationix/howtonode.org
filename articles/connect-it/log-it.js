@@ -5,7 +5,7 @@ exports.setup = function setup() {
   this.counter = 0;
 };
 
-exports.handle = function handle(err, req, res, next) {
+exports.handle = function handle(req, res, next) {
   var writeHead = res.writeHead; // Store the original function
   
   var counter = this.counter++;
