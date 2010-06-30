@@ -33,7 +33,7 @@ My favorite use of closure is to  call a function that generates another functio
 
 Note that the `greet` function is nested within the `greeter` function.  This means it's within the lexical scope of `greeter` and thus according to the rules of closure has access to the local variables of `greeter` including `message`, `name`, and `age`.
 
-## Using closure instead of objects
+## Using a closure instead of objects
 
 Many people who come to JavaScript are experienced programmers who come from other languages where classes and instances are the common way to handle this encapsulation.  JavaScript has something similar in the form of constructor functions and function prototypes.
 
@@ -55,7 +55,7 @@ Nice clean OO code right?  The good thing is that you get to write your methods 
 
 ### Object factories using closures
 
-This is how I would write this class without using `new` and `prototype`.  I'll create a factory function that creates a closure and exposes parts of it as public methods.  Externally it looks a lot like the class based version, but internally it's 100% closure and there isn't a `this` or `new` in sight.
+This is how I would write this class without using `new` and `prototype`.  I'll create a factory function that creates a closure and exposes parts of it as public methods.  Externally it looks a lot like the class based version, but internally it's 100% a closure and there isn't a `this` or `new` in sight.
 
 Define the factory like this:
 
@@ -71,7 +71,7 @@ I like it!  One word of caution though.  While this method is quite easy to use,
 
 This is where closures are the most useful.  In fact, this is the reason that Ryan Dahl (The creator of node.js) used JavaScript in the first place.  C doesn't have closures and it makes non-blocking code difficult to write in C.
 
-The simplest example (which we just saw earlier) is `setTimeout`.  This is a non-blocking function call.  The code in the passed in callback won't get called till after the timeout happens.  This will be on a completely new stack and the only way to get data into it is through lexical scope and closure.
+The simplest example (which we just saw earlier) is `setTimeout`.  This is a non-blocking function call.  The code in the passed in callback won't get called till after the timeout happens.  This will be on a completely new stack and the only way to get data into it is through lexical scope and a closure.
 
 Imagine this code snippet:
 
