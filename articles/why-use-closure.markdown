@@ -3,9 +3,9 @@ Author: Tim Caswell
 Date: Wed Jun 30 2010 12:15:53 GMT-0700 (PDT)
 Node: v0.1.99
 
-One of the greatest features of the JavaScript language is [closure][wikipedia-closure].  I've discussed this concept some in the "[What is This?](/what-is-this)" article.  There I was explaining scope and context.  Today I wish to explain about some practical uses of closure in event based programming as well as compare it to other methods like object orientation to preserve state across event calls.
+One of the greatest features of the JavaScript language is [closure][wikipedia-closure].  I've discussed this concept some in the "[What is This?](/what-is-this)" article.  There I was explaining scope and context.  Today I wish to explain about some practical uses of a closure in event based programming as well as compare it to other methods like object orientation to preserve state across event calls.
 
-## What is closure
+## What is a closure
 
 Again from wikipedia:
 
@@ -65,7 +65,7 @@ And use it like this:
 
 <why-use-closure/usefactory.js>
 
-I like it!
+I like it!  One word of caution though.  While this method is quite easy to use, it doesn't perform well when you're creating large numbers of instances.  Each instance will create its own version of every function in the object.
 
 ## Closures for events and callbacks
 
