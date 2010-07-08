@@ -1,9 +1,11 @@
 // Just a basic server setup for this site
-module.exports = require('connect').createServer([
-  {filter: "response-time"},
-  {filter: "log"},
-  {filter: "conditional-get"},
-  {filter: "cache"},
-  {filter: "gzip"},
-  {module: require('wheat'), repo: __dirname}
-]);
+var Connect = require('connect');
+
+module.exports = Connect.createServer(
+  Connect.responseTime(),
+  Connect.logger(),
+  Connect.conditionalGet(),
+  Connect.cache(),
+  Connect.gzip(),
+  require('wheat')(__dirname)
+);
