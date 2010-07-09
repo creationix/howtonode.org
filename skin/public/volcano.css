@@ -1,3 +1,4 @@
+@import "prettify.css";
 body {
   margin: 0;
   padding: 0 10px;
@@ -9,55 +10,36 @@ body {
   min-width: 500px;
   margin: 0 auto;
 }
-#container a {
-  color: #1654a7;
-  font-weight: bold;
-  text-decoration: none;
-}
-#container a:link {
-  color: #1654a7;
-  font-weight: bold;
-  text-decoration: none;
-}
-#container a:active {
+#container a, #container a:link, #container a:active {
   color: #1654a7;
   font-weight: bold;
   text-decoration: none;
 }
 #container a:hover {
-  color: #217efa;
+  color: #217efb;
   text-decoration: underline;
 }
-#header a {
-  color: #000000;
-  text-decoration: none;
-}
-#header a:link {
-  color: #000000;
-  text-decoration: none;
-}
-#header a:active {
-  color: #000000;
-  text-decoration: none;
-}
+#header a,
+#header a:link,
+#header a:active,
 #header a:hover {
-  color: #000000;
+  color: #000;
   text-decoration: none;
 }
 #header h1 {
   font-family: ArtBrushMedium, sans-serif;
-  text-shadow: #ffffff 1px 1px 5px;
+  text-shadow: #fff 1px 1px 5px;
   font-weight: bold;
   font-size: 74px;
   line-height: 1em;
-  color: #000000;
+  color: #000;
   padding: 0;
   margin: 15px 30px 5px;
 }
 #header .tagline {
   font-family: ArtBrushMedium, sans-serif;
-  color: #222222;
-  text-shadow: #ffffff 1px 1px 3px;
+  color: #222;
+  text-shadow: #fff 1px 1px 3px;
   margin: 5px 30px 20px;
   font-weight: bold;
   font-size: 26px;
@@ -68,11 +50,14 @@ body {
   font-size: 13px;
   line-height: 1em;
   text-align: center;
-  color: #ffffff;
+  color: #fff;
   font-family: sans-serif;
   margin: 20px 0;
 }
-#main, .aside, .bubble {
+#main,
+.aside,
+.bubble,
+.sponsor img {
   -moz-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -104,12 +89,7 @@ body {
   border: 0;
   height: 1px;
 }
-#main .author {
-  text-align: right;
-  font-size: 12px;
-  line-height: 1.5em;
-}
-#main .date {
+#main .author, #main .date {
   text-align: right;
   font-size: 12px;
   line-height: 1.5em;
@@ -126,9 +106,11 @@ body {
   float: right;
   margin: 3px 0 0 5px;
 }
-#main .author .date { font-weight: normal; }
+#main .author .date {
+  font-weight: normal;
+}
 #main .snippet dl {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #aaa;
   background-color: #f6f5f4;
   margin: -1px -10px 0;
   padding: 10px;
@@ -153,10 +135,18 @@ body {
   padding: 0;
   white-space: pre;
 }
-#main .snippet .error { background-color: #fff0f0; }
-#main .snippet .error dt { color: #997777; }
-#main .snippet .output { background-color: #f0fff0; }
-#main .snippet .output dt { color: #779977; }
+#main .snippet .error {
+  background-color: #fff0f0;
+}
+#main .snippet .error dt {
+  color: #977;
+}
+#main .snippet .output {
+  background-color: #f0fff0;
+}
+#main .snippet .output dt {
+  color: #797;
+}
 #main code {
   font-family: monaco, consolas, monospace;
   font-size: 90%;
@@ -164,7 +154,7 @@ body {
   border: 1px solid #e0e0e0;
 }
 #main pre {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #aaa;
   background-color: #f6f5f4;
   margin: 0 -10px;
   display: block;
@@ -179,36 +169,28 @@ body {
   border: 0;
   background-color: inherit;
 }
-#main h1 {
-  font-family: sans-serif;
-  margin: 0.5em 0;
-}
-#main h2 {
-  font-family: sans-serif;
-  margin: 0.5em 0;
-}
-#main h3 {
-  font-family: sans-serif;
-  margin: 0.5em 0;
-}
-#main h4 {
-  font-family: sans-serif;
-  margin: 0.5em 0;
-}
+#main h1,
+#main h2,
+#main h3,
+#main h4,
 #main h5 {
   font-family: sans-serif;
-  margin: 0.5em 0;
+  margin: .5em 0;
 }
-#main h1 { color: #222222; }
+#main h1 {
+  color: #222;
+}
 #main h2 {
   margin-top: 20px;
   margin-bottom: 10px;
   padding-bottom: 5px;
   line-height: 1em;
-  border-bottom: 2px dotted #aaaaaa;
-  color: #444444;
+  border-bottom: 2px dotted #aaa;
+  color: #444;
 }
-#main h3 { color: #666666; }
+#main h3 {
+  color: #666;
+}
 #main p {
   text-align: justify;
   font-size: 14px;
@@ -221,8 +203,8 @@ body {
   line-height: 12px;
   height: 12px;
   margin: 0 -10px -24px;
-  background-color: #ffffff;
-  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  border: 1px solid #AAA;
   padding: 5px 10px;
   font-weight: bold;
   display: block;
@@ -230,7 +212,9 @@ body {
   -moz-border-radius-bottomleft: 5px;
   border-bottom-left-radius: 5px;
 }
-#main .code-link .hash { font-weight: normal; }
+#main .code-link .hash {
+  font-weight: normal;
+}
 #sidebar {
   float: right;
   width: 350px;
@@ -238,16 +222,24 @@ body {
   font-size: 14px;
   line-height: 1.6em;
 }
-#sidebar dl { margin: 10px 0; }
+#sidebar dl {
+  margin: 10px 0;
+}
 #sidebar h3 {
   font-size: 18px;
   font-weight: bold;
   line-height: 1em;
-  border-bottom: 1px solid #aaaaaa;
+  border-bottom: 1px solid #aaa;
 }
-#sidebar dt { font-weight: bold; }
-#sidebar dd { margin-left: 20px; }
-#sidebar dd ul { padding: 0; }
+#sidebar dt {
+  font-weight: bold;
+}
+#sidebar dd {
+  margin-left: 20px;
+}
+#sidebar dd ul {
+  padding: 0;
+}
 #sidebar ul {
   padding: 0 0 0 20px;
   margin: 0;
@@ -257,8 +249,8 @@ body {
   -moz-border-radius: 5px;
   border-radius: 5px;
   padding: 1px 3px;
-  border: 1px solid #888888;
-  background-color: #88bbff;
+  border: 1px solid #888;
+  background-color: #8bf;
   font-size: 10px;
   line-height: 1em;
   margin: 0 5px;
@@ -282,31 +274,23 @@ body {
   background: -moz-linear-gradient(top, #686664, #444444);
   background: -webkit-gradient(linear, 0 0, 0 90%, from(#686664), to(#444444));
   background-color: #5a5958;
-  color: #ffffff;
+  color: #fff;
   padding: 10px 10px 10px 20px;
 }
 #sidebar .aside h3 {
   background-color: rgba(255, 255, 255, 0.4);
   background-color: #a3a2a1;
-  text-shadow: #ffffff 1px 1px 3px;
+  /*Only for IE*/
+
+  text-shadow: #fff 1px 1px 3px;
   -webkit-border-top-right-radius: 20px;
   -moz-border-radius-topright: 20px;
   border-top-right-radius: 20px;
-  color: #000000;
+  color: #000;
   margin: -9px -9px 10px -20px;
   padding: 9px 10px 8px 20px;
 }
-#sidebar .aside a {
-  color: #2ca8ff;
-  font-weight: bold;
-  text-decoration: none;
-}
-#sidebar .aside a:link {
-  color: #2ca8ff;
-  font-weight: bold;
-  text-decoration: none;
-}
-#sidebar .aside a:active {
+#sidebar .aside a, #sidebar .aside a:link, #sidebar .aside a:active {
   color: #2ca8ff;
   font-weight: bold;
   text-decoration: none;
@@ -326,7 +310,7 @@ body {
   background-color: #d5d3d2;
 }
 #sidebar .bubble h3 {
-  text-shadow: #000000 1px 1px 3px;
+  text-shadow: #000 1px 1px 3px;
   -webkit-border-top-left-radius: 10px;
   -moz-border-radius-topleft: 10px;
   border-top-left-radius: 10px;
@@ -335,10 +319,23 @@ body {
   border-top-right-radius: 10px;
   background-color: rgba(0, 0, 0, 0.4);
   background-color: #939392;
+  /*Only for IE*/
+
   color: #eaeeff;
   margin: -9px -9px 10px -9px;
   padding: 9px 10px 8px 10px;
-  border-bottom: 1px solid #aaaaaa;
+  border-bottom: 1px solid #aaa;
+}
+#sidebar .sponsor {
+  padding: 20px 10px 10px 20px;
+  text-align: center;
+  display: block;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+#sidebar .sponsor img {
+  border: 0;
 }
 .clearfix:after {
   content: ".";
@@ -348,42 +345,15 @@ body {
   line-height: 0;
   height: 0;
 }
-.clearfix { display: inline-block; }
-html[xmlns] .clearfix { display: block; }
-* html .clearfix { height: 1%; }
-.str { color: #008800; }
-.kwd { color: #000088; }
-.com { color: #880000; }
-.typ { color: #660066; }
-.lit { color: #006666; }
-.pun { color: #666600; }
-.pln { color: #000000; }
-.tag { color: #000088; }
-.atn { color: #660066; }
-.atv { color: #008800; }
-.dec { color: #660066; }
-@media print .str { color: #006600; }
-@media print .kwd {
-  color: #000066;
-  font-weight: bold;
+.clearfix {
+  display: inline-block;
 }
-@media print .com {
-  color: #660000;
-  font-style: italic;
+html[xmlns] .clearfix {
+  display: block;
 }
-@media print .typ {
-  color: #440044;
-  font-weight: bold;
+* html .clearfix {
+  height: 1%;
 }
-@media print .lit { color: #004444; }
-@media print .pun { color: #444400; }
-@media print .pln { color: #000000; }
-@media print .tag {
-  color: #000066;
-  font-weight: bold;
-}
-@media print .atn { color: #440044; }
-@media print .atv { color: #006600; }
 @font-face {
   font-family: 'ArtBrushMedium';
   src: url('Artbrush.eot');
