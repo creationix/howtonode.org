@@ -5,7 +5,7 @@ Node: v0.1.97
 
 Now that the core APIs of node are really starting to stabilize, I'm moving my attention to helping stabilize the framework scene.  One of the things I found really neat from Ruby was the [Rack][] server interface.  It allowed any server that followed the spec to host any app that followed the spec.  Also (and this is the important part for node) is allowed for generic middleware libraries to do common tasks and functions in a very aspect oriented manner.
 
-My employer, [Ext JS][], has sponsored [TJ Holowaychuk][] and I to write a middleware system for node called [Connect][] in an effort to foster common development in the node community.
+My employer, [Sencha][], has sponsored [TJ Holowaychuk][] and I to write a middleware system for node called [Connect][] in an effort to foster common development in the node community.
 
 ## So What's New?
 
@@ -113,8 +113,8 @@ Connect is cool, I gave two presentations on it in the past week at [txjs][] and
  - Send feedback through [github][] and the normal node community channels. (irc and mailing list)
  - Tweet about it to spread the word. (This only works if everyone uses it)
 
-[Connect]: http://github.com/extjs/Connect
-[Ext JS]: http://extjs.com/
+[Connect]: http://github.com/senchalabs/connect
+[Sencha]: http://sencha.com/
 [TJ Holowaychuk]: http://github.com/visionmedia
 [ejsgi]: http://github.com/isaacs/ejsgi
 [rack]: http://rack.rubyforge.org/
@@ -122,4 +122,4 @@ Connect is cool, I gave two presentations on it in the past week at [txjs][] and
 [txjs]: http://www.slideshare.net/creationix/real-time-web-with-node
 [swdc]: http://www.slideshare.net/creationix/node-powered-mobile
 [nvm]: http://github.com/creationix/nvm
-[github]: http://github.com/extjs/Connect/issues
+[github]: http://github.com/senchalabs/connect/issues
