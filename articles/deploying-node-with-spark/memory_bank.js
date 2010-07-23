@@ -1,11 +1,3 @@
-//database
-// Simplest database ever!
-var data = {
-    greeting:  {
-        value: {hello: "world"},
-        mtime: new Date
-    }
-};
 //routes
 module.exports = function (app) {
     
@@ -13,10 +5,8 @@ module.exports = function (app) {
     app.get("/:key", function (req, res, params, next) {
         // Load from the database
         var item = data[params.key];
-        
         // 404 if it doesn't exist
         if (!item) { next(); return; }
-
         // Serve the item to the client
         sendItem(res, item);
     });
@@ -28,7 +18,6 @@ module.exports = function (app) {
             value: req.body,
             mtime: new Date
         };
-        
         // Serve the item to the client
         sendItem(res, item);
     });
@@ -37,18 +26,23 @@ module.exports = function (app) {
     app.del("/:key", function (req, res, params, next) {
         // Load from the database
         var item = data[params.key];
-        
         // 404 if it doesn't exist
         if (!item) { next(); return; }
-        
         // Delete it
         delete data[params.key];
-        
         // Send an empty OK response
         res.writeHead(204, {});
         res.end();
     });
 
+};
+//rest
+// Simplest database ever!
+var data = {
+    greeting:  {
+        value: {hello: "world"},
+        mtime: new Date
+    }
 };
 
 // Helper for sending items
