@@ -1,12 +1,13 @@
 var Haml = require('haml'),
-    File = require('file'),
-    sys = require('sys');
+    fs = require('fs');
 
+//setup
 var template_names = ["layout", "link", "links"];
 var counter = template_names.length;
 var templates = {};
 template_names.forEach(function (name) {
-  File.read(name + ".haml").addCallback(function (text) {
+  fs.readFile(name + ".haml", 'utf8', function (err, text) {
+    if (err) throw err;
     templates[name] = Haml.compile(text);
     counter--;
     if (counter <= 0) {
@@ -14,28 +15,19 @@ template_names.forEach(function (name) {
     }
   });
 });
-
+//render
 function render(name, locals) {
   return Haml.execute(templates[name], null, locals);
 }
-
-var links = [
-  {name: "Google", link: "http://google.com/"},
-  {name: "Github", link: "http://github.com/"},
-  {name: "nodejs", link: "http://nodejs.org/"},
-  {name: "HowToNode.org", link: "http://howtonode.org/"}
-];
-
+//renderpage
 function render_page() {
   var html = render("layout", {
     title: "Links",
     contents: render("links", {
       partial: render,
-      links: links
+      links: require('./data')
     })
-  })
-  sys.puts(html);
+  });
+  console.log(html);
 }
-
-
 
