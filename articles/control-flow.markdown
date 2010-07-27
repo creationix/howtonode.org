@@ -1,7 +1,7 @@
 Title: Control Flow in Node
 Author: Tim Caswell
 Date: Wed Feb 03 2010 00:34:10 GMT-0600 (CST)
-Node: v0.1.91
+Node: v0.1.102
 
 One of the unique aspects of programming in an async framework like node is the ability to decide between which function will run in serial and which will run in parallel.  While there are no built-in methods for managing this in node, I'll discuss some of the tricks I came up with while writing the node-blog engine that generates this site.
 
