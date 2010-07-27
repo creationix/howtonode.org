@@ -1,114 +1,57 @@
 Title: Control Flow in Node Part II
 Author: Tim Caswell
 Date: Thu Feb 04 2010 02:24:35 GMT-0600 (CST)
+Node: v0.1.102
 
 I had so much fun writing the last article on control flow, that I decided to play around with the feedback I received.  One thing in particular I want to talk about is the good work [inimino][] is doing.
 
-Node has two constructs that are used currently to handle async return values, namely [promises and event emitters][].  You can read all about those on the [nodejs.org][] website.  I'm going to talk about these and another way to manage asynchronous return values and streaming events.
+Node has two constructs that are used currently to handle async return values, namely callbacks and event emitters.  You can read all about those on the [nodejs.org][] website.  I'm going to talk about these and another way to manage asynchronous return values and streaming events.
 
-## Why the distinction between Promise and EventEmitter? ##
+**UPDATE** Promises were removed from node a while back, this article has been updated to show callbacks instead of promises.  For promises see [node-promise][].
 
-In node there are two event handling classes.  They are called Promise, and EventEmitter.  Promises are for the async equivalent of a function.
+## Why the distinction between Callback and EventEmitter? ##
 
-    var File = require('file');
-    var promise = File.read('mydata.txt');
-    promise.addCallback(function (text) {
-      // Do something
-    });
-    promise.addErrback(function (err) {
-      // Handle error
-    })
+In node there are two event handling techniques.  They are called callbacks, and EventEmitter.  Callbacks are for the async equivalent of a function.
 
-File.read takes a filename and *returns* the contents of the file.
+<control-flow-part-ii/callback.js>
 
-Sometimes you want to listen for events that can happen several times.  For example in a web server, when processing a web request, the `body` event is fired 1 or more times and then the `complete` event gets fired:
+`fs.readFile()` takes a filename and "*returns*" the contents of the file.  It doesn't actually return it, but passes it to the passed in callback function.
 
-    Http.createServer(function (req, res) {
-      var body = "";
-      req.addListener('body', function (chunk) {
-        body += chunk;
-      });
-      req.addListener('complete', function () {
-        // Do something with body text
-      });
-    }).listen(8080);
+Sometimes you want to listen for events that can happen several times.  For example in a web server, when processing a web request, the `data` event is fired one or more times and then the `end` event gets fired:
 
-The difference is that with a promise you're either going to get a success event or an error event.  Never both, and never more than one event.  For cases where there are more than two events and/or they can be called multiple times, then you need the more powerful EventEmitters.
+<control-flow-part-ii/http-body.js>
 
-## Creating a custom promise ##
+The difference is that with a callback you're either going to get an error or a result.  Never both, and never more than one event.  For cases where there are more than two events and/or they can be called multiple times, then you need the more powerful and flexible EventEmitters.
 
-Suppose I want to write a wrapper around `posix.open`, `posix.write`, and `posix.close`. Let's call it `fileWrite`. (This is extracted from the actual implementation of `File.write` in the "file" library.)
+## The Node.js Callback style
 
-    function fileWrite (filename, data) {
-      var promise = new events.Promise();
-      posix.open(filename, "w", 0666)
-        .addCallback(function (fd) {
-          function doWrite (_data) {
-            posix.write(fd, _data, 0, encoding)
-              .addCallback(function (written) {
-                if (written === _data.length) {
-                  posix.close(fd);
-                  promise.emitSuccess();
-                } else {
-                  doWrite(_data.slice(written));
-                }
-              }).addErrback(function () {
-                promise.emitError();
-              });
-          }
-          doWrite(data);
-        })
-        .addErrback(function () {
-          promise.emitError();
-        });
-      return promise;
-    };
+Node originally had promises instead of callbacks.  Read the older versions of this article for more information.  After much debate, node decided to drop Promises for simple callbacks.
 
-And now this can be used as:
+Any async function in node accepts a callback as it's last parameter.  Most the functions in the `'fs'` module are like this.  Then that callback is going to get the error (if any) as the first parameter.
 
-    fileWrite("MyBlog.txt", "Hello World").addCallback(function () {
-      // It's done
-    });
-
-You'll note that we have to create a promise object, do our logic, and forward on the interesting results to the promise object.
+    // You call async functions like this.
+    someAsyncFunction(param1, param2, callback);
+    
+    // And define your callback like this
+    function callback(err, result) {...}
 
 ## There could be another way ##
 
-Promises work well, but after reading about continuables from [inimino][], I was inspired to try another way.
+Promises worked well, but after reading about continuables from [inimino][], I was inspired to try another way.
 
-Remember our first example? Suppose that File.read was used like this:
+Remember our first example? Suppose that fs.readFile was used like this:
 
-    var File = require('file');
-    File.read('mydata.txt')(function (text) {
-      // Do something
-    }, function (error) {
-      // Handle error
-    });
+<control-flow-part-ii/continuable.js>
 
-Instead of returning a promise object, it returns a function that's expecting two callback methods:  One for success and one for error.  I call this the `Do` style, and you'll soon see why.
+Instead of expecting a callback, it returns a function that's expecting two callback methods:  One for success and one for error.  I call this the `Do` style, and you'll soon see why.
 
 ## Making callback style actions ##
 
-Often we will want to make custom functions that don't return a value right away.  Using this new style, our `fileWrite` from above would look like this (assuming that the posix functions were converted to this style too):
+Often we will want to make custom functions that don't return a value right away.  Using this new style, let's make a `fileWrite` function that looks like this (assuming that the fs functions were converted to this style too):
 
-    function fileWrite (filename, data) { return function (callback, errback) {
-      posix.open(filename, "w", 0666)(function (fd) {
-        function doWrite (_data) {
-          posix.write(fd, _data, 0, encoding)(
-            function (written) {
-              if (written === _data.length) {
-                posix.close(fd);
-                callback();
-              } else {
-                doWrite(_data.slice(written));
-              }
-            }, errback);
-        }
-        doWrite(data);
-      }, errback);
-    }};
+<control-flow-part-ii/file-write.js>
 
-Notice how easy it is to chain the error messages back up to our caller.  Also this code is much shorter, and easier to read.
+Notice how easy it is to chain the error messages back up to our caller.  Also this code is much shorter, and easier to read. (Than the original promise version, not the callback version)
 
 The key to making these actions is to, instead of creating a promise and returning, return a function that takes two callbacks and then call them directly when needed.
 
@@ -120,23 +63,7 @@ I came up with a small library called `Do` earlier today.  Actually it's not muc
 
 Here is the entire library:
 
-    Do = {
-      parallel: function (fns) {
-        var results = [],
-            counter = fns.length;
-        return function(callback, errback) {
-          fns.forEach(function (fn, i) {
-            fn(function (result) {
-              results[i] = result;
-              counter--;
-              if (counter <= 0) {
-                callback.apply(null, results);
-              }
-            }, errback);
-          });
-        }
-      }
-    };
+<control-flow-part-ii/do.js>
 
 But combined with the callback style actions, this can lead to some very powerful and concise code.
 
@@ -214,7 +141,10 @@ Just for fun, here is the same example translated to the [Jack][] language (stil
     | fun ->
       # File was saved
 
+**UPDATE** I have since made a more powerful library that embraces node's native callback style called Step.  Read more on it's article [step-of-conductor][].
+
 [Jack]: http://github.com/creationix/jack
 [inimino]: http://inimino.org/~inimino/blog/fileio_first_release
-[promises and event emitters]: http://nodejs.org/api.html#_events
+[node-promise]: http://github.com/kriszyp/node-promise
 [nodejs.org]: http://nodejs.org/
+[step-of-conductor]: /step-of-conductor
