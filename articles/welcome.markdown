@@ -1,13 +1,15 @@
 Title: Welcome to HowToNode.org
 Author: Tim Caswell
 Date: Tue Feb 02 2010 10:16:51 GMT-0600 (CST)
-Node: v0.1.91
+Node: v0.1.102
 
 **How To Node** is a blog featuring projects and tutorials relating to the Node.js project.
 
 This article will describe how the blog works.  Teach a few node concepts and describe how to contribute new articles for others to enjoy.
 
 ## Sample App - The node-blog engine. ##
+
+**UPDATE** - This site now runs on another engine, but this article is still good as a general introduction to node.
 
 This entire site is hosted by an nginx server as static html files.  That's right, you can hit refresh as many times as you want and my node code won't know about it.  Think about it as super page caching.
 
@@ -29,28 +31,16 @@ First we need a running http server to listen to POST hooks from [github][].  Th
 
 We'll start with a small HTTP server.  Almost straight from the docs.
 
-    var sys = require('sys'),
-       http = require('http');
+<welcome/server.js>
 
-    http.createServer(function (req, res) {
-      setTimeout(function () {
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.write('Hello World');
-        res.end();
-      }, 2000);
-    }).listen(8000);
-
-    sys.puts('Server running at http://127.0.0.1:8000/');
-
-First we're loading a couple of external libraries.  Node is partially compatible with the CommonJS securable module system.  This means that library developers can write reusable JavaScript code and you can `require` it into your project.  The two we're loading here are [sys][] and [http][]. Loading `sys` allows us to do several low-level operations like write to the terminal and execute shell commands.  Loading `http` allows us to start a standalone HTTP server.
+First we're loading a couple of external libraries.  Node is partially compatible with the CommonJS securable module system.  This means that library developers can write reusable JavaScript code and you can `require` it into your project.  Loading `http` allows us to start a standalone HTTP server.
 
 Bascically, this is the order of operations:
 
- - `sys` is loaded and all execution stops until it's done
- - Same for the `http` library.  `require` is about the only blocking method in node.
+ - `http` is loaded and all execution stops until it's done.  `require` is about the only blocking function in node.
  - Then http.createServer is called and a function is passed to it.  It returns immediately
  - Listen is called on the resultant server and returns immediately.
- - sys.puts is called.  This is also async, so we don't wait for the text to actually appear on the console.
+ - `console.log` is called.  This is also async, so we don't wait for the text to actually appear on the console.
 
 Now what happens next starts to get tricky.  Node runs in a single thread of execution, but as soon as a block of synchronous code is done, the event loop runs the next event in the queue.  So what happens next depends on which IO was ready first.  Practically `listen` and `puts` both happen pretty quickly, so it doesn't usually matter. Se we'll assume that a message got printed to the console and an HTTP server is running port 8000.
 
@@ -58,19 +48,7 @@ Whenever the server gets a web request, the function we passed in to createServe
 
 So to convert this to a Github POST hook, we'll keep it simple and assume all the logic is in another module.
 
-    var sys = require('sys'),
-       http = require('http'),
-       rebuild = require('./builder').rebuild;
-
-    http.createServer(function (req, res) {
-      rebuild(function (output) {
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.write(output);
-        res.end();
-      })
-    }).listen(8000);
-
-    sys.puts('Github hook running at http://127.0.0.1:8000/');
+<welcome/github-hook.js>
 
 So whenever a request is received, we call the external `rebuild` method.  The reason we pass in a callback instead of getting the return value is because the builder will need to do some of it's own IO and can't return a meaningful response right away.  When it's done, we'll be notified and then pass on the output to the browser.
 
@@ -86,7 +64,6 @@ Add an author entry for yourself and write your article.  When done send any of 
 
 [creationix]: http://github.com/creationix
 [miksago]: http://github.com/miksago
-[sys]: http://nodejs.org/api.html#_system_module
 [http]: http://nodejs.org/api.html#_http
 [node]: http://nodejs.org/
 [github]: http://github.com/
