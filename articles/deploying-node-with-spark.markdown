@@ -1,7 +1,7 @@
 Title: Deploying Node Apps with Spark
 Author: Tim Caswell
 Date: Thu, 22 Jul 2010 20:44:44 GMT
-Node: v0.1.101
+Node: v0.1.102
 
 This article will go through building a simple RESTful key/value store using [Connect][].  Then I'll explain my favorite way to host apps on [Ubuntu Server][].  This will use [upstart][] and [Spark][].  We'll setup the [node.js][] environment using the super easy [Ivy][] distribution.
 
