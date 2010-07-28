@@ -1,7 +1,7 @@
 Title: Volcano Wheat
 Author: Tim Caswell
 Date: Fri Apr 16 2010 13:37:07 GMT-0500 (CDT)
-Node: v0.1.91
+Node: v0.1.102
 
 Announcing the release of a new engine for howtonode.org, [Wheat][]!  Also in honor of those stuck in Europe trying to get to [jsconf][], the background is a photo of the icelandic volcano.
 
