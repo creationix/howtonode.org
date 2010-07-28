@@ -1,7 +1,7 @@
 Title: Hello Node!
 Author: Tim Caswell
 Date: Mon Mar 22 2010 10:55:41 GMT-0500 (CDT)
-Node: v0.1.91
+Node: v0.1.102
 
 In programming literature it has become the standard to create a hello world program as the first example.  This article will go through a few simple hello world type examples with everything from simple terminal output to an http server that uses an external framework for some semantic sugar.
 
