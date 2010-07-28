@@ -1,10 +1,8 @@
-var sys = require('sys');
-
 function setAlarm(message, timeout) {
   
   // Define handle in the closure
   function handle() {
-    sys.puts(message);
+    console.log(message);
   }
   
   setTimeout(handle, timeout);

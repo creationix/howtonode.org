@@ -1,7 +1,5 @@
-var sys = require('sys');
-
 function greet(message) {
-  sys.puts(message);
+  console.log(message);
 }
 
 function greeter(name, age) {

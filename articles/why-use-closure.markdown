@@ -1,7 +1,7 @@
 Title: Why use "closure"?
 Author: Tim Caswell
 Date: Wed Jun 30 2010 12:15:53 GMT-0700 (PDT)
-Node: v0.1.99
+Node: v0.1.102
 
 One of the greatest features of the JavaScript language is [closure][wikipedia-closure].  I've discussed this concept some in the "[What is This?](/what-is-this)" article.  There I was explaining scope and context.  Today I wish to explain about some practical uses of a closure in event based programming as well as compare it to other methods like object orientation to preserve state across event calls.
 

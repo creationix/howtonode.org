@@ -1,7 +1,5 @@
-var sys = require('sys');
-
 function handle() {
-  sys.puts(message);
+  console.log(message);
 }
 
 function setAlarm(message, timeout) {

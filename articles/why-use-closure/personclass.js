@@ -1,5 +1,3 @@
-var sys = require('sys');
-
 // Define the constructor
 function Person(name, age) {
 
@@ -10,14 +8,14 @@ function Person(name, age) {
 
 // Define a sync method
 Person.prototype.greet = function greet() {
-  sys.puts(this.message);
+  console.log(this.message);
 };
 
 // Define a method with async internals
 Person.prototype.slowGreet = function slowGreet() {
   var self = this; // Use a closure to preserve `this`
   setTimeout(function () {
-    sys.puts(self.message);
+    console.log(self.message);
   }, 1000);
 };
 

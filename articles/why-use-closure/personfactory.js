@@ -1,5 +1,3 @@
-var sys = require('sys');
-
 // Define the factory
 function newPerson(name, age) {
 
@@ -10,13 +8,13 @@ function newPerson(name, age) {
 
     // Define a sync function
     greet: function greet() {
-      sys.puts(message);
+      console.log(message);
     },
 
     // Define a function with async internals
     slowGreet: function slowGreet() {
       setTimeout(function () {
-        sys.puts(message);
+        console.log(message);
       }, 1000);
     }
 
