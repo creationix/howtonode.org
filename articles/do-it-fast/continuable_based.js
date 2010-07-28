@@ -1,4 +1,3 @@
-
 function errorHandler(error) {
   throw error;
 }

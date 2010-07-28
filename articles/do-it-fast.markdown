@@ -15,9 +15,9 @@ All async functions in node now use a simple callback based interface:
 
 That is, after the arguments, there is a callback function expected.  This callback function will be given the error if there was one, and if not, the result after that.
 
-Creating an async function that exports this interface is simple too [plain_callbacks.js][]:
+Creating an async function that exports this interface is simple too:
 
-<do-it-fast/safe-read.js>
+<do-it-fast/plain_callbacks.js>
 
 These callbacks are fast, simple, and to-the-point.  However, your code can get pretty hairy when you start expanding beyond these trivial examples.  These simple callback based functions can't be used with aggregate utilities, they can't be implicitly chained or grouped either.
 
@@ -27,49 +27,22 @@ These callbacks are fast, simple, and to-the-point.  However, your code can get 
 
 ### Continuables
 
-    function divide(a, b) { return function (callback, errback) {
-      // Use nextTick to prove that we're working asynchronously
-      process.nextTick(function () {
-        if (b === 0) {
-          errback(new Error("Cannot divide by 0"));
-        } else {
-          callback(a / b);
-        }
-      });
-    }}
+<do-it-fast/divide.js#define>
 
 `Do` expects async functions to not require the callback in the initial invocation, but instead return a continuable which can then be called with the `callback` and `errback`.  This is done by manually currying the function. The "continuable" is the function returned by the outer function.  The body of the function won't be executed until you finish the application by attaching a callback.
 
-    divide(100, 10)(function (result) {
-      puts("the result is " + result);
-    }, function (error) {
-      throw error;
-    });
+<do-it-fast/divide.js#use>
 
-This style is extremely simple (doesn't require an external library like process.Promise to use), and is fairly powerful.
+This style is extremely simple, and is fairly powerful.
 
  - The initial function can have variable arguments.
  - The continuable itself is portable until it's invoked by attaching callbacks.
 
 ### Why is this better than plain-ol-callbacks?
 
-Well, let's convert the `safeRead` example from above to continuables [continuable_based.js][]:
+Well, let's convert the `safeRead` example from above to continuables:
 
-    var Do = require('do');
-    // Convert `readFile` from fs to use continuable style.
-    var fs = Do.convert(require('fs'), ['readFile']);
-
-    function safeRead(filename) { return function (callback, errback) {
-      fs.readFile(filename)(callback, function (error) {
-        if (error.errno === process.ENOENT) {
-          callback("");
-        } else {
-          errback(error);
-        }
-      })
-    }}
-
-    safeRead(__filename)(puts, errorHandler);
+<do-it-fast/continuable_based.js>
 
 You'll notice that this is a lot shorter and you don't have to constantly check for the error argument or pad your success results with a `null` argument.  Also since we're passing through the success case as is, we can use the outer `callback` as the inner `callback`.  In most cases you won't do this for success, but you will for `errback`.
 
@@ -77,34 +50,6 @@ You'll notice that this is a lot shorter and you don't have to constantly check 
 
 The real power of `Do` and continuables comes when you're dealing with several async functions as once.  Let's take our example from the [third control flow article][] and convert it to use the new `Do` library:
 
-    var Do = require('do');
-    var fs = Do.convert(require('fs'), ['readdir', 'stat', 'readFile']);
-
-    // Checks the `stat` of a file path and outputs the file contents if it's
-    // a real file
-    function loadFile(path, callback, errback) {
-      fs.stat(path)(function (stat) {
-
-        // Output undefined when the path isn't a regular file
-        if (!stat.isFile()) {
-          callback();
-          return;
-        }
-
-        // Pass through the read to regular files as is.
-        fs.readFile(path)(callback, errback)
-
-      }, errback);
-    }
-
-    // Load an array of the contents of all files in a directory.
-    function loaddir(path) { return function (callback, errback) {
-      fs.readdir(path)(function (filenames) {
-        Do.filterMap(filenames, loadFile)(callback, errback);
-      }, errback);
-    }}
-
-    loaddir(__dirname)(p, errorHandler)
 
 ## How to `Do` (API)
 
@@ -119,22 +64,7 @@ Takes an array of actions and runs them all in parallel. You can either pass in 
 
 **Example:**
 
-    // Multiple arguments
-    Do.parallel(
-      Do.read("/etc/passwd"),
-      Do.read(__filename)
-    )(function (passwd, self) {
-      // Do something
-    }, errorHandler);
-
-    // Single argument
-    var actions = [
-      Do.read("/etc/passwd"),
-      Do.read("__filename")
-    ];
-    Do.parallel(actions)(function (results) {
-      // Do something
-    }, errorHandler);
+<do-it-fast/parallel-example.js>
 
 ### Do.chain(actions) {...}
 
@@ -142,32 +72,7 @@ Chains together several actions feeding the output of the first to the input of 
 
 **Example:**
 
-    // Multiple arguments
-    Do.chain(
-      Do.read(__filename),
-      function (text) {
-        return Do.save("newfile", text);
-      },
-      function () {
-        return Do.stat("newfile");
-      }
-    )(function (stat) {
-      // Do something
-    }, errorHandler);
-
-    // Single argument
-    var actions = [
-      Do.read(__filename),
-      function (text) {
-        return Do.save("newfile", text);
-      },
-      function () {
-        return Do.stat("newfile");
-      }
-    ];
-    Do.chain(actions)(function (stat) {
-      // Do something
-    }, errorHandler);
+<do-it-fast/chain-example.js>
 
 ### Do.map(array, fn) {...}
 
@@ -175,22 +80,7 @@ Takes an array and does an array map over it using the async callback `fn`. The 
 
 **Example:**
 
-    // Direct callback filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    function loadFile(filename, callback, errback) {
-      fs.read(filename)(function (data) {
-        callback([filename, data]);
-      }, errback);
-    }
-    Do.map(files, loadFile)(function (contents) {
-      // Do something
-    }, errorHandler);
-
-    // continuable based filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    Do.map(files, fs.read)(function (contents) {
-      // Do something
-    }, errorHandler);
+<do-it-fast/map-example.js>
 
 ### Do.filter(array, fn) {...}
 
@@ -198,27 +88,7 @@ Takes an array and does an array filter over it using the async callback `fn`. T
 
 **Example:**
 
-    // Direct callback filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    function isFile(filename, callback, errback) {
-      fs.stat(filename)(function (stat) {
-        callback(stat.isFile());
-      }, errback);
-    }
-    Do.filter(files, isFile)(function (filtered_files) {
-      // Do something
-    }, errorHandler);
-
-    // Continuable based filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    function isFile(filename) { return function (callback, errback) {
-      fs.stat(filename)(function (stat) {
-        callback(stat.isFile());
-      }, errback);
-    }}
-    Do.filter(files, isFile)(function (filtered_files) {
-      // Do something
-    }, errorHandler);
+<do-it-fast/filter-example.js>
 
 ### Do.filterMap(array, fn) {...}
 
@@ -228,35 +98,7 @@ The signature of `fn` is `function fn(item, callback, errback)` or any regular c
 
 **Example:**
 
-    // Direct callback filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    function check_and_load(filename, callback, errback) {
-      fs.stat(filename)(function (stat) {
-        if (stat.isFile()) {
-          loadFile(filename, callback, errback);
-        } else {
-          callback();
-        }
-      }, errback);
-    }
-    Do.filterMap(files, check_and_load)(function (filtered_files_with_data) {
-      // Do something
-    }, errorHandler);
-
-    // Continuable based filter
-    var files = ['users.json', 'pages.json', 'products.json'];
-    function check_and_load(filename) { return function (callback, errback) {
-      fs.stat(filename)(function (stat) {
-        if (stat.isFile()) {
-          loadFile(filename, callback, errback);
-        } else {
-          callback();
-        }
-      }, errback);
-    }}
-    Do.filterMap(files, check_and_load)(function (filtered_files_with_data) {
-      // Do something
-    }, errorHandler);
+<do-it-fast/filtermap-example.js>
 
 ## Using with node libraries
 
