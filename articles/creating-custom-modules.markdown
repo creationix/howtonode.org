@@ -1,7 +1,7 @@
 Title: Creating Custom Modules
 Author: Aaron Blohowiak
 Date: Tue May 18 2010 13:37:07 GMT-0500 (CDT)
-Node: v0.1.95
+Node: v0.1.102
 
 Node implements [CommonJS Modules 1.0](http://commonjs.org/specs/modules/1.0/). Node's [full API doc.](http://nodejs.org/api.html#modules-285) explains their use thoroughly, but can be a bit tricky to get started.
 
@@ -40,14 +40,14 @@ The basic example on the [Node.JS Home Page](http://nodejs.org) shows you how to
 
 When you want to use a port of a Module you use the require function like usual, but only save a reference to a member of the returned exports object:
 
-    var puts = require('sys').puts;
+    var inspect = require('sys').inspect;
     
-This creates a local variable, 'puts' and assigns it to the 'puts' property of the sys module.
+This creates a local variable, 'inspect' and assigns it to the 'inspect' property of the sys module.
 
 So now you can 
 
-    puts("hello!");
+    inspect({Hello:"World"})
     
-which is like sys.puts("hello!") without having to type sys.puts all the time.
+which is like `sys.inspect({Hello:"World"})` without having to type `sys.inspect` all the time.
 
 Normal JavaScript function binding rules apply, so if you have any weirdness that you can't figure out, just import the whole module and use it like usual until you [Learn more about JavaScript Binding](http://www.robertsosinski.com/2009/04/28/binding-scope-in-javascript/)
