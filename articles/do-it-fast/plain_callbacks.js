@@ -1,4 +1,3 @@
-process.mixin(require('sys'));
 
 function errorHandler(error) {
   throw error;
@@ -28,6 +27,6 @@ safeRead(__filename, function (err, text) {
   if (err) {
     errorHandler(err);
   } else {
-    puts(text);
+    console.log(text);
   }
 });

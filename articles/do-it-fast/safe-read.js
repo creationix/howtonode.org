@@ -1,6 +1,5 @@
 // Load 'fs', a built-in node library that has async functions
 var fs = require('fs');
-var sys = require('sys');
 
 function safeRead(filename, callback) {
   fs.readFile(filename, function (err, data) {
@@ -23,5 +22,5 @@ safeRead(__filename, function (err, text) {
   if (err) {
     throw err;
   }
-  sys.puts(text);
+  console.log(text);
 })

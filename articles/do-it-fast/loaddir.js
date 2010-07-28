@@ -1,5 +1,3 @@
-process.mixin(require('sys'));
-
 function errorHandler(error) {
   throw error;
 }
@@ -19,7 +17,7 @@ function loadFile(path, callback, errback) {
     }
 
     // Pass through the read to regular files as is.
-    fs.readFile(path)(callback, errback)
+    fs.readFile(path, 'utf8')(callback, errback)
 
   }, errback);
 }
@@ -31,4 +29,4 @@ function loaddir(path) { return function (callback, errback) {
   }, errback);
 }}
 
-loaddir(__dirname)(p, errorHandler)
+loaddir(__dirname)(console.dir, errorHandler)

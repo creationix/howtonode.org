@@ -1,7 +1,7 @@
 Title: "Do" it fast!
 Author: Tim Caswell
 Date: Mon Feb 22 2010 10:52:08 GMT-0600 (CST)
-Node: v0.1.91
+Node: v0.1.102
 
 Now with the release of [Node v0.1.30][] there is even more need for a library like [Do][].  While working with the node community to decide on the best alternative to node promises, we decided that it's best left to library developers.  So as of this morning, node no longer ships with promises, but uses a simple callback interface for all async functions.
 
@@ -11,13 +11,13 @@ I took my async library that I've been developing throughout the Control Flow se
 
 All async functions in node now use a simple callback based interface:
 
-<do-it-fast/async.js*>
+<do-it-fast/async.js>
 
 That is, after the arguments, there is a callback function expected.  This callback function will be given the error if there was one, and if not, the result after that.
 
 Creating an async function that exports this interface is simple too [plain_callbacks.js][]:
 
-<do-it-fast/safe-read.js*>
+<do-it-fast/safe-read.js>
 
 These callbacks are fast, simple, and to-the-point.  However, your code can get pretty hairy when you start expanding beyond these trivial examples.  These simple callback based functions can't be used with aggregate utilities, they can't be implicitly chained or grouped either.
 
