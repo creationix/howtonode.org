@@ -1,5 +1,3 @@
-var sys = require('sys');
-
 // Make a function that returns a closure function.
 function myModule() {
   var name = "tim", age = 28;

@@ -1,5 +1,3 @@
-var sys = require('sys');
-
 //globals
 global_var = true;
 function someFunc() {
@@ -29,7 +27,7 @@ nested_sum(3); // Expected value is 10, but i values get tangled
 //onevar
 name = "Tim";
 function greet() {
-  sys.p(name);
+  console.dir(name);
   // name is undefined
   // Lots of code, and them later on you have:
   var name;
@@ -37,7 +35,7 @@ function greet() {
 greet();
 
 function greet2(name) {
-  sys.p(name);
+  console.dir(name);
   // name is "Tim" because functions arguments are special.
   // Lots of code, and them later on you have:
   var name;

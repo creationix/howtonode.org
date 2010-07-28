@@ -1,5 +1,3 @@
-var sys = require('sys');
-
 //person
 var Person = {
   name: "Tim",
@@ -43,4 +41,4 @@ function makeOlder(years, newname) {
 //use-it
 makeOlder.call(Person, 2, "Old Tim");
 makeOlder.apply(Dog, [1, "Shaggy"]);
-sys.p({Person: Person, Dog: Dog});
+console.dir({Person: Person, Dog: Dog});
