@@ -46,9 +46,9 @@ Ok, now to get some real work done.  In this tutorial we'll make a simple RESTfu
 
 First create a basic app structure like this.
 
-    memory_store/
+    memory_bank/
     |-- app.js
-    |-- memory_store.js
+    |-- memory_bank.js
     `-- public/
         `-- index.html
 
