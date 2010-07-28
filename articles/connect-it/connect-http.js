@@ -1,8 +1,6 @@
 var Connect = require('connect');
 
-Connect.createServer([
-    {module: {handle: function (req, res, next) {
-        // Every request gets the same "Hello Connect" response.
-        res.simpleBody(200, "Hello Connect");
-    }}}
-]).listen(8080);
+Connect.createServer(function (req, res, next) {
+  // Every request gets the same "Hello Connect" response.
+  res.simpleBody(200, "Hello Connect");
+}).listen(8080);

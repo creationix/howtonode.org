@@ -1,28 +1,27 @@
-var sys = require('sys');
+module.exports = function logItSetup() {
 
-// Initialize the counter
-exports.setup = function setup() {
-  this.counter = 0;
-};
-
-exports.handle = function handle(req, res, next) {
-  var writeHead = res.writeHead; // Store the original function
+  // Initialize the counter
+  var counter = 0;
   
-  var counter = this.counter++;
+  return function logItHandle(req, res, next) {
+    var writeHead = res.writeHead; // Store the original function
 
-  // Log the incoming request
-  sys.puts("Request " + counter + " " + req.method + " " + req.url);
+    counter++;
 
-  // Wrap writeHead to hook into the exit path through the layers.
-  res.writeHead = function (code, headers) {
-    res.writeHead = writeHead; // Put the original back
-    
-    // Log the outgoing response
-    sys.puts("Response " + counter + " " + code + " " + JSON.stringify(headers));
-             
-    res.writeHead(code, headers); // Call the original
+    // Log the incoming request
+    console.log("Request " + counter + " " + req.method + " " + req.url);
+
+    // Wrap writeHead to hook into the exit path through the layers.
+    res.writeHead = function (code, headers) {
+      res.writeHead = writeHead; // Put the original back
+
+      // Log the outgoing response
+      console.log("Response " + counter + " " + code + " " + JSON.stringify(headers));
+
+      res.writeHead(code, headers); // Call the original
+    };
+
+    // Pass through to the next layer
+    next();
   };
-  
-  // Pass through to the next layer
-  next();
 };

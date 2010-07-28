@@ -1,11 +1,13 @@
 Title: Just Connect it Already
 Author: Tim Caswell
 Date: Mon Jun 07 2010 12:22:52 GMT-0700 (PDT)
-Node: v0.1.97
+Node: v0.1.102
 
 Now that the core APIs of node are really starting to stabilize, I'm moving my attention to helping stabilize the framework scene.  One of the things I found really neat from Ruby was the [Rack][] server interface.  It allowed any server that followed the spec to host any app that followed the spec.  Also (and this is the important part for node) is allowed for generic middleware libraries to do common tasks and functions in a very aspect oriented manner.
 
 My employer, [Sencha][], has sponsored [TJ Holowaychuk][] and I to write a middleware system for node called [Connect][] in an effort to foster common development in the node community.
+
+**UPDATE** This article has been updated to use the new connect middleware API.
 
 ## So What's New?
 
@@ -60,9 +62,9 @@ Let's go through a simple app from the top down.  It will serve JavaScript files
 
 <connect-it/app.js>
 
-An app is just a call to `Connect.createServer` with an array of middleware config lines.
+An app is just a call to `Connect.createServer` with several handlers in a row.
 
-All Connect middlewares are simply node modules that export a `handle` function.  This function will be called by the connect engine when it gets to that layer of the application.  You have the option at this point to either: A) Serve a response using the `res` parameter. or B) Pass on control to the next layer in the chain using the `next` parameter.  Since you have raw access to the node request and response objects and the full JavaScript language, the possibilities are endless.
+All Connect layers are simply node modules that export a `setup` function that returns a `handle` function.  The setup function is called at server startup and you can pass in configuration parameters to it.  Then on each request, you have the option at this point to either: A) Serve a response using the `res` parameter. or B) Pass on control to the next layer in the chain using the `next` parameter.  Since you have raw access to the node request and response objects and the full JavaScript language, the possibilities are endless.
 
 ### Serve Some Files
 
@@ -78,11 +80,11 @@ Whenever there is a problem with a server, it's really great to have a log-file 
 
 <connect-it/log-it.js>
 
-Connect modules also support a `setup` function that gets called once on server startup.  This is a great place to setup variables used by the middleware.  In this case we're initializing the counter for the logger.
+The setup function is a great place to setup variables used by the middleware across requests.  In this case we're initializing the counter for the logger.
 
-In `handle` we are using a wrapping idiom to hook into the call to `writeHead`.  In JavaScript functions are values just like anything else.  So a great way to wrap functions is to store a reference to the original implementation in a closure variable.  Replace the function with a new one, and in the first line of the new function, put the old function definition back.  Then on the last line of the replacement function call the original.  This is a simple and efficient way to hook into existing object methods since they just look for properties by name and not references to actual function objects.
+In the handler we are using a wrapping idiom to hook into the call to `writeHead`.  In JavaScript functions are values just like anything else.  So a great way to wrap functions is to store a reference to the original implementation in a closure variable.  Replace the function with a new one, and in the first line of the new function, put the old function definition back.  Then on the last line of the replacement function call the original.  This is a simple and efficient way to hook into existing object methods since they just look for properties by name and not references to actual function objects.
 
-The standalone `puts` call will be called at the beginning of each request cycle, and the nested `puts` will be called on the way out by means of the nested `writeHead` function.
+The standalone `console.log` call will be called at the beginning of each request cycle, and the nested `console.log` will be called on the way out by means of the nested `writeHead` function.
 
 ## Built-in Middleware
 
@@ -90,7 +92,7 @@ Connect comes with several built-in middleware layers for easy use.  A much more
 
 <connect-it/app2.js>
 
-This has proper error-handline, proper HTTP headers, and all sorts of other bells and whistles that are required from a production web server.
+This has proper error-handling, proper HTTP headers, and all sorts of other bells and whistles that are required from a production web server.
 
 ## Future and Goals of Connect
 
@@ -106,14 +108,20 @@ There has been a lot of discussion on the topic of middleware and now is the tim
 
 Connect is cool, I gave two presentations on it in the past week at [txjs][] and [swdc][] and people loved it. TJ and I have done all we can for now and need some community feedback in order to move on.  If you are interested in node and want to help shape the future of web frameworks please do the following:
 
- - Install node if you haven't already. (I suggest using [nvm][])
+ - Install node if you haven't already. (I suggest using [ivy][])
  - Clone Connect.
  - Go through the examples in the code-base. (The `app.js` file is launched with the `connect` executable)
  - Write your own code using Connect. (Or port your favorite node framework)
  - Send feedback through [github][] and the normal node community channels. (irc and mailing list)
  - Tweet about it to spread the word. (This only works if everyone uses it)
 
+### Deploying Connect Apps
+
+See the [deploying-node-with-spark][] article for tips on how to set up a production server using [Connect][] and [Spark][].
+
+
 [Connect]: http://github.com/senchalabs/connect
+[Spark]: http://github.com/senchalabs/spark
 [Sencha]: http://sencha.com/
 [TJ Holowaychuk]: http://github.com/visionmedia
 [ejsgi]: http://github.com/isaacs/ejsgi
@@ -121,5 +129,6 @@ Connect is cool, I gave two presentations on it in the past week at [txjs][] and
 [wheat]: http://github.com/creationix/wheat
 [txjs]: http://www.slideshare.net/creationix/real-time-web-with-node
 [swdc]: http://www.slideshare.net/creationix/node-powered-mobile
-[nvm]: http://github.com/creationix/nvm
+[ivy]: http://github.com/creationix/ivy
 [github]: http://github.com/senchalabs/connect/issues
+[deploying-node-with-spark]: /deploying-node-with-spark

@@ -1,6 +1,6 @@
 var Connect = require('connect');
 
-module.exports = Connect.createServer([
-  {module: require('./log-it')},
-  {module: require('./serve-js')}
-]);
+module.exports = Connect.createServer(
+  require('./log-it')(),
+  require('./serve-js')()
+);
