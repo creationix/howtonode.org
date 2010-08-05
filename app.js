@@ -2,7 +2,6 @@
 var Connect = require('connect');
 
 module.exports = Connect.createServer(
-  Connect.responseTime(),
   Connect.logger(),
   Connect.conditionalGet(),
   Connect.cache(),
