@@ -1,5 +1,4 @@
-var sys = require('sys'), /* We need the sys module */
-    work_queue = []; /* This holds our first in, first out queue of prompts and tasks */
+var work_queue = []; /* This holds our first in, first out queue of prompts and tasks */
 
 /* This is the method we used to put prompted items into the work queue.
     prompts will pass a response to the callback method. */
@@ -25,7 +24,7 @@ run = function() {
     while (work_queue.length > 0) {
       /* If next queued item is a prompt, show the prompt and exit taskRunner. */
       if (work_queue[0].work_type === 'prompt') {
-        sys.puts(work_queue[0].text);
+        process.stdout.write(work_queue[0].text + "\n");
         return;
       }
       /* If we have a task we show the text associated with the task and
@@ -33,7 +32,7 @@ run = function() {
           Work queue only insures the order of firing not anything else. */
       if (work_queue[0].work_type === 'task') {
         action = work_queue.shift();
-        sys.puts(action.text);
+        process.stdout.write(action.text + "\n");
         action.callback();
       }
     }
@@ -61,19 +60,12 @@ run = function() {
           taskRunner();
         }
         if (work_queue.length === 0) {
-          stdin.end();
+          process.exit(0);
         }
       };
       
-      /* This is the callback for doing all the cleanup. */
-      cleanupHandlers = function () {
-        stdin.removeListener('data', inputHandler);
-        stdin.removeListener('end', cleanupHandlers);
-      };
-      
-      /* Now that we have defined out handlers, add them as listners for data and end events. */
-      stdin.addListener('data', inputHandler);
-      stdin.addListener('end', cleanupHandlers);
+      /* Now that we have defined out handlers, add them as listeners for data and end events. */
+      stdin.on('data', inputHandler);
     }());
   }
 };
@@ -84,14 +76,14 @@ run = function() {
 
 /* You might prompt to do some setup before firing your tasks */
 prompt("Are you there? ", function (data) {
-  sys.puts("Answer was: " + data);
+  process.stdout.write("Answer was: " + data + "\n");
 }); 
 
 /* Tasks run unattended. work_queue only ensures the order 
     the callbacks are fired not order of completion */
 task('Count to three:', function () {
   for (i = 1; i <= 3; i += 1) {
-    sys.puts("count: " + i);
+    process.stdout.write("count: " + i + "\n");
   }
 });
 

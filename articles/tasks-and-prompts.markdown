@@ -1,7 +1,7 @@
 Title: Tasks and Prompts -- Implementing Simple Work Queues
 Author: R. S. Doiel
 Date: Sun, 28 Feb 2010 00:50:22 GMT
-Node: v0.1.91
+Node: v0.1.103
 
 
 Sometimes all you really need is orderly execution not blocking I/O to get the job done.  Tasks and prompts is a light weight implementation of the work queue design pattern.
@@ -27,6 +27,6 @@ A simple JavaScript array works fine as a first in first out queue (i.e. shift()
 
 ## Explanations
 
-In this simple example I prompt the user to answer a question then count to three. Pretty trivial but it's an implantation of a the work queue pattern. That pattern is common in installation or management scripts.  The only problem with the example above is that it isn't setup as a node module ... wait I did that already! See [github.com/rsdoiel/nshtools](http://github.com/rsdoiel/nshtools). nshtools.js has a more elaborate implementation and includes some other features like command line option processing, mixins of sys, path and fs modules, and high level file commands like cp and mv. The github wiki and the README.md file for nshtools have some more short examples for your enjoyment.
+In this simple example I prompt the user to answer a question then count to three. Pretty trivial but it's an implantation of a the work queue pattern. That pattern is common in installation or management scripts.  The only problem with the example above is that it isn't setup as a node module ... wait I did that already! See [github.com/rsdoiel/nshtools](http://github.com/rsdoiel/nshtools). nshtools.js includes a more elaborate implementation and with features like command line option processing and high level file commands like cp and mv. The github wiki and the README.md file for nshtools have some more short examples for your enjoyment.
 
 Have fun!
