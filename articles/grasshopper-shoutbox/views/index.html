@@ -1,0 +1,41 @@
+<% if(shout.errors) { %>
+    <p class="error">
+    <%= errors(shout).join('</p><p class="error">') %>
+    </p>
+<% } %>
+<% if(flash['success']) { %>
+    <p class="success"><%= flash['success'] %></p>
+<% } %>
+
+<ul>
+    <% shouts.forEach(function(shout) { %>
+        <li>
+            <div class="meta">
+                <img src="http://www.gravatar.com/avatar/<%= shout.mailHash() %>" 
+                     alt="Gravatar" />
+                <p><%= h(shout.name()) %></p>
+            </div>
+            <div class="shout">
+                <p><%= h(shout.message()) %></p>
+            </div>
+        </li>
+    <% }); %>
+</ul>
+
+<form action="/" method="post">
+    <h2>Shout!</h2>
+
+    <div class="fname">
+        <label for="name"><p>Name:</p></label>
+        <input type="text" name="shout.name" value="<%= shout.name() %>" size="20" />
+    </div>
+
+    <div class="femail">
+        <label for="email"><p>Email:</p></label>
+        <input type="text" name="shout.email" value="<%= shout.email() %>" size="20" />
+    </div>
+
+    <textarea name="shout.message" rows="5" cols="40"><%= shout.message() %></textarea>
+
+    <p><input type="submit" value="Submit" /></p>
+</form>
