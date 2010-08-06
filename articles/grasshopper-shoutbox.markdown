@@ -11,32 +11,13 @@ If do not want to type in the code yourself, look at the [complete source code][
 
 ## Setting Up
 
-To follow this article [git][], [node.js][], [npm][], [Grasshopper][] and [CouchDB][] have to be installed and configured on your system.
-
-### git
-
-Follow [these instructions][gitInstall] to install git on your system.
-
-### node.js
-
-This article has been written for v0.1.103 of node.js.  Follow [these instructions][nodeInstall] for getting node installed on your system.
-
-### npm
-
-npm is a package manager for node.js.  It takes care of dependency management when installing node.js modules.  Issue this command to install npm.
-
-    wget -qO- http://npmjs.org/install.sh | sudo sh
+To follow this article [git][], [node.js][], [npm][] and [CouchDB][] have to be installed and configured on your system.
 
 ### Grasshopper
 
 Grasshopper is a feature-rich and flexible web application framework for node.js with support for most of the features web applications would need.  Install it with this command.
 
     sudo npm install grasshopper
-
-### CouchDB
-
-Follow the [installation instruction][couchInstall] on couch wiki to get CouchDB installed for your platform.
-
 
 ### CouchDB Module for node.js
 
@@ -73,7 +54,7 @@ Create the CouchDB database for storing shouts by creating a file named `created
 
 ## Model
 
-In an application following the MVC pattern, models are meant to hold the domain related data and business logic.  Grasshopper provides various features like, validation and ability to update models from request parameters, to make the development of your application's model layer simple.
+Grasshopper provides various features like, validation and ability to update models from request parameters, to make the development of your application's model layer simple.
 
 Our shoutbox application has a single model named `Shout` in `app/model.js`.
 
@@ -93,9 +74,7 @@ We also add a function to generate an MD5 hash of the email which will be needed
 
 ## Controller
 
-Controllers deal with receiving the request, doing the necessary work through models and repositories and generating the response.  They are associated with a specific URL patterns.  Controllers in Grasshopper are just functions which are invoked with a `RequestContext` as the `this` context.
-
-Our Shoutbox has 2 controllers, one to display all the available shouts along with a form to add new shouts and another to save new shouts and redirect back to the previous list.
+Controllers in Grasshopper are just functions which are invoked with a `RequestContext` as the `this` context.  Our Shoutbox has 2 controllers, one to display all the available shouts along with a form to add new shouts and another to save new shouts and redirect back to the previous list.
 
 ### Controller to list shouts
 
@@ -159,7 +138,7 @@ The layout for our shoutbox would look like this.
 
 ## View
 
-Views deal with presenting the data available in the model of the current request context to the user.  They also deal with accepting user input and displaying validations results.  Views in Grasshopper can embed javascript with `<% %>` for code to be executed and `<%= %>` for code whose value is to be included in the response.
+Views in Grasshopper can embed javascript with `<% %>` for code to be executed and `<%= %>` for code whose value is to be included in the response.
 
 Our shoutbox has a single view as it does all the work on a single page.  At the top the page it displays all the errors in the shout if any.  It uses the `errors()` view helper to retrieve all the error messages in the shout as an array.  It then checks whether there is a flash message available to be displayed and displays it.
 
