@@ -4,9 +4,11 @@ This is a community supported blog about how to program in nodejs.
 
 This is powered by a new static blog engine written in node called [wheat][].
 
-To run a local version of the blog, simply install [wheat][], node.JS v0.1.33-205-g2ff20d8 or later and then run the included `server.js` script.
+To run a local version of the blog, simply install [wheat][], node.JS v0.1.33-205-g2ff20d8 or later and then run the included `app.js` script. You can also get wheat out of the box with [ivy][] and then run '[spark][]'.
 
 [wheat]: http://github.com/creationix/wheat
+[ivy]: http://github.com/creationix/ivy
+[spark]: http://github.com/senchalabs/spark
 
 ## Contributing
 
