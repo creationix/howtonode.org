@@ -1,13 +1,18 @@
 // basic imports
-var sys = require('sys');
 var events = require('events');
 
 // for us to do a require later
-exports.Dummy = Dummy;
+module.exports = Dummy;
 
 function Dummy() {
-    var self = this;
-    events.EventEmitter.call(self);
+    events.EventEmitter.call(this);
 }
 
-sys.inherits(Dummy, events.EventEmitter);
+// inherit events.EventEmitter
+Dummy.super_ = events.EventEmitter;
+Dummy.prototype = Object.create(events.EventEmitter.prototype, {
+    constructor: {
+        value: Dummy,
+        enumerable: false
+    }
+});
