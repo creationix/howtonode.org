@@ -1,4 +1,4 @@
-var couchdb = require('node-couchdb'),
+var couchdb = require('couchdb'),
     client = couchdb.createClient();
 
 client.request('put', '/shout');

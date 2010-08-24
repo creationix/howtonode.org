@@ -23,9 +23,7 @@ Grasshopper is a feature-rich and flexible web application framework for node.js
 
 Install the CouchDB module for node.js ([node-couchdb][]) using these commands.
 
-    git clone http://github.com/felixge/node-couchdb.git
-    cd node-couchdb
-    sudo npm install
+    sudo npm install couchdb
 
 ## Creating the Application
 

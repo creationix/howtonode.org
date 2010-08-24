@@ -1,4 +1,4 @@
-var couchdb = require('node-couchdb'),
+var couchdb = require('couchdb'),
     Shout = require('./model').Shout;
 
 exports.all = function(cb) {
