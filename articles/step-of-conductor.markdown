@@ -15,7 +15,7 @@ A very small library that I've been using for these simple cases is based on the
 
 Here is a snippet of using `Step` in the [wheat][] blogging engine I'm working on:
 
-<step-of-conductor/step1.js*>
+<step-of-conductor/step1.js>
 
 In this example, I pass three steps as functions to the `Step` helper.  The first two end in a call to an asynchronous function.  I pass the value `this` as the callback.  This hooks's into `Step`'s system so that it know to call the next step when the first is done.  The parameters given to the callback are passed through to the next step.  Notice that I created a closure variable `props`.  This is so that the third step has access to the props defined in the second step, but not passed through by the `loadAuthor` call.  The third step then does some final processing and calls the main callback to the outer function.
 
@@ -23,13 +23,13 @@ In essence `loadArticle` is a composite asynchronous function that had two other
 
 How about an example that makes use of the parallel feature of `Step`:
 
-<step-of-conductor/step2.js*>
+<step-of-conductor/step2.js>
 
 This example is similar, but with the new addition of the `this.parallel` function.  This parallel function generates a new callback when called and sets an internal counter in the `Step` system.  Though it's hard to see with this example, the arguments to parseFileContents are first a single `err` and then the second argument to each of the `loadAuthor` callbacks.
 
 Perhaps this example will be more clear:
 
-<step-of-conductor/step3.js*>
+<step-of-conductor/step3.js>
 
 This is the route handler for the front page of the blog.  It needs data from two different async calls and can't render the main template till they're loaded.  Then after the main template is rendered, the layout can be rendered.  Both `Git.getTags` and `loadAuthors` output two arguments, but their errors arguments are compressed into a single `err`.  If both emitted errors that the latter would overwrite the first.
 
@@ -47,7 +47,7 @@ Instead of shoe-horning a problem into a preset pattern to make it easier on the
 
 The example from above that uses `Step` could be rewritten to use `Conduct` (the function exported by the [conductor][] library):
 
-<step-of-conductor/conductor1.js*>
+<step-of-conductor/conductor1.js>
 
 <img src="step-of-conductor/example1.dot" style="float:right;margin:0 0 10px 10px" />
 
