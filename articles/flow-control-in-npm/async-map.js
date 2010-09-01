@@ -1,4 +1,4 @@
-function asyncMap (list, fn, cb) {
+function asyncMap (list, fn, cb_) {
   if (typeof cb_ !== "function") throw new Error(
     "No callback provided to asyncMap")
   var data = []
