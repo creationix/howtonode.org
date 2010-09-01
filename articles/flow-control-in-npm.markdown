@@ -21,7 +21,7 @@ Callback functions can take any number of arguments, but the *first* argument is
 
 You've probably seen this example:
 
-<flow-control-in-npm/read-file-example.js*>
+<flow-control-in-npm/read-file-example.js>
 
 `fs.readFile` is an action function.  The function being passed to it, `function (er, data)...` is a callback function.
 
@@ -41,19 +41,19 @@ Let's say you have a list of filenames, and you have to remove each one.  A pret
 
 `asyncMap` is the answer for that.  (The current async-map.js in npm is a bit more complicated, because it allows you to specify a list of functions rather than just one.)
 
-<flow-control-in-npm/async-map.js*>
+<flow-control-in-npm/async-map.js>
 
 Note that the top-level `cb_` function is called with an array of all the results.  So, data is being proxied up, as well as errors.  (That's why it's called async**Map**, rather than async**ForEach**.)
 
 So, now we can simply do this:
 
-<flow-control-in-npm/remove-file-list.js*>
+<flow-control-in-npm/remove-file-list.js>
 
 ### Proxying
 
 You catch that?  An Action function can pass its own cb over to another Action function if it doesn't need to do anything with success or failure.  We could also have done something like this:
 
-<flow-control-in-npm/proxying.js*>
+<flow-control-in-npm/proxying.js>
 
 ### `chain(fn1, fn2, ..., cb)`
 
@@ -61,13 +61,13 @@ There are other cases where you want to make sure that a list of functions are c
 
 `chain` takes a list of function arguments which take a callback, and a final argument which is the ultimate callback function.
 
-<flow-control-in-npm/chain.js*>
+<flow-control-in-npm/chain.js>
 
 ### chain 2
 
 This is great, but it requires using Function#bind if we want to pass arguments to those functions other than a callback.  This API would be nice:
 
-<flow-control-in-npm/chain2-usage.js*>
+<flow-control-in-npm/chain2-usage.js>
 
 Basically, each argument is one of:
 
@@ -79,7 +79,7 @@ Basically, each argument is one of:
 
 Revamped to handle this calling style, chain looks like this:
 
-<flow-control-in-npm/chain2.js*>
+<flow-control-in-npm/chain2.js>
 
 ## Mix and Match
 
