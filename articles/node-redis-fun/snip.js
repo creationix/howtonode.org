@@ -5,6 +5,29 @@ var redis = require('redis-client')
   , cp = require('child_process')
   , _ = require('underscore')._;
 
+/* Passes cb to a new instance redis.Client.connect
+ * but handles error in connecting
+ * accepts optional errback as second argument
+ * the callback gets a this.redis representing the redis object
+ *
+ * Returns nothing
+ */
+var withRedis = function( cb ) {
+  var errback = arguments[1];
+
+  var r = redis.createClient();
+
+  r.stream.on( 'connect', _.bind( cb, { redis : r } ) );
+
+  r.stream.on( "end", function(error) {
+    if( error ) {
+      process.stdio.writeError( "Error connecting to Redis database\n" );
+      if( typeof(errback) === "function" )
+        errback();
+    }
+  });
+}
+
 var languages = 
  [["apacheconf", "ApacheConf"],
   ["applescript", "AppleScript"],
@@ -145,7 +168,6 @@ var genLanguageList = function() {
   } );
 }
 
-//formHtml
 var formHtml = '<form action="/add" method="post">'
       +  '<label for="code">Paste code</label><br>'
       +  '<textarea name="code" rows="25" cols="80"></textarea><br>'
@@ -155,24 +177,22 @@ var formHtml = '<form action="/add" method="post">'
       +  '</select>'
       +  '<input type="submit" value="Paste!" /></form>';
 
-//getPostParams
 var getPostParams = function(req, callback){ 
   var body = ''; 
-  req.addListener('data', function(chunk){
+  req.on('data', function(chunk){
      body += chunk;
    }) 
-   .addListener('end', function() { 
+   .on('end', function() { 
      var obj = qs.parse(  body.replace( /\+/g, ' ' ) ) ;
      callback( obj );
    });
 } 
 
-//addSnippet
 var addSnippet = function( req, res ) {
   getPostParams( req, function( obj ) {
       var r = redis.createClient();
 
-      r.stream.addListener( 'connect', function() {
+      r.stream.on( 'connect', function() {
         r.incr( 'nextid' , function( err, id ) {
           r.set( 'snippet:'+id, JSON.stringify( obj ), function() {
             var msg = 'The snippet has been saved at <a href="/'+id+'">'+req.headers.host+'/'+id+'</a>';
@@ -183,19 +203,18 @@ var addSnippet = function( req, res ) {
     });
 };
 
-//showSnippet
 var showSnippet = function( req, res, id ) {
     var r = redis.createClient();
-    r.stream.addListener( 'connect', function() {
+    r.stream.on( 'connect', function() {
       r.get( 'snippet:'+id, function( err, data ) {
         if( !data ) {
-          res.sendHeader( 404 );
+          res.writeHead( 404 );
           res.write( "No such snippet" );
           res.end();
           return;
         }
 
-        res.sendHeader( 200, { "Content-Type" : "text/html" } );
+        res.writeHead( 200, { "Content-Type" : "text/html" } );
 
         var obj = JSON.parse( data.toString() );
         var shortcode = languages.filter( function(el) { 
@@ -207,12 +226,12 @@ var showSnippet = function( req, res, id ) {
                             "-f", "html",
                             "-O", "full,style=pastie",
                             "-P", "title=Snippet #" + id ] );
-        pyg.stdout.addListener( "data", function( coloured ) {
+        pyg.stdout.on( "data", function( coloured ) {
           if( coloured )
             res.write( coloured );
         } );
 
-        pyg.addListener( 'exit', function() {
+        pyg.on( 'exit', function() {
           res.end();
         });
 
@@ -223,8 +242,6 @@ var showSnippet = function( req, res, id ) {
       });
   });
 }
-
-//create
 
 nerve.create( [
   [ /^\/([0-9]+)/, showSnippet ],
