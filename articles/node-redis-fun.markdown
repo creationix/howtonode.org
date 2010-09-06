@@ -1,7 +1,7 @@
 Title: Node + Redis = Fun
 Author: Nikhil Marathe
-Date: Tue Feb 23 2010 21:20:20 GMT+530 (IST)
-Node: v0.1.91
+Date: Mon Sep 06 2010 12:48:20 GMT+530 (IST)
+Node: v0.2.0
 
 node brings asynchronous, evented I/O to the server. Redis gives you a blazing fast database with support for strings, lists and sets. Both Redis and Node.js follow certain patterns, Redis for data-storage, and node for event based programming. I hope to give an introduction to both in this article. By the time we are done, we will have built a [Pastebin][] service.
 
@@ -13,7 +13,7 @@ I will assume that the reader is comfortable with Javascript, including using ev
 
 Before we get down to the code, here is the software you will need:
 
-* [node][] ( we will use [v0.1.91](http://github.com/ry/node/downloads) )
+* [node][] ( we will use [v0.2.0](http://github.com/ry/node/downloads) )
 * [Redis][]
 * [redis-node-client][] - to connect to Redis from node. Already bundled within snip.
 * [nerve][] - A micro-framework to handle routing. Use the bundled version which works with node v0.1.91.
@@ -175,12 +175,12 @@ It would have been even cooler if redis-node-client supported streaming the data
                         "-f", "html",
                         "-O", "full,style=pastie",
                         "-P", "title=Snippet #" + id ] );
-    pyg.stdout.addListener( "data", function( coloured ) {
+    pyg.stdout.on( "data", function( coloured ) {
       if( coloured )
         res.write( coloured );
     } );
 
-    pyg.addListener( 'exit', function() {
+    pyg.on( 'exit', function() {
       res.end();
     });
 
