@@ -168,6 +168,7 @@ var genLanguageList = function() {
   } );
 }
 
+//formHtml
 var formHtml = '<form action="/add" method="post">'
       +  '<label for="code">Paste code</label><br>'
       +  '<textarea name="code" rows="25" cols="80"></textarea><br>'
@@ -177,6 +178,7 @@ var formHtml = '<form action="/add" method="post">'
       +  '</select>'
       +  '<input type="submit" value="Paste!" /></form>';
 
+//getPostParams
 var getPostParams = function(req, callback){
   var body = '';
   req.on('data', function(chunk){
@@ -187,7 +189,7 @@ var getPostParams = function(req, callback){
      callback( obj );
    });
 }
-
+//addSnippet
 var addSnippet = function( req, res ) {
   getPostParams( req, function( obj ) {
       var r = redis.createClient();
@@ -202,7 +204,7 @@ var addSnippet = function( req, res ) {
       } );
     });
 };
-
+//showSnippet
 var showSnippet = function( req, res, id ) {
     var r = redis.createClient();
     r.stream.on( 'connect', function() {
@@ -243,6 +245,7 @@ var showSnippet = function( req, res, id ) {
   });
 }
 
+//create
 nerve.create( [
   [ /^\/([0-9]+)/, showSnippet ],
   [ nerve.post("/add"), addSnippet ],
