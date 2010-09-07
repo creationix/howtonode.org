@@ -28,7 +28,7 @@ var withRedis = function( cb ) {
   });
 }
 
-var languages = 
+var languages =
  [["apacheconf", "ApacheConf"],
   ["applescript", "AppleScript"],
   ["as", "ActionScript"],
@@ -177,16 +177,16 @@ var formHtml = '<form action="/add" method="post">'
       +  '</select>'
       +  '<input type="submit" value="Paste!" /></form>';
 
-var getPostParams = function(req, callback){ 
-  var body = ''; 
+var getPostParams = function(req, callback){
+  var body = '';
   req.on('data', function(chunk){
      body += chunk;
-   }) 
-   .on('end', function() { 
+   })
+   .on('end', function() {
      var obj = qs.parse(  body.replace( /\+/g, ' ' ) ) ;
      callback( obj );
    });
-} 
+}
 
 var addSnippet = function( req, res ) {
   getPostParams( req, function( obj ) {
@@ -217,7 +217,7 @@ var showSnippet = function( req, res, id ) {
         res.writeHead( 200, { "Content-Type" : "text/html" } );
 
         var obj = JSON.parse( data.toString() );
-        var shortcode = languages.filter( function(el) { 
+        var shortcode = languages.filter( function(el) {
           return el[0] == obj.language;
         } ) [0][0];
 
