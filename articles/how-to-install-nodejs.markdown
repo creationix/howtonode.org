@@ -3,7 +3,6 @@ Author: Node Knockout
 Date: Sat, 11 Sep 2010 22:40:19 GMT
 Node: v0.2.1
 
-
 This was the first in a series of posts leading up to
 [Node.js Knockout][] on how to use [node.js][].
 

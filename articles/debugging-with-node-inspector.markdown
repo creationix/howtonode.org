@@ -1,5 +1,5 @@
 Title: Debugging with node-inspector
-Author: Node Knockout
+Author: Danny Coates
 Date: Sat Sep 11 2010 16:42:29 GMT-0700 (PDT)
 Node: v0.2.1
 

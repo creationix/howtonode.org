@@ -1,6 +1,6 @@
 GithubName:   creationix
 Email:    tim@creationix.com
-Github: creationix
+Homepage: http://creationix.com/
 Twitter: creationix
 Location: Palo Alto, CA
 

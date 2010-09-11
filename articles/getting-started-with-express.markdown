@@ -1,5 +1,5 @@
 Title: Getting Started with Express
-Author: Node Knockout
+Author: TJ Holowaychuk
 Date: Sat, 11 Sep 2010 22:55:36 GMT
 Node: v0.2.1
 
