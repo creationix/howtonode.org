@@ -1,12 +1,10 @@
 Title: Introduction to npm
-Author: Node Knockout
+Author: Isaac Z. Schlueter
 Date: Sat, 11 Sep 2010 23:05:24 GMT
 Node: v0.2.1
 
 This was the third in a series of posts leading up to
-[Node.js Knockout][] on how to use [node.js][]. This post was
-written by [npm][] author and [Node.js Knockout judge][] Isaac
-Schlueter.
+[Node.js Knockout][] on how to use [node.js][].
 
 npm is a [NodeJS][node.js] package manager. As its name would
 imply, you can use it to install node programs. Also, if you use it
