@@ -1,4 +1,3 @@
-GithubName:   isaacs
 Email:    i@izs.me
 Github: isaacs
 Twitter: izs

@@ -1,4 +1,3 @@
-GithubName:   aaronblohowiak
 Email:    aaron.blohowiak@gmail.com
 Github: aaronblohowiak
 Twitter: aaronblohowiak

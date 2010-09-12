@@ -1,4 +1,4 @@
-GithubName:   creationix
+Github:   creationix
 Email:    tim@creationix.com
 Homepage: http://creationix.com/
 Twitter: creationix

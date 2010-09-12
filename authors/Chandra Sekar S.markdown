@@ -1,4 +1,3 @@
-GithubName:   tuxychandru
 Email:    chandru.in@gmail.com
 Github: tuxychandru
 Twitter: tuxychandru
