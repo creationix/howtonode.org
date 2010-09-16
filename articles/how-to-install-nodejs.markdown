@@ -13,7 +13,7 @@ and [Windows][].
 
 ## Mac
 
-If you’re using the excellent [homebrew][] package manager, you can
+If you're using the excellent [homebrew][] package manager, you can
 install node with one command: `brew install node`.
 
 Otherwise, follow the below steps:
@@ -21,6 +21,8 @@ Otherwise, follow the below steps:
 1.  [Install Xcode][].
 2.  [Install git][].
 3.  Run the following commands:
+
+<how-to-install-nodejs/darwin_setup.sh>
 
 You can check it worked with a simple [Hello, World!][] example.
 
@@ -31,6 +33,8 @@ You can check it worked with a simple [Hello, World!][] example.
     -   `sudo apt-get install git-core`
 
 2.  Run the following commands:
+
+<how-to-install-nodejs/ubuntu_setup.sh>
 
 You can check it worked with a simple [Hello, World!][] example.
 
@@ -44,32 +48,40 @@ follow these steps:
 1.  [Install cygwin][].
 2.  Use `setup.exe` in the cygwin folder to install the following
     packages:
-    -   devel → openssl
-    -   devel → g++-gcc
-    -   devel → make
-    -   python → python
-    -   devel → git
+    -   devel &rarr; openssl
+    -   devel &rarr; g++-gcc
+    -   devel &rarr; make
+    -   python &rarr; python
+    -   devel &rarr; git
 
 3.  Open the cygwin command line with
     `Start > Cygwin > Cygwin Bash Shell`.
 4.  Run the below commands to download and build node.
+
+<how-to-install-nodejs/cygwin_setup.sh>
 
 For more details, including information on troubleshooting, please
 see the [GitHub wiki page][].
 
 ## Hello Node.js!
 
-Here’s a quick program to make sure everything is up and running
+Here's a quick program to make sure everything is up and running
 correctly:
 
+<how-to-install-nodejs/hello_node.js>
+
 Run the code with the `node` command line utility:
+
+    > node hello_node.js
+    Server running at http://127.0.0.1:8124/
+
 
 Now, if you navigate to [http://127.0.0.1:8124/][] in your browser,
 you should see a nice message.
 
 ## Congrats!
 
-You’ve installed [node.js][].
+You've installed [node.js][].
 
   [Countdown to Knockout: Post 1 - How to Install Node.js]: http://nodeknockout.posterous.com/countdown-to-knockout-post-1-how-to-install-n
   [Node.js Knockout]: http://nodeknockout.com/
