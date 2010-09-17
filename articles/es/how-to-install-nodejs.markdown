@@ -58,7 +58,7 @@ Para ello sigue estos pasos:
 
 3.  Abrir la linea de comandos cygwin con
     `Start > Cygwin > Cygwin Bash Shell`.
-4.  Ejecutar el comando de abajo para descargar y crear node.
+4.  Ejecutar los comandos de abajo para descargar y crear node.
 
 <how-to-install-nodejs/cygwin_setup.sh>
 
