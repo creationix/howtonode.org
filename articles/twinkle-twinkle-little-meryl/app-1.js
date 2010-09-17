@@ -1,5 +1,3 @@
-// app.js 
-
 // import meryl
 var meryl = require('meryl');
 

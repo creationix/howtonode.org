@@ -1,5 +1,3 @@
-// app.js
-
 var meryl = require('meryl'),
   qs = require('querystring');
   staticfile = meryl.findp('staticfile'),
