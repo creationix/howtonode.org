@@ -51,7 +51,7 @@ the contents above, run it with node:
 
 Now point your http client to address
 [http://localhost:3000](http://localhost:3000) to see the expected output. If it
-is done, congrats, you've just greet Meryl!
+is done, congrats, you've just greeted Meryl!
 
 ## So What
 
@@ -270,14 +270,15 @@ will solve our problem. So add below,
 	});
 	
 
-As you see we have defined some more extension. It's real easy to add one.
-Unfortunately  Meryl has a long way and restrcited amoutn of time to implemet
+As you see we have defined some more extension. It's reallly easy to add one.
+Unfortunately  Meryl has a long way and restrcited amount of time to implement
 such fundemental plugins adn extensions. Don't forget to help Meryl by
 contributing to it.
 
 ## Sum up
 
-Finally we are done writing up a simple twitter like service. Here is the final code.
+Finally we are done writing up a simple twitter like service. Here is the final
+code.
 
 	var meryl = require('../../index'),
 	  qs = require('querystring');
