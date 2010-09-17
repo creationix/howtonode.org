@@ -33,16 +33,7 @@ Yep, it's done. You can now use Meryl in your applications by simply typing
 'require("meryl")'. As a startup, please check out our first example below.
 Here is the first bits for Meryl.
 
-	// app.js 
-	
-	// import meryl
-	var meryl = require('meryl');
-
-	// Now define a request handler tied to an url expression.
-	meryl.h('GET /', function () { this.send('<h3>Hello, World!</h3>'); });
-
-	// OK, here we go. Let's plug meryl into your http server instance.
-	require('http').createServer(meryl.cgi()).listen(3000);
+<twinkle-twinkle-little-meryl/app-1.js>
 
 Later you create a file with an arbitrary name (conventionally 'app.js') with
 the contents above, run it with node:
@@ -103,26 +94,7 @@ can use 'meryl.findp' for importing any plugin and 'meryl.findx' for extensions
 vice versa. Below we'll call our built-in static file handler using
 'meryl.findp'.
 
-	// app.js 
-	
-	// import meryl
-	var meryl = require('../../index');
-	// import built-in static file plugin
-	var staticfile = meryl.findp('staticfile');
-
-	// register our plugin mapping the 'static' virtual
-	// path for static content
-	
-	// options we're passing to staticfile function are default already but
-	// demonstrated here for clarification.
-	
-	// root param denotes the root path for static content on file system
-	// path param denotes the url expression paramter which to lookup file under root
-	meryl.p('GET /static/<filepath>', staticfile({root: 'public', path: 'filepath'}));
-	
-
-	// of course plug meryl
-	require('http').createServer(meryl.cgi()).listen(3000);
+<twinkle-twinkle-little-meryl/app-2.js>
 
 If you run this code you' ll get a simple and fresh static file server. With a
 directory structure like below, you can make requests for contents under
@@ -227,23 +199,7 @@ modifications. (See
 
 --
 
-	// app.js
-	
-	var meryl = require('../../index'),
-	  staticfile = meryl.findp('staticfile'),
-	  microtemplate = meryl.findx('microtemplate');
-
-	var twinkles = ['This is my freaking first wink', 'Hey tweeting sucks, lets twinkle'];
-
-	meryl.x('render', microtemplate());
-
-	meryl.p('GET /static/<filepath>', staticfile());
-
-	meryl.h('GET /', function() {
-	  this.render('index', {twinkles: twinkles});
-	});
-	
-	require('http').createServer(meryl.cgi()).listen(3000);
+<twinkle-twinkle-little-meryl/app-3.js>
 
 After all, we have to write some code to insert new winks into our existing
 winks. So writing another handler for handling a post datas from a html form
@@ -280,42 +236,7 @@ contributing to it.
 Finally we are done writing up a simple twitter like service. Here is the final
 code.
 
-	var meryl = require('../../index'),
-	  qs = require('querystring');
-	  staticfile = meryl.findp('staticfile'),
-	  microtemplate = meryl.findx('microtemplate');
-
-	var twinkles =  ['This is my freaking first wink', 'Hey tweeting sucks, lets twinkle'];
-
-	meryl.x('render', microtemplate());
-
-	meryl.x('redirect', function(loc) {
-	  this.status = 301;
-	  this.headers['Location'] = loc;
-	  this.send();
-	});
-
-	meryl.x('decodeSimplePostData', function(postdata) {
-	  if(typeof postdata != 'string')
-	    return qs.parse(postdata.toString());
-	  return qs.parse(postdata);
-	});
-
-	meryl.p('GET /static/<filepath>', staticfile());
-
-	meryl.h('GET /', function() {
-	  this.render('index', {twinkles: twinkles});
-	});
-
-	meryl.h('POST /newtweet', function() {
-	  var data = this.decodeSimplePostData(this.postdata);
-	  if(data.wink) {
-	    twinkles.push(data.wink);
-	   }
-	  this.redirect('/');
-	});
-
-	require('http').createServer(meryl.cgi()).listen(3000);
+<twinkle-twinkle-little-meryl/app-final.js>
 
 
 So far, we are ok for now. Please don't stop here. Go play with Meryl, modify
