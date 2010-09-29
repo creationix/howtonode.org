@@ -1,6 +1,6 @@
 Title: Websockets everywhere with Socket.IO
 Author: Guillermo Rauch
-Date: Aug 24 2010
+Date: Wed Sep 29 2010 12:11:39 GMT+0530 (IST)
 
 If you've stayed on top of the advances in the realtime web for the past few years, you've probably heard of different techniques aimed to reduce the latency (ie: speed) of the message exchange between a client and a server. If you're developing a multiplayer game, a chat application, or showing frequent updates of data like tweets or stock price changes, you probably want to **reverse** the traditional model of communication. So instead of requesting (polling) data on a specific interval of time, you want the server to send (push) data to the client.
 
