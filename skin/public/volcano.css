@@ -191,7 +191,9 @@ body {
 #main h3 {
   color: #666;
 }
-#main p {
+/* Added the default paragraph style to
+the list items to fix the size issue */
+#main p, #main li {
   text-align: justify;
   font-size: 14px;
   line-height: 1.6em;
