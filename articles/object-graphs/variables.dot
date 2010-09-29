@@ -1,0 +1,37 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+  
+  /* Variables */
+	node [shape = plaintext]; 
+	description
+	Lane
+	Fred
+	descr
+  /* Functions */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn1 [label="<__proto__>Function"];
+  fn2 [label = "<__proto__>Function|<name>name"];
+  /* Objects */
+  node [shape = Mrecord, fillcolor=lightBlue, style=filled];
+  obj1 [label = "<__proto__>Object|<name>name | <description> description"];
+  obj2 [label = "<__proto__>Object|<descr> descr | <name>name"];
+  obj3 [label = "<__proto__>Object|<name>name"];
+  /* Strings */
+  node [shape = plaintext, fillcolor=lightGrey, style=filled];
+  name [label="\"Lane…\""]
+  name2 [label="\"Fred…\""]
+  name3 [label="\"Zed…\""]
+  name4 [label="\"Cloe…\""]
+  
+  Lane -> obj1;
+  obj1:name -> name;
+  obj1:description -> fn1;
+  Fred -> obj2;
+  obj2:name -> name2;
+  obj2:descr -> fn1;
+  obj3:name -> name3;
+  descr -> fn1;
+  description -> fn2;
+  fn2:name -> name4;
+}
