@@ -6,6 +6,8 @@ The last thing you want this weekend is to be introducing bugs at 4:30PM on Sund
 
 Shoulda.js is a micro javascript unit testing framework inspired by Thoughtbot's Shoulda for Ruby. It gives you a tight syntax for writing terse, readable unit tests. It weighs in at under 300 lines and makes no assumptions about your javascript environment or libraries.
 
+## Get Started
+
 Here's how to get started. You've probably seen this pattern before: tests are grouped into logical units called "contexts". Contexts can optionally share test-case setup code. This is a sample test for a massively concurrent version of super mario we've written (the source for that is not included ;-) :
 
 <testing-your-javascript/mario_tests.js>
