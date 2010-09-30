@@ -1,14 +1,7 @@
-// Create a parent object
-var tim = {
-  name: "Tim Caswell",
-  age: 28,
-  isProgrammer: true,
-  likesJavaScript: true
-}
-// Create a child object
-var jack = Object.create(tim);
-// Override some properties locally
-jack.name = "Jack Caswell";
-jack.age = 4;
-// Look up stuff through the prototype chain
-jack.likesJavaScript;
+// Let's create some local variables in the top scope
+var name = "Tim Caswell";
+var age = 28;
+var isProgrammer = true;
+var likesJavaScript = true;
+// Test to see if the two variables reference the same value
+isProgrammer === likesJavaScript;
