@@ -1,0 +1,25 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+	
+	subgraph cluster_0 {
+    style =rounded;
+
+    /* Free Variables */
+    node [shape = plaintext, style=""]
+    name; age; isProgrammer; likesJavaScript;
+
+  }
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  timcaswell [label="\"Tim Caswell\""]
+  n28 [label="28"]
+  true [label="true"]
+
+  name -> timcaswell;
+  age -> n28;
+  isProgrammer -> true;
+  likesJavaScript -> true;
+  
+}

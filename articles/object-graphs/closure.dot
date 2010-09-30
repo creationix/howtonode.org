@@ -1,0 +1,47 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  subgraph cluster_0 {
+    style =rounded;
+    
+    /* Free Variables */
+    node [shape = plaintext, style=""]
+    description1;description2;
+    subgraph cluster_1 {
+
+      /* Free Variables */
+      node [shape = plaintext, style=""]
+      name1 [label="name"];
+
+      subgraph cluster_2 {
+        node [shape=Mrecord, fillcolor=orange, style=filled];
+        fn1 [label="<__proto__>function () \{ return name; \}"];
+      }
+    }
+    subgraph cluster_3 {
+
+      /* Free Variables */
+      node [shape = plaintext, style=""]
+      name2 [label="name"];
+
+      subgraph cluster_4 {
+        node [shape=Mrecord, fillcolor=orange, style=filled];
+        fn2 [label="<__proto__>function () \{ return name; \}"];
+      }
+    }
+
+
+  }
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  cloe [label="\"Cloe the Closure\""]
+  albert [label="\"Albert the Awesome\""]
+
+
+  description1 -> fn1:__proto__;
+  description2 -> fn2:__proto__;
+  name1 -> cloe;
+  name2 -> albert;
+}
