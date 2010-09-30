@@ -9,6 +9,8 @@ Pulling packets off the network can show you what your computers are saying to e
 
 There are plenty of ways to do packet inspection these days, but none of them let you interact with your network traffic the way that node lets you write network programs: by writing a few event handlers in JavaScript. `node_pcap` not only let's you capture and process packets in JavaScript, but since it is built on node.js, data from the packets can be easily routed around to web browsers, databases, or whatever else you can think of.
 
+## Example
+
 Here's an example of capturing packets and sending them back to a web browser using WebSocket:
 
 <http://pcap.ranney.com:81/>
