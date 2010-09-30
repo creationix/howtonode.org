@@ -1,0 +1,29 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Functions */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  global [label="<tim>tim|<jack>jack"];
+  /* Objects */
+  node [shape = Mrecord, fillcolor=lightBlue, style=filled];
+  obj1 [label = "<__proto__>Object|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
+  obj2 [label = "<__proto__>Object|<name>name|<age>age"];
+  /* Literals */
+  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  tim [label="\"Tim Caswell\""]
+  jack [label="\"Jack Caswell\""]
+  true [label="true"]
+  n4 [label="4"]
+  n28 [label="28"]
+  /* Links */
+  obj2:__proto__ -> obj1:__proto__ [color=blue];
+  global:tim -> obj1:__proto__;
+  obj1:name -> tim;
+  obj1:age -> n28;
+  obj1:isProgrammer -> true;
+  obj1:likesJavaScript -> true;
+  global:jack -> obj2:__proto__;
+  obj2:name -> jack;
+  obj2:age -> n4;
+}

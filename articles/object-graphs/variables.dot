@@ -2,39 +2,17 @@ digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
 
-  /* Variables */
-/*
-  node [shape = plaintext];
-  description
-  Lane
-  Fred
-  descr
-*/
   /* Functions */
   node [shape = Mrecord, fillcolor=orange, style=filled];
-  global [label="<__proto__>Function|<Lane>Lane|<descr>descr|<Fred>Fred|<description>description"];
-  fn1 [label="<__proto__>Function"];
-  fn2 [label = "<__proto__>Function|<name>name"];
-  /* Objects */
-  node [shape = Mrecord, fillcolor=lightBlue, style=filled];
-  obj1 [label = "<__proto__>Object|<name>name | <description> description"];
-  obj2 [label = "<__proto__>Object|<descr> descr | <name>name"];
-  obj3 [label = "<__proto__>Object|<name>name"];
-  /* Strings */
-  node [shape = plaintext, fillcolor=lightGrey, style=filled];
-  name [label="\"Lane the Lambda\""]
-  name2 [label="\"Fred the Functor\""]
-  name3 [label="\"Zed the Zetabyte\""]
-  name4 [label="\"Cloe the Closure\""]
-
-  global:Lane -> obj1:__proto__;
-  obj1:name -> name;
-  obj1:description -> fn1;
-  global:Fred -> obj2:__proto__;
-  obj2:name -> name2;
-  obj2:descr -> fn1:__proto__;
-  obj3:name -> name3;
-  global:descr -> fn1:__proto__;
-  global:description -> fn2:__proto__;
-  fn2:name -> name4;
+  global [label="<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
+  /* Literals */
+  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  timcaswell [label="\"Tim Caswell\""]
+  n28 [label="28"]
+  true [label="true"]
+  global:name -> timcaswell;
+  global:age -> n28;
+  global:isProgrammer -> true;
+  global:likesJavaScript -> true;
+  
 }
