@@ -27,14 +27,14 @@ digraph finite_state_machine {
   name3 [label="\"Zed the Zetabyte\""]
   name4 [label="\"Cloe the Closure\""]
 
-  global:Lane -> obj1;
+  global:Lane -> obj1:__proto__;
   obj1:name -> name;
   obj1:description -> fn1;
-  global:Fred -> obj2;
+  global:Fred -> obj2:__proto__;
   obj2:name -> name2;
-  obj2:descr -> fn1;
+  obj2:descr -> fn1:__proto__;
   obj3:name -> name3;
-  global:descr -> fn1;
-  global:description -> fn2;
+  global:descr -> fn1:__proto__;
+  global:description -> fn2:__proto__;
   fn2:name -> name4;
 }
