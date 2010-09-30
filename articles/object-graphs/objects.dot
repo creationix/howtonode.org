@@ -7,8 +7,8 @@ digraph finite_state_machine {
   global [label="<tim>tim|<jack>jack"];
   /* Objects */
   node [shape = Mrecord, fillcolor=lightBlue, style=filled];
-  obj1 [label = "<__proto__>Object|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
-  obj2 [label = "<__proto__>Object|<name>name|<age>age"];
+  obj1 [label = "<__proto__>__proto__|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
+  obj2 [label = "<__proto__>__proto__|<name>name|<age>age"];
   /* Literals */
   node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
   tim [label="\"Tim Caswell\""]

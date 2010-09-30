@@ -31,6 +31,11 @@ The orange box represents the outermost closure scope.  These variables are top-
 
 <br style="clear:left"/>
 
+Here we have one object with four properties referenced by the `tim` variable.  Also we created a new object that inherits from the first object and referenced it from `jack`.  Then we overrode two properties in the local object.
+
+Now when looking up `jack.likesJavaScript`, we first find the object that `jack` references.  Then we look for the `likesJavaScript` property.  Since it's not there, we look at the parent object and find it there.  Then we find the `true` value it references.
+
+
 ### Global Variables
 
 If you leave off the var statement from 
