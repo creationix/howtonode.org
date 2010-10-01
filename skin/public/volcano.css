@@ -63,11 +63,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 #main {
+    float:left;
   background-color: #fdfeff;
   padding: 10px 30px;
-  min-height: 400px;
-  min-width: 400px;
-  margin-right: 350px;
+  margin-right:0;
+  min-height: 300px;
+  min-width: 300px;
+  width: 70%;
+  /*margin-right: 350px;*/
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -218,8 +221,9 @@ the list items to fix the size issue */
   font-weight: normal;
 }
 #sidebar {
-  float: right;
-  width: 350px;
+  margin-left:0;
+  float: left;
+  width: 24.7%;/*350px;*/
   font-family: sans-serif;
   font-size: 14px;
   line-height: 1.6em;
@@ -227,7 +231,7 @@ the list items to fix the size issue */
 #sidebar dl {
   margin: 10px 0;
 }
-#sidebar h3 {
+#sidebar h4 {
   font-size: 18px;
   font-weight: bold;
   line-height: 1em;
