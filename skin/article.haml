@@ -30,7 +30,7 @@
 
 #sidebar
   .aside.clearfix
-    %h3 About the Author
+    %h4 About the Author
     %img.headshot{src: gravitar(author.email) }
     %dl
       %dt Name:
@@ -58,7 +58,7 @@
           %a{href: author.homepage} Homepage
 
   .aside
-    %h3
+    %h4
       About this Article
     :if article.date
       %dl{title: article.date}
@@ -115,7 +115,7 @@
 
   :if article.related && article.related.length > 0
     .bubble
-      %h3
+      %h4
         Other Articles by this Author
       %ul
         :each related in article.related
