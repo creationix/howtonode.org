@@ -52,7 +52,10 @@ body {
   text-align: center;
   color: #fff;
   font-family: sans-serif;
-  margin: 20px 0;
+  padding: 20px 0;
+}
+#footer.clearfix{
+  clear:both;
 }
 #main,
 .aside,
@@ -192,6 +195,9 @@ body {
   color: #444;
 }
 #main h3 {
+  color: #222;
+}
+#main h4 {
   color: #666;
 }
 /* Added the default paragraph style to
