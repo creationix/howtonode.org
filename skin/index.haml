@@ -1,14 +1,15 @@
 #main.clearfix
   :each article in articles.slice(0,15)
-    .author
-      %img{src:gravitar(article.author.email, 30)}
-      By #{article.author.name}
-      .date{title: article.date}&= formatDate(article.date, "%Y.%m.%d")
-    %h3{style: "margin-right: 150px"}
-      %a{href: "/" + article.name}&= article.title
-    = intro(article.markdown)
-    %a{href: "/" + article.name} Read more...
-    %hr
+    .article
+      .author
+        %img{src:gravitar(article.author.email, 30)}
+        By #{article.author.name}
+        .date{title: article.date}&= formatDate(article.date, "%Y.%m.%d")
+      %h3{style: "margin-right: 150px"}
+        %a{href: "/" + article.name}&= article.title
+      %p
+        = intro(article.markdown)
+      %a{href: "/" + article.name} Read more...
 
 #sidebar
   .aside
