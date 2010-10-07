@@ -52,7 +52,10 @@ body {
   text-align: center;
   color: #fff;
   font-family: sans-serif;
-  margin: 20px 0;
+  padding: 20px 0;
+}
+#footer.clearfix{
+  clear:both;
 }
 #main,
 .aside,
@@ -63,11 +66,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 #main {
+    float:left;
   background-color: #fdfeff;
   padding: 10px 30px;
-  min-height: 400px;
-  min-width: 400px;
-  margin-right: 350px;
+  margin-right:0;
+  min-height: 300px;
+  min-width: 300px;
+  width: 65%;
+  /*margin-right: 350px;*/
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -189,6 +195,10 @@ body {
   color: #444;
 }
 #main h3 {
+  font-size: 2em;
+  color: #222;
+}
+#main h4 {
   color: #666;
 }
 /* Added the default paragraph style to
@@ -217,9 +227,15 @@ the list items to fix the size issue */
 #main .code-link .hash {
   font-weight: normal;
 }
+.article {
+  padding-bottom:10px;
+  margin-bottom:7px;
+  border-bottom:1px solid #ddd;
+}
 #sidebar {
-  float: right;
-  width: 350px;
+  margin-left:0;
+  float: left;
+  width: 28%;
   font-family: sans-serif;
   font-size: 14px;
   line-height: 1.6em;
@@ -227,7 +243,7 @@ the list items to fix the size issue */
 #sidebar dl {
   margin: 10px 0;
 }
-#sidebar h3 {
+#sidebar h4 {
   font-size: 18px;
   font-weight: bold;
   line-height: 1em;
