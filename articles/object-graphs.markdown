@@ -61,7 +61,7 @@ JavaScript isn't just a series of chained data structures.  It contains executab
 
 ### Visualizing Closures
 
-Functions can de drawn as nested scopes and as special objects that contain executable code as well as properties.
+Functions can be drawn as nested scopes and as special objects that contain executable code as well as properties.
 
 In this example we will create a simple factory method that generates a closure and returns a function.
 
