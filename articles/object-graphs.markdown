@@ -57,11 +57,11 @@ If you must put something on the global object, do it explicitly with `window.wo
 
 ## Functions and Closures
 
-JavaScript isn't just a series of chained data structures.  It contains executable, callable code known as functions.  These functions create nested scopes and closures. 
+JavaScript isn't just a series of chained data structures.  It contains executable, callable code known as functions.  These functions create chained scopes and closures. 
 
 ### Visualizing Closures
 
-Functions can be drawn as nested scopes and as special objects that contain executable code as well as properties.
+Functions can be drawn as special objects that contain executable code as well as properties.  Every function has a special `[scope]` property that represents the environment it was in when it was defined.  If a function is returned from another function then this reference to the old environment is closed over by the new function in a "closure".
 
 In this example we will create a simple factory method that generates a closure and returns a function.
 
@@ -71,7 +71,7 @@ In this example we will create a simple factory method that generates a closure 
 
 <br style="clear:left"/>
 
-When we call `description1()`, the VM looks up the function that it references and executes it.  Since that function looks for a local variable named `name`, it finds it in the parent closure scope.  This factory method is nice since each generated function has it's own space for local variables.
+When we call `description1()`, the VM looks up the function that it references and executes it.  Since that function looks for a local variable named `name`, it finds it in the closure scope.  This factory method is nice since each generated function has it's own space for local variables.
 
 See the article [why use closure][] for more in-depth reading on this topic and it's many uses.
 

@@ -2,46 +2,38 @@ digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
 
-  subgraph cluster_0 {
-    style =rounded;
-    
-    /* Free Variables */
-    node [shape = plaintext, style=""]
-    description1;description2;
-    subgraph cluster_1 {
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[Scope]|<description1>description1|<description2>description2"];
+  closure1 [label="<__proto__>[Scope]|<name>name"];
+  closure2 [label="<__proto__>[Scope]|<name>name"];
 
-      /* Free Variables */
-      node [shape = plaintext, style=""]
-      name1 [label="name"];
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
 
-      subgraph cluster_2 {
-        node [shape=Mrecord, fillcolor=orange, style=filled];
-        fn1 [label="<__proto__>function () \{ return name; \}"];
-      }
-    }
-    subgraph cluster_3 {
-
-      /* Free Variables */
-      node [shape = plaintext, style=""]
-      name2 [label="name"];
-
-      subgraph cluster_4 {
-        node [shape=Mrecord, fillcolor=orange, style=filled];
-        fn2 [label="<__proto__>function () \{ return name; \}"];
-      }
-    }
-
-
-  }
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn1 [label="<__proto__>[Function]|<__scope__>[scope]"];
+  fn2 [label="<__proto__>[Function]|<__scope__>[scope]"];
 
   /* Literals */
-  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
   cloe [label="\"Cloe the Closure\""]
   albert [label="\"Albert the Awesome\""]
 
+  /* References */
+  top:description1 -> fn1:__proto__;
+  top:description2 -> fn2:__proto__;
+  closure1:name -> cloe;
+  closure2:name -> albert;
+  fn1:__scope__ -> closure1:__proto__;
+  fn2:__scope__ -> closure2:__proto__;
 
-  description1 -> fn1:__proto__;
-  description2 -> fn2:__proto__;
-  name1 -> cloe;
-  name2 -> albert;
+  /* Inheritance Chains */
+  edge [style=dashed]
+  closure1:__proto__ -> top:__proto__;
+  closure2:__proto__ -> top:__proto__;
+
+
+
 }

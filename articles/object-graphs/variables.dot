@@ -1,25 +1,21 @@
 digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
-	
-	subgraph cluster_0 {
-    style =rounded;
 
-    /* Free Variables */
-    node [shape = plaintext, style=""]
-    name; age; isProgrammer; likesJavaScript;
-
-  }
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[Scope]|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"]
 
   /* Literals */
-  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
   timcaswell [label="\"Tim Caswell\""]
   n28 [label="28"]
   true [label="true"]
 
-  name -> timcaswell;
-  age -> n28;
-  isProgrammer -> true;
-  likesJavaScript -> true;
-  
+  /* References */
+  top:name -> timcaswell;
+  top:age -> n28;
+  top:isProgrammer -> true;
+  top:likesJavaScript -> true;
+ 
 }

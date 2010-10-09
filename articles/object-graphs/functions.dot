@@ -2,42 +2,37 @@ digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
 
-  subgraph cluster_0 {
-    style =rounded;
-    
-    /* Free Variables */
-    node [shape = plaintext, style=""]
-    Lane; Fred; description;
-    subgraph cluster_1 {
-      node [shape=Mrecord, fillcolor=orange, style=filled];
-      fn1 [label="<__proto__>function () \{ return this.name; \}"];
-    }
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[Scope]|<Lane>Lane|<description>description|<Fred>Fred"];
 
-    /* Objects */
-    node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
-    obj1 [label = "<__proto__>Object|<name>name|<description>description"];
-    obj2 [label = "<__proto__>Object|<description>description|<name>name"];
-    /* Literals */
-    node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
-    name [label="\"Lane the Lambda\""]
-    name2 [label="\"Fred the Functor\""]
-
-
-  }
-  /* Objects */
+  /* Normal Objects */
   node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
-  obj3 [label = "<__proto__>Object|<name>name"];
+  ob_Lane [label = "<__proto__>[Object]|<name>name|<description>description"];
+  ob_Fred [label = "<__proto__>[Object]|<description>description|<name>name"];
+  ob_1 [label = "<__proto__>[Object]|<name>name"];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn1 [label="<__proto__>function () \{ return this.name; \}"];
+
   /* Literals */
-  node [shape = plaintext, fillcolor=lightGrey, style="filled,rounded"];
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  name [label="\"Lane the Lambda\""]
+  name2 [label="\"Fred the Functor\""]
   name3 [label="\"Zed the Zetabyte\""]
 
+  /* References */
+  top:Lane -> ob_Lane:__proto__;
+  top:Fred -> ob_Fred:__proto__;
+  ob_Lane:name -> name;
+  ob_Lane:description -> fn1:__proto__;
+  ob_Fred:name -> name2;
+  ob_Fred:description -> fn1:__proto__;
+  ob_1:name -> name3;
+  top:description -> fn1:__proto__;
 
-  Lane -> obj1:__proto__;
-  obj1:name -> name;
-  obj1:description -> fn1:__proto__;
-  Fred -> obj2:__proto__;
-  obj2:name -> name2;
-  obj2:description -> fn1:__proto__;
-  obj3:name -> name3;
-  description -> fn1:__proto__;
+  /* Inheritance Chains */
+  edge [style=dashed]
+
 }
