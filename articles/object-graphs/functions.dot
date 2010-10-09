@@ -14,7 +14,7 @@ digraph finite_state_machine {
 
   /* Function Objects */
   node [shape = Mrecord, fillcolor=orange, style=filled];
-  fn1 [label="<__proto__>function () \{ return this.name; \}"];
+  fn1 [label="<__proto__>[Function ()]|\{return this.name\}"];
 
   /* Literals */
   node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];

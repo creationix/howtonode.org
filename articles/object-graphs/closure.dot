@@ -13,8 +13,8 @@ digraph finite_state_machine {
 
   /* Function Objects */
   node [shape = Mrecord, fillcolor=orange, style=filled];
-  fn1 [label="<__proto__>[Function]|<__scope__>[scope]"];
-  fn2 [label="<__proto__>[Function]|<__scope__>[scope]"];
+  fn1 [label="<__proto__>[Function ()]|\{return name\}|<__scope__>[scope]"];
+  fn2 [label="<__proto__>[Function ()]|\{return name\}|<__scope__>[scope]"];
 
   /* Literals */
   node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
