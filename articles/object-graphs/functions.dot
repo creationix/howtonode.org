@@ -32,7 +32,4 @@ digraph finite_state_machine {
   ob_1:name -> name3;
   top:description -> fn1:__proto__;
 
-  /* Inheritance Chains */
-  edge [style=dashed]
-
 }
