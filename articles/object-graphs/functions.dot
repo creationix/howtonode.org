@@ -4,17 +4,17 @@ digraph finite_state_machine {
 
   /* Execution Contexts */
   node [shape=Mrecord, fillcolor=beige, style=filled];
-  top [label="<__proto__>[Scope]|<Lane>Lane|<description>description|<Fred>Fred"];
+  top [label="<__proto__>[ Scope ]|<Lane>Lane|<description>description|<Fred>Fred"];
 
   /* Normal Objects */
   node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
-  ob_Lane [label = "<__proto__>[Object]|<name>name|<description>description"];
-  ob_Fred [label = "<__proto__>[Object]|<description>description|<name>name"];
-  ob_1 [label = "<__proto__>[Object]|<name>name"];
+  ob_Lane [label = "<__proto__>[ Object ]|<name>name|<description>description"];
+  ob_Fred [label = "<__proto__>[ Object ]|<description>description|<name>name"];
+  ob_1 [label = "<__proto__>[ Object ]|<name>name"];
 
   /* Function Objects */
   node [shape = Mrecord, fillcolor=orange, style=filled];
-  fn1 [label="<__proto__>[Function ()]|\{return this.name\}"];
+  fn1 [label="<__proto__>[ λ() ]|\{return this.name\}"];
 
   /* Literals */
   node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];

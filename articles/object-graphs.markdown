@@ -87,8 +87,6 @@ Here we'll create a few objects that all share a common function.  This function
 
 <br style="clear:left"/>
 
-*(Note I drew the objects and literals inside the closure to make the diagram clearer.  There is no special meaning to this.  Only free variables and function bodies are affected by closure nesting)*
-
 In the diagram, we see that even though `Fred.description` was set to `Lane.description`, it's really only referencing the function.  Thus all three references have equal ownership of the anonymous function.  This is why I try to not call functions on constructor prototypes "methods", because that implies some sort of binding of the function to the constructor and it's "class". *(see [what is this][] for more details on the dynamic nature of `this`)*
 
 ## Conclusion

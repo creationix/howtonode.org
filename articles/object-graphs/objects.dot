@@ -4,12 +4,12 @@ digraph finite_state_machine {
 
   /* Execution Contexts */
   node [shape=Mrecord, fillcolor=beige, style=filled];
-  top [label="<__proto__>[Scope]|<tim>tim|<jack>jack"];
+  top [label="<__proto__>[ Scope ]|<tim>tim|<jack>jack"];
 
   /* Normal Objects */
   node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
-  obj1 [label = "<__proto__>Object|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
-  obj2 [label = "<__proto__>Object|<name>name|<age>age"];
+  obj1 [label = "<__proto__>[ Object ]|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
+  obj2 [label = "<__proto__>[ Object ]|<name>name|<age>age"];
 
 
   /* Literals */

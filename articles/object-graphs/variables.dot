@@ -4,7 +4,7 @@ digraph finite_state_machine {
 
   /* Execution Contexts */
   node [shape=Mrecord, fillcolor=beige, style=filled];
-  top [label="<__proto__>[Scope]|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"]
+  top [label="<__proto__>[ Scope ]|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"]
 
   /* Literals */
   node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
