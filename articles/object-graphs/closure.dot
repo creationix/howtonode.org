@@ -1,0 +1,41 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<description1>description1|<description2>description2|<makeClosure>makeClosure"];
+  closure1 [label="<__proto__>[ Scope ]|<name>name"];
+  closure2 [label="<__proto__>[ Scope ]|<name>name"];
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn_makeClosure [label="<__proto__>[ makeClosure(name) ]|\{ return function () \{…\} \}"];
+  fn1 [label="<__proto__>[ λ() ]|\{return name\}|<__scope__>[scope]"];
+  fn2 [label="<__proto__>[ λ() ]|\{return name\}|<__scope__>[scope]"];
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  cloe [label="\"Cloe the Closure\""]
+  albert [label="\"Albert the Awesome\""]
+
+  /* References */
+  top:makeClosure -> fn_makeClosure:__proto__;
+  top:description1 -> fn1:__proto__;
+  top:description2 -> fn2:__proto__;
+  closure1:name -> cloe;
+  closure2:name -> albert;
+  fn1:__scope__ -> closure1:__proto__;
+  fn2:__scope__ -> closure2:__proto__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  closure1:__proto__ -> top:__proto__;
+  closure2:__proto__ -> top:__proto__;
+
+
+
+}
