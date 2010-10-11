@@ -1,0 +1,45 @@
+digraph finite_state_machine {
+  size="8.3,8"
+  rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<Rectangle>Rectangle|<rect>rect|<Square>Square|<sqr>sqr"];
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  ob_RectProto [label = "<__proto__>[ Object ]|<constructor>constructor|<getArea>getArea|<getPerimeter>getPerimeter|<toString>toString"];
+  ob_SquareProto [label = "<__proto__>[ Object ]|<constructor>constructor|<getPerimeter>getPerimeter"];
+  ob_rect [label = "<__proto__>[ Object ]|<width>width=6|<height>height=4"];
+  ob_sqr [label = "<__proto__>[ Object ]|<width>width=5|<height>height=5"];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn_Rectangle [label="<__proto__>[Rectangle(width, height)]|\{this.width = width…\}|<prototype>prototype"];
+  fn_Square [label="<__proto__>[Square(width)]|\{this.width = width…\}|<prototype>prototype"];
+  fn_getArea [label="<__proto__>[getArea()]|\{return this.width * this.height\}"];
+  fn_getPerimeter [label="<__proto__>[getPerimeter()]|\{return 2 * (this.width + this.height)\}"];
+  fn_toString [label="<__proto__>[toString()]|\{return this.constructor.name…\}"];
+  fn_getPerimeter2 [label="<__proto__>[getPerimeter()]|\{return 4 * this.width\}"];
+
+  /* References */
+  top:Rectangle -> fn_Rectangle:__proto__;
+  top:Square -> fn_Square:__proto__;
+  top:rect -> ob_rect:__proto__;
+  top:sqr -> ob_sqr:__proto__;
+  fn_Rectangle:prototype -> ob_RectProto:__proto__;
+  fn_Square:prototype -> ob_SquareProto:__proto__;
+  ob_RectProto:constructor -> fn_Rectangle:__proto__;
+  ob_RectProto:getArea -> fn_getArea:__proto__;
+  ob_RectProto:getPerimeter -> fn_getPerimeter:__proto__;
+  ob_RectProto:toString -> fn_toString:__proto__;
+  ob_SquareProto:constructor -> fn_Square:__proto__;
+  ob_SquareProto:getPerimeter -> fn_getPerimeter2:__proto__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  ob_rect:__proto__ -> ob_RectProto:__proto__;
+  ob_sqr:__proto__ -> ob_SquareProto:__proto__;
+  ob_SquareProto:__proto__ -> ob_RectProto:__proto__;
+
+}
