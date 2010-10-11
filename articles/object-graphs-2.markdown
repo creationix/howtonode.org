@@ -61,7 +61,7 @@ This example is a super simple MVC system.  The controller function takes in as 
 
 <object-graphs-2/factory.js#controller>
 
-To use this, simple call the function with the desired parameters.  Notice how we can use these directly as event handlers without having to first bind the function to the object.  Since it doesn't use `this` internally, there is no need to mess with the value of `this`.
+To use this, simply call the function with the desired parameters.  Notice how we can use these directly as event handlers (setTimeout) without having to first bind the function to the object.  Since it (the function) doesn't use `this` internally, there is no need to mess with the value of `this`.
 
 <object-graphs-2/factory.js#usage>
 
