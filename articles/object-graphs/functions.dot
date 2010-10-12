@@ -1,0 +1,35 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<Lane>Lane|<description>description|<Fred>Fred"];
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  ob_Lane [label = "<__proto__>[ Object ]|<name>name|<description>description"];
+  ob_Fred [label = "<__proto__>[ Object ]|<description>description|<name>name"];
+  ob_1 [label = "<__proto__>[ Object ]|<name>name"];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  fn1 [label="<__proto__>[ λ() ]|\{return this.name\}"];
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  name [label="\"Lane the Lambda\""]
+  name2 [label="\"Fred the Functor\""]
+  name3 [label="\"Zed the Zetabyte\""]
+
+  /* References */
+  top:Lane -> ob_Lane:__proto__;
+  top:Fred -> ob_Fred:__proto__;
+  ob_Lane:name -> name;
+  ob_Lane:description -> fn1:__proto__;
+  ob_Fred:name -> name2;
+  ob_Fred:description -> fn1:__proto__;
+  ob_1:name -> name3;
+  top:description -> fn1:__proto__;
+
+}

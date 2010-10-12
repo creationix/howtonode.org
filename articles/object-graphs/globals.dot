@@ -1,0 +1,26 @@
+digraph finite_state_machine {
+  size="8,5"
+  rankdir = "LR"
+  
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<name>name|<age>age|<isProgrammer>isProgrammer"];
+  global [label="<__proto__>[ global ]|<likesJavaScript>likesJavaScript"];
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  timcaswell [label="\"Tim Caswell\""]
+  n28 [label="28"]
+  true [label="true"]
+
+  /* References */
+  top:name -> timcaswell;
+  top:age -> n28;
+  top:isProgrammer -> true;
+  global:likesJavaScript -> true;
+  
+  /* Inheritance Chains */
+  edge [style=dashed]
+  top:__proto__ -> global:__proto__;
+ 
+}

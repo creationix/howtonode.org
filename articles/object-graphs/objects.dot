@@ -1,0 +1,37 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<tim>tim|<jack>jack"];
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  obj1 [label = "<__proto__>[ Object ]|<name>name|<age>age|<isProgrammer>isProgrammer|<likesJavaScript>likesJavaScript"];
+  obj2 [label = "<__proto__>[ Object ]|<name>name|<age>age"];
+
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  s_tim [label="\"Tim Caswell\""]
+  s_jack [label="\"Jack Caswell\""]
+  true [label="true"]
+  n4 [label="4"]
+  n28 [label="28"]
+  
+  /* References */
+  top:tim -> obj1:__proto__;
+  obj1:name -> s_tim;
+  obj1:age -> n28;
+  obj1:isProgrammer -> true;
+  obj1:likesJavaScript -> true;
+  top:jack -> obj2:__proto__;
+  obj2:name -> s_jack;
+  obj2:age -> n4;
+  
+  /* Inheritance Chains */
+  edge [style=dashed]
+  obj2:__proto__ -> obj1:__proto__;
+
+}
