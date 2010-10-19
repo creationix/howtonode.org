@@ -1,6 +1,6 @@
 <% if(shout.errors) { %>
     <p class="error">
-    <%= errors(shout).join('</p><p class="error">') %>
+    <%h errors(shout).join('</p><p class="error">') %>
     </p>
 <% } %>
 <% if(flash['success']) { %>
@@ -13,10 +13,10 @@
             <div class="meta">
                 <img src="http://www.gravatar.com/avatar/<%= shout.mailHash() %>" 
                      alt="Gravatar" />
-                <p><%= h(shout.name()) %></p>
+                <p><%= shout.name() %></p>
             </div>
             <div class="shout">
-                <p><%= h(shout.message()) %></p>
+                <p><%= shout.message() %></p>
             </div>
         </li>
     <% }); %>

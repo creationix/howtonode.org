@@ -128,7 +128,7 @@ Grasshopper allows having an application wide layout into which the views of req
 
 The layout file can use this piece of code to specify the location where the contents of the views have to be included.
 
-    <%= include(view) %>
+    <% include(view); %>
 
 The layout for our shoutbox would look like this.
 
@@ -142,7 +142,7 @@ Our shoutbox has a single view as it does all the work on a single page.  At the
 
     <% if(shout.errors) { %>
         <p class="error">
-            <%= errors(shout).join('</p><p class="error">') %>
+            <%h errors(shout).join('</p><p class="error">') %>
         </p>
     <% } %>
     <% if(flash['success']) { %>
@@ -157,10 +157,10 @@ It then lists all the available shouts including the name and gravatar of the pe
                 <div class="meta">
                     <img src="http://www.gravatar.com/avatar/<%= shout.mailHash() %>" 
                          alt="Gravatar" />
-                    <p><%= h(shout.name()) %></p>
+                    <p><%= shout.name() %></p>
                 </div>
                 <div class="shout">
-                    <p><%= h(shout.message()) %></p>
+                    <p><%= shout.message() %></p>
                 </div>
             </li>
         <% }); %>
