@@ -1,0 +1,42 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  PersonProto [label = "<__proto__>Person.prototype|<constructor>constructor|<greet>greet"];
+  DaveProto [label = "<__proto__>Dave.prototype|<constructor>constructor"];
+  FunctionProto [label = "<__proto__>Function.prototype|<constructor>constructor|<call>call|<apply>apply|…"];
+  ObjectProto [label = "<__proto__>Object.prototype|<constructor>constructor|<toString>toString|<valueOf>valueOf|…"];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  Dave [label = "<__proto__>Dave|<prototype>prototype"];
+  Person [label = "<__proto__>Person|<prototype>prototype|<create>create"];
+  Function [label = "<__proto__>Function|<prototype>prototype|…"];
+  Object [label = "<__proto__>Object|<prototype>prototype|<keys>keys|<create>create|…"];
+
+  /* References */
+  DaveProto:constructor -> Dave:__proto__;
+  PersonProto:constructor -> Person:__proto__;
+  FunctionProto:constructor -> Function:__proto__;
+  ObjectProto:constructor -> Object:__proto__;
+  Person:prototype -> PersonProto:__proto__;
+  Dave:prototype -> DaveProto:__proto__;
+  Function:prototype -> FunctionProto:__proto__;
+  Object:prototype -> ObjectProto:__proto__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  DaveProto:__proto__ -> PersonProto:__proto__;
+  FunctionProto:__proto__ -> ObjectProto:__proto__;
+  PersonProto:__proto__ -> ObjectProto:__proto__;
+  Person:__proto__ -> FunctionProto:__proto__;
+  Object:__proto__ -> FunctionProto:__proto__;
+  Function:__proto__ -> FunctionProto:__proto__;
+  Dave:__proto__ -> Person:__proto__;
+  
+  
+
+ 
+}

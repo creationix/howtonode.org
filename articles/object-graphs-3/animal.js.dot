@@ -1,0 +1,47 @@
+digraph finite_state_machine {
+	size="8.2,5"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<animal>animal"]
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  StringProto [label = "<__proto__>String.prototype|<constructor>constructor|<concat>concat|<trim>trim|…"];
+  FunctionProto [label = "<__proto__>Function.prototype|<constructor>constructor|<call>call|<apply>apply|…"];
+  ObjectProto [label = "<__proto__>Object.prototype|<constructor>constructor|<toString>toString|<valueOf>valueOf|…"];
+
+  /* Function Objects */
+  node [shape = Mrecord, fillcolor=orange, style=filled];
+  String [label = "<__proto__>String|<prototype>prototype|<fromCharCode>fromCharCode|…"];
+  Function [label = "<__proto__>Function|<prototype>prototype|…"];
+  Object [label = "<__proto__>Object|<prototype>prototype|<keys>keys|<create>create|…"];
+
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  cat [label="\"cat\""]
+
+  /* References */
+  top:animal -> cat;
+  StringProto:constructor -> String:__proto__;
+  FunctionProto:constructor -> Function:__proto__;
+  ObjectProto:constructor -> Object:__proto__;
+  String:prototype -> StringProto:__proto__;
+  Function:prototype -> FunctionProto:__proto__;
+  Object:prototype -> ObjectProto:__proto__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  cat -> StringProto:__proto__;
+  String:__proto__ -> FunctionProto:__proto__;
+  Object:__proto__ -> FunctionProto:__proto__;
+  Function:__proto__ -> FunctionProto:__proto__;
+  FunctionProto:__proto__ -> ObjectProto:__proto__;
+  StringProto:__proto__ -> ObjectProto:__proto__;
+  
+  
+
+ 
+}

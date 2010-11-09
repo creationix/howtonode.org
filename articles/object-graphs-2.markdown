@@ -74,7 +74,7 @@ To use this, simply call the function with the desired parameters.  Notice how w
 
 Here is the object graph that results from this code.  Notice that we have access to the two passed in anonymous objects via the hidden `[scope]` property of the functions.  Or in other words, we have access to `model` and `view` from the closure created by the factory function.
 
-![classical](object-graphs-2/factory.dot)
+![factory](object-graphs-2/factory.dot)
 
 <br style="clear:left"/>
 

@@ -1,0 +1,25 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+  /* Classes */
+  node [shape = Mrecord, fillcolor=yellow, style=filled];
+  Person [label="<__self__>Person|<class>class|greet()|…"];
+  PersonSingleton [label="<__self__>[anonymous]|create()"];
+  Dave [label="<__self__>Dave|<class>class|…"];
+  Object [label="<__self__>Object|<class>class|clone()|dup()|…"];
+  Class [label="<__self__>Class|<class>class|allocate()|new()|superclass()"];
+  Module [label="<__self__>Module|<class>class|ancestors()|instance_methods()|class_variables()|…"];
+
+  /* References */
+  Person:class -> PersonSingleton:__self__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  Dave:__self__ -> Person:__self__;
+  Person:__self__ -> Object:__self__;
+  PersonSingleton:__self__ -> Class:__self__;
+  Class:__self__ -> Module:__self__;
+  Module:__self__ -> Object:__self__;
+ 
+}

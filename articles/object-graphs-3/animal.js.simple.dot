@@ -1,0 +1,29 @@
+digraph finite_state_machine {
+	size="8,2.8"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<animal>animal"]
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  StringProto [label = "<__proto__>String.prototype|concat|trim|substring|indexOf|replace|split|…"];
+  ObjectProto [label = "<__proto__>Object.prototype|toString|toLocaleString|hasOwnProperty|valueOf|isPrototypeOf|propertyIsEnumerable|…"];
+
+  /* Literals */
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  cat [label="\"cat\""]
+
+  /* References */
+  top:animal -> cat;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  cat -> StringProto:__proto__;
+  StringProto:__proto__ -> ObjectProto:__proto__;
+  
+  
+
+ 
+}

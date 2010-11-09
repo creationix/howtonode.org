@@ -1,0 +1,37 @@
+digraph finite_state_machine {
+	size="8,5"
+	rankdir = "LR"
+
+
+  /* Variables */
+  node [shape=none,fillcolor=white];
+  animal;
+
+  /* Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  cat [label = "<value>value: \"cat\"|<class>class"];
+
+  /* Classes */
+  node [shape = Mrecord, fillcolor=yellow, style=filled];
+  String [label="<__self__>String|<class>class|downcase()|upcase()|…"];
+  Object [label="<__self__>Object|<class>class|clone()|dup()|…"];
+  Class [label="<__self__>Class|<class>class|allocate()|new()|superclass()"];
+  Module [label="<__self__>Module|<class>class|ancestors()|instance_methods()|class_variables()|…"];
+  
+  
+
+  /* References */
+  cat:class -> String:__self__;
+  String:class -> Class:__self__;
+  Object:class -> Class:__self__;
+  Class:class -> Class:__self__;
+  Module:class -> Class:__self__;
+  animal -> cat:value;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  String:__self__ -> Object:__self__;
+  Class:__self__ -> Module:__self__;
+  Module:__self__ -> Object:__self__;
+ 
+}

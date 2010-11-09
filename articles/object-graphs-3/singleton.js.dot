@@ -1,0 +1,26 @@
+digraph finite_state_machine {
+	size="8,2.6"
+	rankdir = "LR"
+
+  /* Execution Contexts */
+  node [shape=Mrecord, fillcolor=beige, style=filled];
+  top [label="<__proto__>[ Scope ]|<animal>animal"]
+
+  /* Normal Objects */
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  RegExpProto [label = "<__proto__>RegExp.prototype|exec|compile|test|toString|…"];
+  ObjectProto [label = "<__proto__>Object.prototype|toString|toLocaleString|hasOwnProperty|valueOf|isPrototypeOf|…"];
+  cat [label = "<__proto__>\/cat\/|speak|lastIndex|source|multiline|…"];
+
+  /* References */
+  top:animal -> cat:__proto__;
+
+  /* Inheritance Chains */
+  edge [style=dashed]
+  cat:__proto__ -> RegExpProto:__proto__;
+  RegExpProto:__proto__ -> ObjectProto:__proto__;
+  
+  
+
+ 
+}
