@@ -1,7 +1,7 @@
 Title: Learning Javascript with Object Graphs (Part III)
 Author: Tim Caswell
-Date: Sat Oct 16 2010 07:40:03 GMT-0700 (PDT)
-Node: v0.2.3
+Date: Tue Nov 09 2010 10:00:57 GMT-0800 (PST)
+Node: v0.2.4
 
 Part I of this series explained basic object graphs and visually described references, closures, and basic inheritance in JavaScript.  Part II compared different styles for doing object-oriented programming in JavaScript.  Now in Part III we'll get creative and look as Ruby's object model and compare it to how JavaScript works.  Also I'll show how to implement some Ruby style classes.  JavaScript is a very flexible language and can support about any object model you want with enough understanding and creativity.
 
