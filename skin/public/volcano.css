@@ -26,7 +26,7 @@ body {
   color: #000;
   text-decoration: none;
 }
-#header h1 {
+#header H1 {
   font-family: ArtBrushMedium, sans-serif;
   text-shadow: #fff 1px 1px 5px;
   font-weight: bold;
@@ -185,6 +185,7 @@ body {
 }
 #main h1 {
   color: #222;
+  font-size: 2em;
 }
 #main h2 {
   margin-top: 20px;
@@ -193,13 +194,15 @@ body {
   line-height: 1em;
   border-bottom: 2px dotted #aaa;
   color: #444;
+  font-size: 1.7em;
 }
 #main h3 {
-  font-size: 2em;
   color: #222;
+  font-size: 1.2em;
 }
 #main h4 {
   color: #666;
+  font-size: 1em;
 }
 /* Added the default paragraph style to
 the list items to fix the size issue */
