@@ -1,6 +1,6 @@
 Title: Creating safe and composable 'mixins' with traits.js
 Author: Tom Van Cutsem
-Date: Tue Nov 9 2010 20:08:54 GMT+0100
+Date: Wed Nov 10 2010 10:33:29 GMT-0800 (PST)
 
 In this article I will introduce [_traits.js_](http://traitsjs.org), a small library to define, compose and instantiate traits. Traits are reusable sets of properties and form an alternative to multiple inheritance or mixins.
 
