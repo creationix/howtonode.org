@@ -37,6 +37,6 @@ var httpServer = http.createServer( function(request, response) {
 });
 
 
-var server = ws.createServer({}, httpServer);
+var server = ws.createServer({server: httpServer});
 
 server.listen(8000);
