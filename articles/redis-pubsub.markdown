@@ -1,6 +1,6 @@
 Title: Node.js and Redis Pub-Sub
 Author: James R. Bracy
-Date: Sat Oct 09 2010 19:30:48 GMT-0400 (EDT)
+Date: Wed Dec 01 2010 20:36:43 GMT-0800 (PST)
 Node: v0.2.0
 
 > This is the 7th in a series of posts leading up to [Node.js Knockout](http://nodeknockout.com/) on how to use [node.js](http://nodejs.org/). This post, [cross-posted from GitHub](http://github.com/waratuman/flight-stream), was written by [James Bracy](http://github.com/waratuman), founder of [Redis To Go](http://redistogo.com). [Redis To Go](http://redistogo.com) is a dead simple solution for managed Redis instances.
