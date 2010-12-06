@@ -15,7 +15,7 @@ Also I chose ruby because I've noticed that several newcomers to the node.js com
 
 Both languages are object oriented languages.  The difference is one subscribes to the stricter and slightly more complicated classical OO style while the other has a plain prototypal object system.  In both languages all values are objects (or at least act like them).  A ruby class is also an object who is an instance of the class `Class`.  In JavaScript functions are also objects.  In both primitive values like numbers and booleans are objects that contain methods/functions through their classes/prototypes.  An object is simply a value that contains state and/or behavior through named channels.  Objects provide encapsulation so that you can call `obj.save()` instead of having to use some external function and pass around all the state `save(obj)`.
 
-## Methods verses Functions
+## Methods versus Functions
 
 Probably the biggest difference between the object models when you get down to it and ignore syntax is the fact that Ruby has methods and JavaScript has first-class functions.  I can hear you thinking how "Wait, I thought 'method' and 'function' were synonyms!" so I'll explain what I mean.
 
