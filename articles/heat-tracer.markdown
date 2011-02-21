@@ -1,7 +1,7 @@
 Title: Realtime Performance Visualizations using Node.js
 Author: Geoff Flarity
-Date: Sun Feb 06 2011 20:36:43 GMT-0500 (EST)
-Node: v0.3.8
+Date: Mon, 21 Feb 2011 19:04:30 GMT 
+Node: v0.4.0
 
 
 This article outlines how to create a realtime heatmap of your syscall latency using HTML5, some great node modules, and DTrace. It was inspired by talk that Bryan Cantrill and Brendan Greg gave on Joyent's cool cloud analytics tools. While specific, the code provided could easily be adapted to provide a heatmap of any type of aggregation Dtrace is capable of providing. 
