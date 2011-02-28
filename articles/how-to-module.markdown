@@ -3,8 +3,6 @@ Author: Isaac Z. Schlueter
 Date: Mon Feb 28 2011 11:07:42 GMT-0800 (PST)
 Node: v0.4.1
 
-# How To Module
-
 These are some basic steps for writing a NodeJS module.
 
 Most of the suggestions in this document are optional.  You
