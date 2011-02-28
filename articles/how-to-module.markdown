@@ -1,7 +1,7 @@
 Title: How To Module
 Author: Isaac Z. Schlueter
-Date: Fri Feb 25 22:45:35 UTC 2011
-Node: v0.4
+Date: Mon Feb 28 2011 11:07:42 GMT-0800 (PST)
+Node: v0.4.1
 
 # How To Module
 
