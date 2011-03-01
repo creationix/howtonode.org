@@ -96,5 +96,5 @@ You've installed [node.js][].
   [code-diesel]: http://www.codediesel.com/linux/installing-node-js-on-ubuntu-10-04/
   [cygwin]: http://www.cygwin.com/
   [Install cygwin]: http://www.mcclean-cooper.com/valentino/cygwin_install/
-  [GitHub wiki page]: http://wiki.github.com/ry/node/building-node-on-windowscygwin
+  [GitHub wiki page]: http://wiki.github.com/joyent/node/building-node-on-windowscygwin
   [http://127.0.0.1:8124/]: http://127.0.0.1:8124/
