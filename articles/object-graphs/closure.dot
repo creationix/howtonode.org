@@ -1,25 +1,25 @@
 digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
-	fontname = "Helvetica"
+	
 
   /* Execution Contexts */
-  node [shape=Mrecord, fillcolor=beige, style=filled];
+  node [shape=Mrecord, fillcolor=beige, style=filled, fontname=Helvetica];
   top [label="<__proto__>[ Scope ]|<description1>description1|<description2>description2|<makeClosure>makeClosure"];
   closure1 [label="<__proto__>[ Scope ]|<name>name"];
   closure2 [label="<__proto__>[ Scope ]|<name>name"];
 
   /* Normal Objects */
-  node [shape = Mrecord, fillcolor=lightskyblue, style=filled];
+  node [shape = Mrecord, fillcolor=lightskyblue, style=filled, fontname=Helvetica];
 
   /* Function Objects */
-  node [shape = Mrecord, fillcolor=orange, style=filled];
+  node [shape = Mrecord, fillcolor=orange, style=filled, fontname=Helvetica];
   fn_makeClosure [label="<__proto__>[ makeClosure(name) ]|\{ return function () \{…\} \}"];
   fn1 [label="<__proto__>[ λ() ]|\{return name\}|<__scope__>[scope]"];
   fn2 [label="<__proto__>[ λ() ]|\{return name\}|<__scope__>[scope]"];
 
   /* Literals */
-  node [shape = plaintext, fillcolor=gray92, style="filled,rounded"];
+  node [shape = plaintext, fillcolor=gray92, style="filled,rounded", fontname=Helvetica];
   cloe [label="\"Cloe the Closure\""]
   albert [label="\"Albert the Awesome\""]
 
