@@ -1,6 +1,7 @@
 digraph finite_state_machine {
 	size="8,5"
 	rankdir = "LR"
+	node [fontname=Sans]
 
   /* Normal Objects */
   node [shape = Mrecord, fillcolor=lightskyblue, style=filled];

@@ -1,6 +1,7 @@
 digraph finite_state_machine {
 	size="8,2.4"
 	rankdir = "LR"
+	node [fontname=Sans]
 
 
   /* Classes */
