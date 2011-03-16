@@ -40,6 +40,9 @@ Results can be viewed by opening .reports/report.html
 
 Here is the graph produced by this test on my MacBook Air:
 
+<img src="/peg-performance/result.png" style="float:none;" />
+
+
 ## Analysis
 
 Here are my thoughts, I'm sure you have your own. For this test at least:
