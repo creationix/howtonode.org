@@ -10,7 +10,7 @@ There's been a lot great work happening in the VM performance space over the las
 
 The author of this article is well aware of it's provocative nature. This is just one test and readers should take care when extrapolating results dissimilar use cases. The C code provided by the project being reviewed follows an Object Oriented style. It is certainly possible to optimize the C code further, for instance by using a more procedural style with less memory allocation. But then a similar approach should be used by the other versions (languages) presented as well. I whole heartedly encourage you submit pull requests with these new versions in separate directories based on the style/technique used. 
 
-I hope to challenge readers to question their assumptions regarding language/runtime performance. I also hope to highlight the fact that server side JavaScript has become viable platform platform choice when performance is a consideration. That said, this is one test and I can only encourage more work in this area. If you're interested in such things, check out [The Computer Language Benchmarks Game](http://shootout.alioth.debian.org/). Let's discuss results rather than argue fanatically about predictions. 
+My intention is to challenge readers to question their assumptions regarding language/runtime performance. I also hope to highlight the fact that server side JavaScript has become viable platform platform choice when performance is a consideration. That said, this is one test and I can only encourage more work in this area. If you're interested in such things, check out [The Computer Language Benchmarks Game](http://shootout.alioth.debian.org/). Let's discuss results rather than argue fanatically about predictions. 
 
 ## The Problem
 
