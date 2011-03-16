@@ -16,15 +16,15 @@ The purpose of this article is to highlight the fact that server side JavaScript
 
 <img src="/peg-performance/15-peg.jpg" style="float:none;" />
 
-Solving 137846 games of the 15-Hole Peg Soltaire by calculating every possible move using an Object Oriented style. Solutions are provided in C, C#, Java, JavaScript, PHP, Python and Ruby (more submissions encouraged!). Most of the code was written by Jonathan Fuerth his presentation on Java/HotSpot performance. I've added a harness and updated the JavaScript so that it uses proper prototypical style . You can find my 'fork' on [github](https://github.com/gflarity/peg-performance).
+Solving 137846 games of the 15-Hole Peg Soltaire by calculating every possible move using an Object Oriented style. Solutions are provided in C, C#, Java, JavaScript, PHP, Python and Ruby (more submissions encouraged!). Most of the code was written by Jonathan Fuerth his presentation on Java/HotSpot performance. I've updated the JavaScript so that it uses proper prototypical method inheritance. You can find my 'fork' on [github](https://github.com/gflarity/peg-performance). 
 
 ## The Code
 
-git://github.com/gflarity/peg-performance.git
+    git clone git://github.com/gflarity/peg-performance.git
 
 ## Pre-requisites
 
-This was all developed and tested under OS X however there shouldn't be any platform dependencies. You'll need a number of things for the test itself. I've put the version I'm using in brackets: gcc( 4.2.1(, Mono (2.10.1), Java (1.6.0_24), node.js (0.4.2), PHP (5.3.3), Python (2.7.1), Ruby (1.8.7). 
+This was all developed and tested under OS X however there shouldn't be any platform dependencies. You'll need a number of things for the test itself. I've put the version I'm using in brackets: gcc (4.2.1), Mono (2.10.1), Java (1.6.0_24), node.js (0.4.2), PHP (5.3.3), Python (2.7.1), Ruby (1.8.7). 
 
 ## Run the tests!
 
@@ -33,6 +33,7 @@ Note this will take a few minutes as some platforms are definitely faster than o
     cd src/main
     make test 
 
+For each of the languages the test is run 10 times. I throw out the best and worst result then compute an average. A chart is created to show the results.
 
 ## Results
 
@@ -40,17 +41,23 @@ Results can be viewed by opening .reports/report.html
 
 Here is the graph produced by this test on my MacBook Air:
 
-<img src="/peg-performance/result.png" style="float:none;" />
-
+<img src="/peg-performance/results.png" style="float:none;" width='100%' height='100%' />
 
 ## Analysis
 
-Here are my thoughts, I'm sure you have your own. For this test at least:
+Here's what I find interesting about these results:
+
+0) The JavaScript implementation is even faster if you load the browser version in Chrome 10. It clocks in around 2300ms on my mba.
 
 1) HotSpot Java is F.A.S.T., FAST. I'd really like to see a C++ version for comparison in this test though, but given the ecosystem out there and the fact that its automatically cross platform, I'd have hard time justifying the use of C++ for many things these days... Well, maybe a kickass JavaScript engine ;)
-2) You might not want to implement any C library that could be implemented in Java if you're going to use an object oriented style. 
-3) Respect for the Mono project. While I'm sure Microsoft's .NET runtime approaches the HotSpot VM in terms of performance, Mono is still no slouch. 
-4) JavaScript performance has come a LONG way. I wouldn't be surprised to see V8 approach and maybe even eclipse HotSpot's performance in the next 2 years. Despite all it's quirks, JavaScript is a dynamically typed language. We must consider it's performance vs a statically typed Java. Some would argue that static typing and having the compiler catch type bugs is 'safer'. Having developed numerous non-webservice projects using dynamic languages I can only disagree.  Typically I trade reduced performance for increased development effeciency when I choose Perl, Python or Groovy,. Despite it's quirks, JavaScript can offer the best of both worlds once you wrap your head around it. 
+
+2) I'd like to see the results of this test if this problem was solved in a non object oriented style. 
+
+3) Much respect to the Mono project. While I'm sure Microsoft's .NET runtime approaches the HotSpot VM in terms of performance, Mono is hanging in there.
+
+4) Despite all it's quirks, JavaScript is a dynamically typed language. We must consider this when comparing it's performance vs a statically typed Java. While some might argue that static typing is 'safer', performance is it's only virtue from my perspective. Typically I trade reduced performance for increased development effeciency every time I choose Perl, Python or Ruby. So despite it's quirks, it appears that JavaScript can offer the best of both worlds in terms performance and development effeciency. Not bad for the most widely deployed platform in the world (every browser).
+
+
 
 
 
