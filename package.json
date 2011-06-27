@@ -1,0 +1,21 @@
+{
+  "author": "Tim Caswell <tim@creationix.com> (http://creationix.com/)",
+  "name": "howtonode.org",
+  "description": "The popular blog howto.no.de",
+  "version": "0.0.0",
+  "homepage": "http://howto.no.de/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/creationix/howtonode.org.git"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "dependencies": {
+    "stack": ">=0.0.3",
+    "creationix": ">=0.1.2",
+    "wheat": ">=0.2.0",
+    "cluster": ">=0.6.4"
+  },
+  "devDependencies": {}
+}

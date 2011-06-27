@@ -1,11 +1,10 @@
 // Just a basic server setup for this site
-var Connect = require('connect');
+var Http = require('http'),
+    Stack = require('stack'),
+    Creationix = require('creationix'),
+    Wheat = require('wheat');
 
-module.exports = Connect.createServer(
-  Connect.logger(),
-  Connect.conditionalGet(),
-  Connect.favicon(),
-  Connect.cache(),
-  Connect.gzip(),
-  require('wheat')(__dirname)
-);
+module.exports = Http.createServer(Stack(
+  Creationix.log(),
+  Wheat(__dirname)
+));
