@@ -24,7 +24,7 @@ Ok, here is where the magic happens.  In this step I'm putting the Ubuntu Natty 
 
     sudo qemu-debootstrap --arch armel --foreign natty build
 
-At this point your image is ready to be put onto your movile device, but let's explore for the magic for some fun.  First we want to `chroot` into this system to interact with it.
+At this point your image is ready to be put onto your mobile device, but let's explore for the magic for some fun.  First we want to `chroot` into this system to interact with it.
 
     sudo mount -t proc none build/proc
     sudo mount -t sysfs none build/sys
