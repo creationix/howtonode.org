@@ -42,7 +42,7 @@ Now let's see what kind of binaries live in this world.
     cd /usr/bin
     ./file ./file
 
-We just installed `file`, a program that tells isus stuff about files.  Then we told it to tell us about itself.  I got as output:
+We just installed `file`, a program that tells us stuff about files.  Then we told it to tell us about itself.  I got as output:
 
     file: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.16, stripped
 
