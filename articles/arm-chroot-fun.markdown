@@ -62,7 +62,7 @@ To keep our host machine happy, we should logout of the chroot and clean things 
 
 Now we have a fully functional Ubuntu system in a single file.
 
-On webOS the easiest way to put a file on the drive is to use `novacom put`.
+On webOS the easiest way to put a file on the drive is to use `novacom put` (part of the webOS SDK).
 
     novacom put file://media/internal/UbuntuNatty_armel.img < UbuntuNatty_armel.img
 
