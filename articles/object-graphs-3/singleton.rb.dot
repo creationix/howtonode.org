@@ -1,7 +1,7 @@
 digraph finite_state_machine {
 	size="8,3"
 	rankdir = "LR"
-
+	node [fontname=Sans]
 
   /* Variables */
   node [shape=none,fillcolor=white];

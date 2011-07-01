@@ -1,10 +1,11 @@
 digraph G {
   size="5,5";
+	node [fontname=Monaco]
   
 	subgraph cluster_0 {
   	style=filled;
   	color=darkorange;
-  	node [style=filled,color=white,fontcolor=gray6,fontname=Monaco];
+  	node [style=filled,color=white,fontcolor=gray6];
 
 		M[label="loadMarkdown"];
 		P[label="parseMarkdown"];
@@ -18,6 +19,6 @@ digraph G {
 	P -> F[label=props];
 	A -> F[label=author];
 	F -> output[label=props];
-	input [shape=Mdiamond,color=dodgerblue4,fontname=Monaco];
-	output [shape=Msquare,color=crimson,fontname=Monaco];
+	input [shape=Mdiamond,color=dodgerblue4];
+	output [shape=Msquare,color=crimson];
 }

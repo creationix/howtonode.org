@@ -1,6 +1,7 @@
 digraph finite_state_machine {
 	size="8,2.8"
 	rankdir = "LR"
+	node [fontname=Sans]
 
   /* Execution Contexts */
   node [shape=Mrecord, fillcolor=beige, style=filled];

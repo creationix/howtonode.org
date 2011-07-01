@@ -1,5 +1,6 @@
 digraph finite_state_machine {
 	size="8,5"
+	node [fontname=Sans]
 	node [shape = doublecircle]; 
 	LR_1[color=red]
 	LR_7[color=blue]
