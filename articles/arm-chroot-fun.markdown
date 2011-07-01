@@ -1,9 +1,9 @@
 Title: Fun Putting Node on Mobile Devices
 Author: Tim Caswell
-Date: Sun Jun 26 2011 18:25:08 GMT-0700 (PDT)
-Node: v0.4.8
+Date: Fri Jul 01 2011 10:04:02 GMT-0700 (PDT)
+Node: v0.4.9
 
-This article will walk you through creating an Ubuntu image that can be chrooted inside a mobile device like the soon to be released TouchPad.  Once the Ubuntu environment is setup we'll learn how to compile and install node for fun and/or profit.
+This article will walk you through creating an Ubuntu image that can be chrooted inside a mobile device like the recently released [TouchPad][].  Once the Ubuntu environment is setup we'll learn how to compile and install node for fun and/or profit.
 
 ## Create the Image
 
@@ -114,8 +114,8 @@ Then I like to use nvm so I can compare multiple versions of node on the same sy
     git clone http://github.com/creationix/nvm.git
     . nvm/nvm.sh               # Load the nvm function into this environment
     export JOBS=2              # This should match the number of CPUs you have.
-    nvm install v0.4.8         # Download, build, and install node and npm
-    nvm alias default v0.4.8   # Make this the default upon nvm load (login)
+    nvm install v0.4.9         # Download, build, and install node and npm
+    nvm alias default v0.4.9   # Make this the default upon nvm load (login)
 
 I would then add the `. $HOME/nvm/nvm.sh` line to my `.bashrc` so I get the nvm environment on every login.
 
@@ -145,7 +145,7 @@ And for cleanup.
 
 You now have a nice portable Ubuntu system complete with working apt-get, nvm, node, and npm. If you run out of space you can reclaim some by running `apt-get clean` from within the chroot.  Also you can resize the partition when it's not mounted using `resize2fs`.  This image can be copied to other devices and reused there.
 
-You'd be surprised what you can do in this environment that works in the host environment at well.  For example, I've found that Ubuntu's `htop` program will run as is in the host webOS environment.  I just copied the one in `/media/chroot/usr/bin/htop` to `/usr/bin/htop`.  Also I found that SDL programs build in the Ubuntu environment will successfully link with the sdl libraries that are part of the PDK system and they will launch as cards when run in the host environment.  With things like SDL bindings for node, you would be able to develop PDK apps in JavaScript on your TouchPad. See <https://github.com/creationix/node-sdl> for a start on such a library.  This library was developed, compiled and tested 100% on a mobile device.
+You'd be surprised what you can do in this environment that works in the host environment at well.  For example, I've found that Ubuntu's `htop` program will run as is in the host webOS environment.  I just copied the one in `/media/chroot/usr/bin/htop` to `/usr/bin/htop`.  Also I found that SDL programs build in the Ubuntu environment will successfully link with the sdl libraries that are part of the PDK system and they will launch as cards when run in the host environment.  With things like SDL bindings for node, you would be able to develop PDK apps in JavaScript on your TouchPad. See <https://github.com/creationix/node-sdl> for a start on such a library.  This library was developed, compiled and tested 100% on my TouchPad using my laptop as a bigger screen and keyboard.
 
 
-
+[TouchPad]: http://www.hpwebos.com/us/products/pads/touchpad/index.html
