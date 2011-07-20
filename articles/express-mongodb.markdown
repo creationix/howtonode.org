@@ -1,7 +1,7 @@
 Title: Blog rolling with mongoDB, express and Node.js
 Author: Ciaran Jessup
 Date: Thu Feb 18 2010 21:28:42 GMT+0000 (UTC)
-Node: v0.1.91
+Node: v0.4.9
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
@@ -23,7 +23,7 @@ Installation is as simple as downloading the [installer from here][]. For this t
 
 ###node.js###
 
-I'll assume that you already have an installed version of node.js (why else would you be looking at a how-to?! ;) ) However as [node][] is subject to a reasonably high rate of change for the purposes of this article everything has been written to run against the ['v0.1.91' tag][].
+I'll assume that you already have an installed version of node.js (why else would you be looking at a how-to?! ;) ) However as [node][] is subject to a reasonably high rate of change for the purposes of this article everything has been written to run against the ['v0.4.9' tag][].
 
 ###kiwi###
 
@@ -318,7 +318,7 @@ __Fin__.
 [express]: http://github.com/visionmedia/express
 [mongoDB]: http://www.mongodb.org
 [installer from here]: http://www.mongodb.org/display/DOCS/Downloads
-['v0.1.91' tag]: http://github.com/ry/node/tree/v0.1.91
+['v0.4.9' tag]: http://github.com/joyent/node/tree/v0.4.9
 [localhost:3000]: http://localhost:3000
 [new post]: http://localhost:3000/blog/new
 [document orientated]: http://en.wikipedia.org/wiki/Document-oriented_database
