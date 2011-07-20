@@ -322,8 +322,8 @@ __Fin__.
 [new post]: http://localhost:3000/blog/new
 [document orientated]: http://en.wikipedia.org/wiki/Document-oriented_database
 [relational]: http://en.wikipedia.org/wiki/Relational_database_management_system
-[jade]: http://http://jade-lang.com/ 
-[stylus]: http://http://learnboost.github.com/stylus/
+[jade]: http://jade-lang.com/ 
+[stylus]: http://learnboost.github.com/stylus/
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
 [surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
 [natural]: http://en.wikipedia.org/wiki/Natural_key
