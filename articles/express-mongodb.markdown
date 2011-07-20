@@ -5,7 +5,7 @@ Node: v0.4.9
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
-The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [jade][] and [stylus][] for driving the templated views and styling! We will be using [kiwi][] to easy the package management and installation issues.
+The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [jade][] and [stylus][] for driving the templated views and styling! We will be using [npm][] to ease the package management and installation issues.
 
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
@@ -25,19 +25,19 @@ Installation is as simple as downloading the [installer from here][]. For this t
 
 I'll assume that you already have an installed version of node.js (why else would you be looking at a how-to?! ;) ) However as [node][] is subject to a reasonably high rate of change for the purposes of this article everything has been written to run against the ['v0.4.9' tag][].
 
-###kiwi###
+###npm###
 
-The original version of this article required various dependencies to be installed by hand from github repositories, package management has moved on within node.js since that time and we will use this to our advantage by following the instructions on how to install the [kiwi package manager][].
-Once kiwi is installed you should be able to execute:
+The original version of this article required various dependencies to be installed by hand from github repositories, package management has moved on within node.js since that time and we will use this to our advantage by following the instructions on how to install the [npm][].
+Once npm is installed you should be able to execute:
 
-    kiwi search
+    npm search
 
 From your console and see a list of [node][] packages that can be installed, if you cannot then it would be a good plan to figure out why not before proceeding.
 
 ## Getting hold of express
 Installing express on your system is as easy as:
 
-    kiwi install express 0.9.0
+    npm install express
 
 Now we can begin with the process of writing our blog, let the good times (blog)roll.
 
@@ -82,7 +82,7 @@ _Well alright, fairly small blogging apps can grow!_
 
 In express a 'normal' application consists of a call to `configure`, followed by a series of method calls that declare `routes` and what happens to requests that match the route followed by a call to `run`.
 
-Thus one of the simplest express applications (when using kiwi) could be written as follows:
+Thus one of the simplest express applications could be written as follows:
 
 <express-mongodb/simple-express.js>
 
@@ -193,10 +193,10 @@ If I've lost you along the way you can get a zip of this fully working (but non-
 
 I promised that by the end of this article we'd be persisting our data across restarts of node, I've not yet delivered on this promise but now I will ..hopefully ;)
 
-To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend kiwi comes to the rescue.  If we open the console up and enter the `express` directory we created earlier we will be able to type the following commands to install the driver.
+To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend npm comes to the rescue.  If we open the console up and enter the `express` directory we created earlier we will be able to type the following commands to install the driver.
 
     #!sh
-    kiwi install mongodb-native 0.7.0
+    npm install mongodb
 
 Now we need to replace our old memory based data provider with one thats capable of using mongodb:
 
@@ -313,8 +313,7 @@ __Fin__.
 
 [git]: http://git-scm.com/
 [node]: http://nodejs.org
-[kiwi]: http://wiki.github.com/visionmedia/kiwi
-[kiwi package manager]: http://wiki.github.com/visionmedia/kiwi/getting-started
+[npm]: http://npmjs.org/
 [express]: http://github.com/visionmedia/express
 [mongoDB]: http://www.mongodb.org
 [installer from here]: http://www.mongodb.org/display/DOCS/Downloads
