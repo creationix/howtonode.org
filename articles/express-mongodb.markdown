@@ -5,7 +5,7 @@ Node: v0.4.9
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
-The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [haml-js][] and [sass.js][] for driving the templated views and styling! We will be using [kiwi][] to easy the package management and installation issues.
+The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [jade][] and [stylus][] for driving the templated views and styling! We will be using [kiwi][] to easy the package management and installation issues.
 
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
@@ -96,7 +96,7 @@ When you browse to [localhost:3000][] you should see that old favourite 'Hello W
 
 ## A chapter in which we build on our humble beginnings ##
 
-Now that we have a fully working web server we should probably look at doing something with it. In this section we will learn how to use [Haml][] to render our data and create forms to post the data back to the server, initially we will store this in memory.
+Now that we have a fully working web server we should probably look at doing something with it. In this section we will learn how to use [jade][] to render our data and create forms to post the data back to the server, initially we will store this in memory.
 
 The layout of express applications is fairly familiar and is usually of the form:
 
@@ -145,13 +145,13 @@ Now you should be able to restart the server and browser to [localhost:3000][]. 
 
 There are two important things to note that we've just done;
 
-The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [haml-js][] template `blogs_index.html.haml`.
+The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blogs_index.html.haml`.
 
-The second is the usage of a 'layout' [haml-js][] file `layout.html.haml`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
+The second is the usage of a 'layout' [jade][] file `layout.html.haml`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
 
-> If you're familiar with [Haml][] then you may want to skip this section, otherwise please read-on! [Haml][] is yet-another templating language, however this one is driven by the rule that 'Markup should be beautiful'. It provides a lightweight syntax for declaring markup with a bare minimum of typed characters.
+> If you're familiar with [jade][] then you may want to skip this section, otherwise please read-on! [jade][] is yet-another templating language, however this one is driven by the rule that 'Markup should be beautiful'. It provides a lightweight syntax for declaring markup with a bare minimum of typed characters.
 >
-> [haml-js][] is a server-side JavaScript partial/mostly-complete implementation of [Haml][]. Reading a [haml-js][] template is simple. The hierarchy of elements is expressed as indentation on the left hand-side; that is, everything that starts in a given column shares the same parent. Each line of [Haml][] represents either a new element in the (eventual) HTML document or a function within [Haml][] (which offers conditions and loops etc). Effectively [haml-js][] takes a JSON object and binds it to any `literal` text in the [haml-js][] template, applies the rules that define [Haml][] and then processes the resulting bag of stuff to produce a well-formed and valid HTML document of the specified DOCTYPE. (Yay!)
+> Reading a [jade][] template is simple. The hierarchy of elements is expressed as indentation on the left hand-side; that is, everything that starts in a given column shares the same parent. Each line of [jade][] represents either a new element in the (eventual) HTML document or a function within [jade][] (which offers conditions and loops etc). Effectively [jade][] takes a JSON object and binds it to any `literal` text in the [jade][] template, applies the rules that define [jade][] and then processes the resulting bag of stuff to produce a well-formed and valid HTML document of the specified DOCTYPE. (Yay!)
 
 As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet:
 
@@ -170,9 +170,9 @@ Again after restarting your app and browsing to [localhost:3000][] you should se
 A couple of things to notice here:
 
 1. We setup a route to handle the request for the css as a regular expression match. We then used the matched url segment to load a Sass file from the available views and `express` dynamically converts the Sass into CSS for us on the fly. In a production environment there are configuration options that can be passed to the `configure` method to make sure these views are cached but during development its rather useful to be able to change your Sass on the fly :)
-2. As express is treating the sass to CSS rendering in exactly the same manner as the Haml to HTML rendering we need to suppress the default `layout` behaviour as there is no meaningful layout here for our Sass.
+2. As express is treating the stylus to CSS rendering in exactly the same manner as the jade to HTML rendering we need to suppress the default `layout` behaviour as there is no meaningful layout here for our Sass.
 
-> Sass is to CSS as Haml is to HTML. However reading Sass can be a little more complex as the hierarchy that is being described is really individual selectors. Lines that start at the same column and begin with a `:` are rules, these rules are applied to the hierarchy that they're found under, for example in the above Sass example the bottom most line of Sass `:background-color #ffa` is equivalent to the CSS `#articles .article .body {background-color: #ffa;}` this equivalence is due to the position of the start of this line relative to its parent lines :) (Easy really!)
+> Sass is to CSS as jade is to HTML. However reading Sass can be a little more complex as the hierarchy that is being described is really individual selectors. Lines that start at the same column and begin with a `:` are rules, these rules are applied to the hierarchy that they're found under, for example in the above Sass example the bottom most line of Sass `:background-color #ffa` is equivalent to the CSS `#articles .article .body {background-color: #ffa;}` this equivalence is due to the position of the start of this line relative to its parent lines :) (Easy really!)
 
 
 ###Great, so how do I make my first post?###
@@ -323,9 +323,8 @@ __Fin__.
 [new post]: http://localhost:3000/blog/new
 [document orientated]: http://en.wikipedia.org/wiki/Document-oriented_database
 [relational]: http://en.wikipedia.org/wiki/Relational_database_management_system
-[haml-js]: http://github.com/visionmedia/haml.js
-[Haml]: http://haml-lang.com/
-[sass.js]: http://github.com/visionmedia/sass.js
+[jade]: http://http://jade-lang.com/ 
+[stylus]: http://http://learnboost.github.com/stylus/
 [node-mongodb-native]: http://github.com/christkv/node-mongodb-native
 [surrogate]: http://en.wikipedia.org/wiki/Surrogate_key
 [natural]: http://en.wikipedia.org/wiki/Natural_key
