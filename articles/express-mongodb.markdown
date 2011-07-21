@@ -37,7 +37,8 @@ From your console and see a list of [node][] packages that can be installed, if 
 ## Getting hold of express
 Installing express on your system is as easy as:
 
-    npm install express
+    // You may need to run this under sudo
+    npm install express -g
 
 Now we can begin with the process of writing our blog, let the good times (blog)roll.
 
