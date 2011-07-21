@@ -19,7 +19,7 @@ Whilst not a mandatory requirement I will be using git to pull down code from va
 
 ###mongoDB###
 
-Installation is as simple as downloading the [installer from here][]. For this tutorial I've been using v1.2.2 on MacOSX but any recent version should work. Once installed you can just execute 'mongod' to have a local instance up and running.
+Installation is as simple as downloading the [installer from here][]. For this tutorial I've been using v1.8.2 on MacOSX but any recent version should work. Once installed you can just execute 'mongod' to have a local instance up and running.
 
 ###node.js###
 
