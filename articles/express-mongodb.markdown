@@ -316,7 +316,7 @@ __Fin__.
 [npm]: http://npmjs.org/
 [express]: http://github.com/visionmedia/express
 [mongoDB]: http://www.mongodb.org
-[installer from here]: http://www.mongodb.org/display/DOCS/Downloads
+[installer from here]: http://www.mongodb.org/downloads
 ['v0.4.9' tag]: http://github.com/joyent/node/tree/v0.4.9
 [localhost:3000]: http://localhost:3000
 [new post]: http://localhost:3000/blog/new
