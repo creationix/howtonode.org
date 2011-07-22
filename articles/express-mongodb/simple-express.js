@@ -4,6 +4,8 @@ var express = require('express');
 var app = express.createServer();
 
 // Configuration
+app.configure( function() {
+});
 
 // Routes
 app.get('/', function(req, res) {
