@@ -62,7 +62,11 @@ Because we're dealing with a [document orientated][] database rather than a [rel
       created_at: new Date()
     }
 
-There are plenty of other document configurations we could've gone for but this will provide us with a good foundation (for example there's no notion of article authors.). Also the `created_at` field could most probably be omitted as the default 'Primary Key factory' that the mongo-db-native client that we're using generates time-based object-ids, but for simplicity we'll go with a 'proper' date.
+There are plenty of other document configurations we could've used. For example,
+there's no notion of an article's authors and the 'created_at' field could
+probably be omitted as the default 'Primary Key factory' that mongodb-native
+uses generates time-based object ids. However, this datatype provides a good
+foundation and we'll use a 'proper' date for simplicity.
 
 > It should be noted that one oft-reported issue with mongoDB is the size of the data on the disk. As we're dealing with a [document orientated][] database each and every record stores all the field-names with the data so there is no re-use. This means that it can often be more space-efficient to have properties such as 't', or 'b' rather than 'title' or 'body', however for fear of confusion I would avoid this unless truly required!
 
