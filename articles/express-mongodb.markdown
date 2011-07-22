@@ -85,7 +85,7 @@ Now that we know what we're trying to achieve lets try and achieve that goal in 
 
 _Well alright, fairly small blogging apps can grow!_
 
-In express a 'normal' application consists of a call to `configure`, followed by a series of method calls that declare `routes` and what happens to requests that match the route followed by a call to `run`.
+In express a 'normal' application consists of a call to `configure`, followed by a series of method calls that declare `routes` and what happens to requests that match the route followed by a call to `listen`.
 
 Thus one of the simplest express applications could be written as follows:
 
