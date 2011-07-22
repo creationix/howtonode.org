@@ -30,9 +30,6 @@
 
 #sidebar
   .aside.clearfix
-    %a.twitter-share-button{href:"http://twitter.com/share",data-count:"horizontal",data-via:"creationix"}
-      Tweet
-    %script{src:"http://platform.twitter.com/widgets.js"}
     %h4 About the Author
     %img.headshot{src: gravitar(author.email) }
     %dl
@@ -63,6 +60,9 @@
   .aside
     %h4
       About this Article
+    %a.twitter-share-button{href:"http://twitter.com/share",data-count:"horizontal",data-via:"creationix"}
+      Tweet
+    %script{src:"http://platform.twitter.com/widgets.js"}
     :if article.date
       %dl{title: article.date}
         %dt
