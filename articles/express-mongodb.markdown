@@ -189,7 +189,7 @@ Something to notice here:
 
 Now we can view a list of blog posts it would be nice to have a simple form for making new posts and being re-directed back to the new list. To achieve this we'll need a new view (to let us create a post) and two new routes (one to accept the post data, the other to return the form).
 
-<express-mongodb/views/blog_new.html.haml>
+<express-mongodb/views/blog_new.jade>
 
 Add two new routes to app.js
 

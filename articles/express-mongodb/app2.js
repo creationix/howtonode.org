@@ -10,20 +10,18 @@ app.get('/', function(req, res){
 });
 
 //blog
-get('/blog/new', function(){
-  this.render('blog_new.html.haml', {
-    locals: {
-      title: 'New Post'
+app.get('/blog/new', function(req, res) {
+    res.render('blog_new.jade', { locals: {
+        title: 'New Post'
     }
-  });
+    });
 });
 
-post('/blog/new', function(){
-  var self = this;
-  articleProvider.save({
-    title: this.param('title'),
-    body: this.param('body')
-  }, function(error, docs) {
-    self.redirect('/')
-  });
+app.post('/blog/new', function(req, res){
+    articles.save({
+        title: req.param('title'),
+        body: req.param('body')
+    }, function( error, docs) {
+        res.redirect('/')
+    });
 });
