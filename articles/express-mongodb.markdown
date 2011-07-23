@@ -160,9 +160,9 @@ Now you should be able to restart the server and browser to [localhost:3000][]. 
 
 There are two important things to note that we've just done;
 
-The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blogs_index.html.haml`.
+The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blogs_index.jade`.
 
-The second is the usage of a 'layout' [jade][] file `layout.html.haml`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
+The second is the usage of a 'layout' [jade][] file `layout.jade`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
 
 > If you're familiar with [jade][] then you may want to skip this section, otherwise please read-on! [jade][] is yet-another templating language, however this one is driven by the rule that 'Markup should be beautiful'. It provides a lightweight syntax for declaring markup with a bare minimum of typed characters.
 >
@@ -170,7 +170,7 @@ The second is the usage of a 'layout' [jade][] file `layout.html.haml`. This fil
 
 As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet:
 
-<express-mongodb/views/layout2.html.haml>
+<express-mongodb/views/layout2.jade>
 
 Add a stylus template to the `views` folder in order to generate the css:
 
