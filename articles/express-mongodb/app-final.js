@@ -50,6 +50,7 @@ app.get('/blog/new', function(req, res) {
     });
 });
 
+//addComment
 app.post('/blog/addComment', function(req, res) {
     articles.addCommentToArticle(req.param('_id'), {
         person: req.param('person'),
@@ -60,6 +61,7 @@ app.post('/blog/addComment', function(req, res) {
        });
 });
 
+//newPost
 app.post('/blog/new', function(req, res){
     articles.save({
         title: req.param('title'),
@@ -69,6 +71,7 @@ app.post('/blog/new', function(req, res){
     });
 });
 
+//getBlogs
 app.get('/blog/:id', function(req, res) {
     articles.findById(req.params.id, function(error, article) {
         res.render('blog_show.jade',
@@ -80,6 +83,6 @@ app.get('/blog/:id', function(req, res) {
     });
 });
     
-
+//run
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
