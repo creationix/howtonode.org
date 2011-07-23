@@ -1,23 +1,32 @@
-var kiwi= require('kiwi')
-
-kiwi.require('express');
-require('express/plugins')
+var express = require('express');
 var ArticleProvider = require('./articleprovider-memory').ArticleProvider;
 
-configure(function(){
-  use(MethodOverride);
-  use(ContentLength);
-  use(Logger);
-  set('root', __dirname);
-})
+var app = module.exports = express.createServer();
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+ 
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
 
 var articleProvider= new ArticleProvider();
 
-get('/', function(){
-  var self = this;
+app.get('/', function(req, res){
   articleProvider.findAll(function(error, docs){
-    self.halt( 200, require('sys').inspect(docs) );
-  })
+      res.send(docs);
+  });
 })
 
-run();
+app.listen(3000);
