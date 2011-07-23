@@ -1,7 +1,7 @@
 //root
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){
-        res.render('blog_index.jade', { locals: {
+        res.render('blogs_index.jade', { locals: {
             title: 'Blog',
             articles:docs
             }
