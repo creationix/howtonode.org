@@ -174,7 +174,7 @@ As is probably obvious we need a little styling to be applied here, to do that w
 
 Add a stylus template to the `views` folder in order to generate the css:
 
-<express-mongodb/views/style.css.sass>
+<express-mongodb/views/style.styl>
 
 And add a new route to app.js:
 

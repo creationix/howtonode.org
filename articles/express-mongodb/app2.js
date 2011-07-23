@@ -9,11 +9,6 @@ app.get('/', function(req, res){
     })
 });
 
-//css
-get('/*.css', function(file){
-  this.render(file + '.css.sass', { layout: false });
-});
-
 //blog
 get('/blog/new', function(){
   this.render('blog_new.html.haml', {
