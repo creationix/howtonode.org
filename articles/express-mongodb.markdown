@@ -128,6 +128,7 @@ The layout of express applications is fairly familiar and is usually of the form
     |-- public              /* Publicly accessible resources            */
     |   |-- images
     |   `-- javascripts
+    |   `-- stylesheets 
     `-- views               /* The templates for the 'views'            */
 
 ###Of providers and data###
