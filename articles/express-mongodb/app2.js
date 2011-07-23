@@ -1,15 +1,13 @@
 //root
-get('/', function(){
-  var self = this;
-  articleProvider.findAll(function(error, docs){
-    self.render('blogs_index.html.haml', {
-      locals: {
-        title: 'Blog',
-        articles: docs
-      }
-    });
-  })
-})
+app.get('/', function(req, res){
+    articleProvider.findAll( function(error,docs){
+        res.render('blog_index.jade', { locals: {
+            title: 'Blog',
+            articles:docs
+            }
+        });
+    })
+});
 
 //css
 get('/*.css', function(file){
