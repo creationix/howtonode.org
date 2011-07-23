@@ -93,7 +93,24 @@ Thus one of the simplest express applications could be written as follows:
 
 The above code declares a single `route` that operates on `GET` requests to the address `/` from the browser and will just return a simple (non-HTML) text string and a response code of 200 to the client.
 
-Convention seems to be to place this code into a file named `app.js` at the root of your express folder. If you do this and then execute it:
+Now, this is one of the simplest bits of application code one can write but
+express is a framework which can automatically build out an application
+template for you including picking a styling and templating engine.
+
+By executing the following commands
+
+    mkdir blog
+    cd blog
+    express -c stylus
+    npm install -d
+
+You will have:
+
+1. Made the blog directory for your project (might be a good idea to put this under source control)
+2. Asked express to generate an application using the jade template engine and the stylus css engine (jade is the default html template engine)
+3. Asked npm to download and locally install any dependencies required by this express application.
+
+If you were to now take simple-express.js an put it into the blog folder as 'app.js' you should be able to execute it.
 
     node app.js
 
