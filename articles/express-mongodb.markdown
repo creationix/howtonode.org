@@ -180,10 +180,7 @@ Since we configure the express application template to use Stylus, css based on 
 
 Again after restarting your app and browsing to [localhost:3000][] you should see the posts, with a little more style (admittedly not much more!).
 
-A couple of things to notice here:
-
-1. We setup a route to handle the request for the css as a regular expression match. We then used the matched url segment to load a stylus file from the available views and `express` dynamically converts the stylus into CSS for us on the fly. In a production environment there are configuration options that can be passed to the `configure` method to make sure these views are cached but during development its rather useful to be able to change your stylus on the fly :)
-2. As express is treating the stylus to CSS rendering in exactly the same manner as the jade to HTML rendering we need to suppress the default `layout` behaviour as there is no meaningful layout here for our stylus.
+Something to notice here:
 
 > Stylus is to CSS as jade is to HTML. However reading stylus can be a little more complex as the hierarchy that is being described is really individual selectors. Lines that start at the same column are rules. Rules are applied to the hierarchy that they're found under, for example in the above stylus example, the bottom most line of stylus `background-color #ffa` is equivalent to the CSS `#articles .article .body {background-color: #ffa;}` this equivalence is due to the position of the start of this line relative to its parent lines :) (Easy really!)
 
