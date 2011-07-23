@@ -176,9 +176,7 @@ Add a stylus template to the `views` folder in order to generate the css:
 
 <express-mongodb/views/style.styl>
 
-And add a new route to app.js:
-
-<express-mongodb/app2.js#css>
+Since we configure the express application template to use Stylus, css based on our new sheet should be applied.
 
 Again after restarting your app and browsing to [localhost:3000][] you should see the posts, with a little more style (admittedly not much more!).
 
