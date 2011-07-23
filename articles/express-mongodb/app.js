@@ -1,51 +1,63 @@
-var kiwi= require('kiwi')
-kiwi.require('express');
-kiwi.seed('mongodb-native')
 
-require('express/plugins')
-var ArticleProvider= require('./articleprovider-mongodb').ArticleProvider;
+/**
+ * Module dependencies.
+ */
 
-configure(function(){
-  use(MethodOverride);
-  use(ContentLength);
-  use(Logger);
-  set('root', __dirname);
-})
+var express = require('express');
+var Articles = require('./ViewModel/Article').Article;
 
-var articleProvider= new ArticleProvider('localhost', 27017);
 
-get('/', function(){
-  var self = this;
-  articleProvider.findAll(function(error, docs){
-    self.render('blogs_index.html.haml', {
-      locals: {
-        title: 'Blog',
-        articles: docs
-      }
-    });
-  })
-})
+var app = module.exports = express.createServer();
 
-get('/*.css', function(file){
-  this.render(file + '.css.sass', { layout: false });
+// Configuration
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
 });
 
-get('/blog/new', function(){
-  this.render('blog_new.html.haml', {
-    locals: {
-      title: 'New Post'
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler()); 
+});
+
+var articles = new Articles('localhost', 27017);
+// Routes
+
+app.get('/', function(req, res){
+    articles.findAll( function(error,docs){
+        res.render('blog_index.jade', { 
+            locals: {
+                title: 'Blog',
+                articles:docs
+            }
+        });
+    })
+});
+
+app.get('/blog/new', function(req, res) {
+    res.render('blog_new.jade', { locals: {
+        title: 'New Post'
     }
-  });
+    });
 });
 
-post('/blog/new', function(){
-  var self = this;
-  articleProvider.save({
-    title: this.param('title'),
-    body: this.param('body')
-  }, function(error, docs) {
-    self.redirect('/')
-  });
+app.post('/blog/new', function(req, res){
+    articles.save({
+        title: req.param('title'),
+        body: req.param('body')
+    }, function( error, docs) {
+        res.redirect('/')
+    });
 });
 
-run();
+app.listen(3000);
+console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
