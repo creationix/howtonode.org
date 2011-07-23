@@ -146,11 +146,11 @@ If the app is re-run and you browse to [localhost:3000][] you will see the objec
 
 Now we have a way of reading and storing data (patience, memory is only the beginning!) we'll want a way of displaying and creating the data properly. Initially we'll start by just providing an index view of all the blog articles. To do this create the following two files in your views sub-directory (be very careful about the indentation, that first lines should be up against the left-hand margin!):
 
-<express-mongodb/views/layout.html.haml>
+<express-mongodb/views/layout.jade>
 
 and
 
-<express-mongodb/views/blogs_index.html.haml>
+<express-mongodb/views/blogs_index.jade>
 
 Next change your `get('/')` routing rule in your `app.js` to be as follows:
 
