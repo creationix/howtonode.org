@@ -271,15 +271,15 @@ We'll also need a new route to allow the article to be referenced by a URL and w
 
 We need to update the index page's view:
 
-<express-mongodb/views/blogs_index-final.html.haml>
+<express-mongodb/views/blogs_index-final.jade>
 
 The page that shows a single blog entry:
 
-<express-mongodb/views/blog_show-final.html.haml>
+<express-mongodb/views/blog_show-final.jade>
 
 The stylesheet that renders these pages:
 
-<express-mongodb/views/style-final.css.sass>
+<express-mongodb/views/style-final.styl>
 
 We also need to add a new rule to `app.js` for serving these view requests:
 
