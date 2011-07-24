@@ -1,10 +1,9 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express');
-var Articles = require('./ViewModel/Article').Article;
+var ArticleProvider = require('./articleprovider-mongodb').ArticleProvider;
 
 
 var app = module.exports = express.createServer();
@@ -29,12 +28,12 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-var articles = new Articles('localhost', 27017);
+var articleProvider = new ArticleProvider('localhost', 27017);
 // Routes
 
 app.get('/', function(req, res){
-    articles.findAll( function(error,docs){
-        res.render('blog_index.jade', { 
+    articleProvider.findAll( function(error,docs){
+        res.render('blogs_index.jade', { 
             locals: {
                 title: 'Blog',
                 articles:docs
@@ -51,12 +50,33 @@ app.get('/blog/new', function(req, res) {
 });
 
 app.post('/blog/new', function(req, res){
-    articles.save({
+    articleProvider.save({
         title: req.param('title'),
         body: req.param('body')
     }, function( error, docs) {
         res.redirect('/')
     });
+});
+
+app.get('/blog/:id', function(req, res) {
+    articleProvider.findById(req.params.id, function(error, article) {
+        res.render('blog_show.jade',
+        { locals: {
+            title: article.title,
+            article:article
+        }
+        });
+    });
+});
+
+app.post('/blog/addComment', function(req, res) {
+    articleProvider.addCommentToArticle(req.param('_id'), {
+        person: req.param('person'),
+        comment: req.param('comment'),
+        created_at: new Date()
+       } , function( error, docs) {
+           res.redirect('/blog/' + req.param('_id'))
+       });
 });
 
 app.listen(3000);
