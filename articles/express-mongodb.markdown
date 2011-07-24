@@ -3,6 +3,8 @@ Author: Ciaran Jessup
 Date: Thu Feb 18 2010 21:28:42 GMT+0000 (UTC)
 Node: v0.4.10
 
+> Article and Code updated by [loarabia (Larry Olson)][loarabiaSite].
+
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
 The technology stack that we'll be using will be [node][] + [express][] + [mongoDB][] all of which are exciting, fast and highly scalable. You'll also get to use [jade][] and [stylus][] for driving the templated views and styling! We will be using [npm][] to ease the package management and installation issues.
@@ -340,3 +342,4 @@ __Fin__.
 [natural]: http://en.wikipedia.org/wiki/Natural_key
 [Checkpoint 1]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/express-mongodb-1.zip
 [Checkpoint 2]: http://github.com/creationix/howtonode.org/tree/master/articles/express-mongodb/express-mongodb-2.zip
+[loarabiaSite]: http://loarabia.tumblr.com
