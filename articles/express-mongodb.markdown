@@ -280,7 +280,7 @@ The page that shows a single blog entry:
 
 The stylesheet that renders these pages:
 
-<express-mongodb/views/stylesheets/style-final.styl>
+<express-mongodb/public/stylesheets/style-final.styl>
 
 We also need to add a new rule to `app.js` for serving these view requests:
 
