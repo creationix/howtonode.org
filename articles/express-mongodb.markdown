@@ -175,7 +175,7 @@ As is probably obvious we need a little styling to be applied here, to do that w
 
 Add a stylus template to the `views` folder in order to generate the css:
 
-<express-mongodb/views/style.styl>
+<express-mongodb/public/stylesheets/style.styl>
 
 Since we configure the express application template to use Stylus, css based on our new sheet should be applied.
 
@@ -204,7 +204,7 @@ If I've lost you along the way you can get a zip of this fully working (but non-
 
 I promised that by the end of this article we'd be persisting our data across restarts of node, I've not yet delivered on this promise but now I will ..hopefully ;)
 
-To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend npm comes to the rescue.  If we open the console up and enter the `express` directory we created earlier we will be able to type the following commands to install the driver.
+To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend npm comes to the rescue.  If we open the console up and enter the blog directory we created earlier or if that is still your working directory, then we will be able to type the following command to install the driver.
 
     #!sh
     npm install mongodb
@@ -280,7 +280,7 @@ The page that shows a single blog entry:
 
 The stylesheet that renders these pages:
 
-<express-mongodb/views/style-final.styl>
+<express-mongodb/views/stylesheets/style-final.styl>
 
 We also need to add a new rule to `app.js` for serving these view requests:
 
