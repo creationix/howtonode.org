@@ -4,6 +4,7 @@ Date: Thu Feb 18 2010 21:28:42 GMT+0000 (UTC)
 Node: v0.4.10
 
 > Article and Code updated by [loarabia (Larry Olson)][loarabiaSite].
+> Article and Code updated by Toby Clemson
 
 In this article I hope to take you through the steps required to get a fully-functional (albeit feature-light) persistent blogging system running on top of [node][].
 
@@ -141,23 +142,20 @@ If the app is re-run and you browse to [localhost:3000][] you will see the objec
 
 ###A view to a kill###
 
-Now we have a way of reading and storing data (patience, memory is only the beginning!) we'll want a way of displaying and creating the data properly. Initially we'll start by just providing an index view of all the blog articles. To do this create the following two files in your views sub-directory (be very careful about the indentation, that first lines should be up against the left-hand margin!):
+Now we have a way of reading and storing data (patience, memory is only the beginning!) we'll want a way of displaying and creating the data properly. Initially we'll start by just providing an index view of all the blog articles. 
+Fortunately the `express` command we executed earlier to bootstrap our blogging application has already constructed a layout and an index page for us to use.  The layout file is Ok as it is, but we need to adjust the index page to look as follows: (be very careful about the indentation, that first lines should be up against the left-hand margin!):
 
-<express-mongodb/views/layout.jade>
-
-and
-
-<express-mongodb/views/blog_index.jade>
+<express-mongodb/views/index.jade>
 
 Next change your `get('/')` routing rule in your `app.js` to be as follows:
 
-<express-mongodb/app2.js#root>
+<express-mongodb/2/app.js#root>
 
 Now you should be able to restart the server and browser to [localhost:3000][]. Et voila! We'll not win any design awards, but you should now see a list of 3 very 'functional' blog postings (don't worry we'll come back to the style in a moment).
 
 There are two important things to note that we've just done;
 
-The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blog_index.jade`.
+The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `index.jade`.
 
 The second is the usage of a 'layout' [jade][] file `layout.jade`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
 
@@ -165,15 +163,13 @@ The second is the usage of a 'layout' [jade][] file `layout.jade`. This file wil
 >
 > Reading a [jade][] template is simple. The hierarchy of elements is expressed as indentation on the left hand-side; that is, everything that starts in a given column shares the same parent. Each line of [jade][] represents either a new element in the (eventual) HTML document or a function within [jade][] (which offers conditions and loops etc). Effectively [jade][] takes a JSON object and binds it to any `literal` text in the [jade][] template, applies the rules that define [jade][] and then processes the resulting bag of stuff to produce a well-formed and valid HTML document of the specified DOCTYPE. (Yay!)
 
-As is probably obvious we need a little styling to be applied here, to do that we'll need to change our layout a little to request a stylesheet:
+As is probably obvious we need a little styling to be applied here, fortunately we can see that the default layout requests a stylesheet already:
 
-<express-mongodb/views/layout2.jade>
+<express-mongodb/views/layout.jade>
 
-Add a stylus template to the `views` folder in order to generate the css:
+Not only that, but the default stylesheet has already been populated for us in `public/styesheets/style.styl', however sadly the contents don't fully meet our requirements so lets change that file to look more like this:
 
 <express-mongodb/public/stylesheets/style.styl>
-
-Since we configure the express application template to use Stylus, css based on our new sheet should be applied.
 
 Again after restarting your app and browsing to [localhost:3000][] you should see the posts, with a little more style (admittedly not much more!).
 
@@ -190,20 +186,25 @@ Now we can view a list of blog posts it would be nice to have a simple form for 
 
 Add two new routes to app.js
 
-<express-mongodb/app2.js#blog>
+<express-mongodb/2/app.js#blog>
 
 Upon restarting your app if you browse to [new post][] you will be able to create new blog articles, awesome! Looking at the post route we can see that upon successfully saving we redirect back to the index page where all the articles are displayed.
 
-If I've lost you along the way you can get a zip of this fully working (but non-persisting) blog here: [Checkpoint 1][]. This patch should apply cleanly to the previously described SHA of express :)
+If I've lost you along the way you can get a zip of this fully working (but non-persisting) blog here: [Checkpoint 1][]. (please be aware that upon extracting the zip file you will need to re-perform the `npm install -d` command within the folder to install the project dependencies.)
 
 ### Adding permanent persistence to the mix ###
 
 I promised that by the end of this article we'd be persisting our data across restarts of node, I've not yet delivered on this promise but now I will ..hopefully ;)
 
-To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend npm comes to the rescue.  If we open the console up and enter the blog directory we created earlier or if that is still your working directory, then we will be able to type the following command to install the driver.
+To do this we need to install a dependency on [node-mongodb-native][], which will allow our burgeoning application to access [mongoDB][]. Once again our friend npm comes to the rescue.  The dependencies of node applications can be expressed with a small JSON file in the root of the application `package.json` the `npm` tool understands how to read this file and install the dependencies on our behalf! (Yay! Go Tools!)
 
-    #!sh
-    npm install mongodb
+To add a dependency on [mongoDB][] you need to make your `package.json` look as follows:
+
+<express-mongodb/package.json>
+
+Once you have saved the file you then just need to execute the following command to have `npm` talk to the internet-tubes, download and then install the nodejs client for mongoDB.
+
+    npm install -d
 
 Now we need to replace our old memory based data provider with one thats capable of using mongodb:
 
@@ -268,7 +269,7 @@ We'll also need a new route to allow the article to be referenced by a URL and w
 
 We need to update the index page's view:
 
-<express-mongodb/views/blogs_index-final.jade>
+<express-mongodb/views/index-final.jade>
 
 The page that shows a single blog entry:
 

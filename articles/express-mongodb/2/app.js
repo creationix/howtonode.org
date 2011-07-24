@@ -26,7 +26,7 @@ var articleProvider= new ArticleProvider();
 //root
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){
-        res.render('blog_index.jade', { locals: {
+        res.render('index.jade', { locals: {
             title: 'Blog',
             articles:docs
             }

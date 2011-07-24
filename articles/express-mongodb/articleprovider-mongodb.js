@@ -9,6 +9,8 @@ ArticleProvider = function(host, port) {
   this.db.open(function(){});
 };
 
+//getCollection
+
 ArticleProvider.prototype.getCollection= function(callback) {
   this.db.collection('articles', function(error, article_collection) {
     if( error ) callback(error);
@@ -21,14 +23,9 @@ ArticleProvider.prototype.findAll = function(callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
-        article_collection.find(function(error, cursor) {
+        article_collection.find().toArray(function(error, results) {
           if( error ) callback(error)
-          else {
-            cursor.toArray(function(error, results) {
-              if( error ) callback(error)
-              else callback(null, results)
-            });
-          }
+          else callback(null, results)
         });
       }
     });
