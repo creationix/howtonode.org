@@ -151,7 +151,7 @@ Now we have a way of reading and storing data (patience, memory is only the begi
 
 and
 
-<express-mongodb/views/blogs_index.jade>
+<express-mongodb/views/blog_index.jade>
 
 Next change your `get('/')` routing rule in your `app.js` to be as follows:
 
@@ -161,7 +161,7 @@ Now you should be able to restart the server and browser to [localhost:3000][]. 
 
 There are two important things to note that we've just done;
 
-The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blogs_index.jade`.
+The first is the change to our application's routing rules. What we've done is say that for any browser requests that come in to the route ('/') we should ask the data provider for all the articles it knows about (a future improvement might be 'the most recent 10 posts etc.') and to 'render' those returned articles using the [jade][] template `blog_index.jade`.
 
 The second is the usage of a 'layout' [jade][] file `layout.jade`. This file will be used whenever a call to 'render' is made (unless over-ridden in that particular call) and provides a simple mechanism for common style across all page requests.
 
