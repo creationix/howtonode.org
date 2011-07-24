@@ -16,6 +16,7 @@ ArticleProvider.prototype.getCollection= function(callback) {
   });
 };
 
+//findAll
 ArticleProvider.prototype.findAll = function(callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
@@ -33,11 +34,13 @@ ArticleProvider.prototype.findAll = function(callback) {
     });
 };
 
+//findById
+
 ArticleProvider.prototype.findById = function(id, callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
-        article_collection.findOne({_id: ObjectID.createFromHexString(id)}, function(error, result) {
+        article_collection.findOne({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(id)}, function(error, result) {
           if( error ) callback(error)
           else callback(null, result)
         });
@@ -45,6 +48,7 @@ ArticleProvider.prototype.findById = function(id, callback) {
     });
 };
 
+//save
 ArticleProvider.prototype.save = function(articles, callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)

@@ -51,5 +51,5 @@ app.post('/blog/new', function(req, res){
     });
 });
 
-
+//listen
 app.listen(3000);
