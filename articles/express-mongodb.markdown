@@ -11,13 +11,7 @@ The technology stack that we'll be using will be [node][] + [express][] + [mongo
 
 This article will be fairly in-depth so you may want to get yourself a rather large mug of whatever beverage you prefer before you settle down :)
 
-## Getting Started / Pre-Requisites
-
-Before we start with the code it's important to make sure you have [git][] installed, an up-to-date installation of [node][] and a running [mongodb][] server on your development environment.
-
-###git###
-
-Whilst not a mandatory requirement I will be using git to pull down code from various location. Sadly the installation, configuration and setup of git is way beyond the scope of this article and I recommend reading up on that before embarking on this article if you're not familiar with git!
+## Getting Started / Pre-Requisites.
 
 ###mongoDB###
 
