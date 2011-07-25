@@ -33,7 +33,7 @@ var articleProvider = new ArticleProvider('localhost', 27017);
 
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){
-        res.render('blog_index.jade', { 
+        res.render('index.jade', { 
             locals: {
                 title: 'Blog',
                 articles:docs

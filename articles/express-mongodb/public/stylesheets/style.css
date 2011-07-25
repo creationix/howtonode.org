@@ -20,7 +20,6 @@ h1 {
   margin-left: auto;
   margin-right: auto;
   width: 320px;
-  color: #340000;
 }
 #articles .article {
   margin: 20px;
@@ -35,20 +34,4 @@ h1 {
 }
 #articles .article .body {
   background-color: #ffa;
-}
-.article .created_at {
-  display: none;
-}
-.article input[type =text] {
-  width: 490px;
-  margin-left: 16px;
-}
-.article input[type =button],
-.article input[type =submit] {
-  text-align: left;
-  margin-left: 440px;
-}
-.article textarea {
-  width: 490px;
-  height: 90px;
 }
