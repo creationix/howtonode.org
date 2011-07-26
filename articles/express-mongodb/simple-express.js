@@ -1,17 +1,15 @@
-var kiwi= require('kiwi')
+ // Module dependencies.
+var express = require('express');
 
-kiwi.require('express');
-require('express/plugins')
+var app = express.createServer();
 
-configure(function(){
-  use(MethodOverride);
-  use(ContentLength);
-  use(Logger);
-  set('root', __dirname);
-})
+// Configuration
+app.configure( function() {
+});
 
-get('/', function(){
-  this.halt(200, "Hello World!");
-})
+// Routes
+app.get('/', function(req, res) {
+    res.send('Hello World');
+});
 
-run();
+app.listen(3000);
