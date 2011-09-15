@@ -4,7 +4,8 @@ Date: Wed Sept 14 2011 09:50:00 GMT+0000 (UTC)
 Node: v0.4.11
 
 In this article, you will learn how to use Bogart and CouchDB to create a minimal
-blogging engine.
+blogging engine. The Express with MongoDB article was a huge hit. This article has
+similar goals but shows a different way of using Node.JS.
 
 ## Pre-Requisites
 
