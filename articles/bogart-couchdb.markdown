@@ -67,7 +67,7 @@ application will support the following methods:
 * Show a single post (GET /posts/:id)
 * Comment on a post (POST /posts/:id/comments)
 
-## Lets get startred!
+## Lets get started!
 
 A Bogart application consists of a JSGI server with one or more pieces of middleware and 
 one or more Bogart routers each containing any number of routes.
