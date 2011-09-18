@@ -1,0 +1,14 @@
+{
+    "name": "blog",
+    "description": "Simple Blogging Engine",
+    "version": "0.1.0",
+    "author": "Nathan Stott",
+    "email": "nathan.stott@whiteboard-it.com",
+    "main": "./app",
+    "directories": { "lib": "./lib" },
+    "dependencies": {
+      "bogart": ">=0.2.0",
+      "mustache": "0.3.1-dev",
+      "couchdb": ">=0.1.2"
+    }
+}

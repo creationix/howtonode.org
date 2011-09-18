@@ -1,0 +1,16 @@
+<h2>Posts</h2>
+
+<a href='/posts/new'>New Post</a>
+
+<ul>
+  {{#posts}}
+    <li>
+      <div class='post'>
+        <h2><a href='/posts/{{_id}}'>{{title}}</a></h2>
+        <p>
+          {{body}}
+        </p>
+      </div>
+    </li>
+  {{/posts}}
+</ul>
