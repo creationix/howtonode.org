@@ -1,0 +1,47 @@
+<a href='/posts'>Home</a>
+
+<h1>{{title}}</h1>
+
+<div class='post-content'>
+  {{body}}
+</div>
+
+<div>
+  <h2>Comments</h2>
+  <ul id='comments'>
+    {{#comments}}
+      <li>
+        <div>
+          Author: <span class='author'>{{author}}</span>
+        </div>
+        <div>
+          {{body}}
+        </div>
+      </li>
+    {{/comments}}
+
+    {{^comments}}
+      No Comments Yet
+    {{/comments}}
+  </ul>
+</div>
+
+<form method='post' action='/posts/{{_id}}/comments'>
+  <fieldset>
+    <legend>Leave a Comment</legend>
+
+    <div>
+      <label for='author'>Your Name</label>
+      <input name='author' />
+    </div>
+
+    <div>
+      <label for='body'>Your Comment</label>
+      <input name='body' />
+    </div>
+
+    <div class='buttons'>
+      <input type='submit' value='Post Comment' />
+    </div>
+  </fieldset>
+</form>
