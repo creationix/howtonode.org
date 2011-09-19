@@ -1,7 +1,7 @@
 Title: A Simple Blog with CouchDB, Bogart, and Node.js
 Author: Nathan Stott
-Date: Wed Sept 14 2011 09:50:00 GMT+0000 (UTC)
-Node: v0.4.11
+Date: Mon Sep 19 2011 08:53:58 GMT-0700 (PDT)
+Node: v0.4.12
 
 In this article, you will learn how to use Bogart and CouchDB to create a minimal
 blogging engine. The Express with MongoDB article was a huge hit. This article has
