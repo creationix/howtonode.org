@@ -39,7 +39,7 @@ for the community.
 ## JSGI
 
 Bogart is a JSGI-based framework. JSGI is specified by the CommonJS mailing list. Knowledge
-of JSGI is helpful when dealing with Bogart; however, it is not necesarry. You can find
+of JSGI is helpful when dealing with Bogart; however, it is not necessary. You can find
 [more information about JSGI](http://wiki.commonjs.org/wiki/JSGI) on the 
 [CommonJS wiki](http://wiki.commonjs.org).
 
