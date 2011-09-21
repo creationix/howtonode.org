@@ -3,7 +3,7 @@ Author: Nathan Stott
 Date: Mon Sep 19 2011 08:53:58 GMT-0700 (PDT)
 Node: v0.4.12
 
-Update: By request I have posted a [gist of the app.js](https://gist.github.com/1232272)
+*Update:* By request I have posted a [gist of the app.js](https://gist.github.com/1232272)
 using *MongoDB* instead of *CouchDB*.  This gist also serves as a beginning example
 for how to use non-promise-based APIs with bogart.
 
