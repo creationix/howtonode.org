@@ -3,6 +3,10 @@ Author: Nathan Stott
 Date: Wed Sept 14 2011 09:50:00 GMT+0000 (UTC)
 Node: v0.4.11
 
+Update: By request I have posted a [gist of the app.js](https://gist.github.com/1232272)
+using *MongoDB* instead of *CouchDB*.  This gist also serves as a beginning example
+for how to use non-promise-based APIs with bogart.
+
 In this article, you will learn how to use Bogart and CouchDB to create a minimal
 blogging engine. The Express with MongoDB article was a huge hit. This article has
 similar goals but shows a different way of using Node.JS.
