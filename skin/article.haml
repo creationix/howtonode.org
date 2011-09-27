@@ -68,13 +68,13 @@
         %dt
           Date Released:
         %dd
-          &= formatDate(article.date, "%l %F %j, %Y")
+          &= formatDate(article.date, "%A %B %e, %Y")
     :if article.lastUpdated
       %dl{title: article.lastUpdated}
         %dt
           Last Updated:
         %dd
-          &= formatDate(article.lastUpdated, "%l %F %j, %Y")
+          &= formatDate(article.lastUpdated, "%A %B %e, %Y")
 
     :if article.node
       %dl
