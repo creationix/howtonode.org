@@ -1,7 +1,7 @@
 Title: Managing module dependencies
 Author: Kishore Nallan
 Date: Mon Dec 05 2011 16:30:20 GMT
-Node: v0.4.1
+Node: v0.6.4
 
 Following [this discussion](http://groups.google.com/group/nodejs/browse_thread/thread/9aa563f1fe3b3ff5) on the node.js mailing list about managing module dependencies, I thought it's worth sharing some pointers on that here.
 
@@ -26,8 +26,10 @@ Note that you can either require a specific version of a module, or a minimum ve
 If you have development related dependencies (e.g. testing framework) which you do not wish to install in production, specify them using the `devDependencies` property:
 
 	"devDependencies": {
-      "vows": "0.5.13"
+      "vows": ">= 0.4.x"
     }
+
+On production, using `npm install --production` will ensure that the development dependencies are not installed. 
 
 ## Managing private NPM modules
 
