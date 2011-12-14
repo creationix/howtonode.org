@@ -1,9 +1,9 @@
 Title: A Simple Blog with CouchDB, Bogart, and Node.js
 Author: Nathan Stott
-Date: Wed Sept 14 2011 09:50:00 GMT+0000 (UTC)
-Node: v0.4.11
+Date: Mon Sep 19 2011 08:53:58 GMT-0700 (PDT)
+Node: v0.4.12
 
-Update: By request I have posted a [gist of the app.js](https://gist.github.com/1232272)
+*Update:* By request I have posted a [gist of the app.js](https://gist.github.com/1232272)
 using *MongoDB* instead of *CouchDB*.  This gist also serves as a beginning example
 for how to use non-promise-based APIs with bogart.
 

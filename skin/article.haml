@@ -60,18 +60,21 @@
   .aside
     %h4
       About this Article
+    %a.twitter-share-button{href:"http://twitter.com/share",data-count:"horizontal",data-via:"creationix"}
+      Tweet
+    %script{src:"http://platform.twitter.com/widgets.js"}
     :if article.date
       %dl{title: article.date}
         %dt
           Date Released:
         %dd
-          &= formatDate(article.date, "%l %F %j, %Y")
+          &= formatDate(article.date, "%A, %B %e, %Y")
     :if article.lastUpdated
       %dl{title: article.lastUpdated}
         %dt
           Last Updated:
         %dd
-          &= formatDate(article.lastUpdated, "%l %F %j, %Y")
+          &= formatDate(article.lastUpdated, "%A, %B %e, %Y")
 
     :if article.node
       %dl
