@@ -1,6 +1,8 @@
-var couchdb = require('couchdb');
-var client  = couchdb.createClient(5984, '127.0.0.1', { user: 'nathan', password: 's4stott' });
-var db      = client.db('blog');
+var couchdb = require('couchdb')
+  , settings = require('../settings');
+
+var client  = couchdb.createClient(settings.port, settings.host, { user: settings.user, password: settings.password });
+var db      = client.db(settings.db);
 
 var designDoc = {
   _id: '_design/blog',
