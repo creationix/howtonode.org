@@ -9,6 +9,7 @@
     "dependencies": {
       "bogart": ">=0.2.0",
       "mustache": "0.3.1-dev",
-      "couchdb": ">=0.1.2"
+      "couchdb": ">=0.1.2",
+      "promised-io": "=0.2.3"
     }
 }
