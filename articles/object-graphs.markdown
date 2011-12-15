@@ -49,7 +49,7 @@ Ever wondered why tools like [jslint][] always tell you to not forget to put `va
 
 Notice that `likesJavaScript` is now a property of the global object instead of a free variable in the outer closure.  This only really matters if you're going to be mixing several scripts.  But in any real program that's exactly what you're going to be doing.
 
-Always remember to put those `var` statements in there to keep your variable's scope to the current closure and it's children.  You'll be much happier by following this simple rule.
+Always remember to put those `var` statements in there to keep your variable's scope to the current closure and its children.  You'll be much happier by following this simple rule.
 
 If you must put something on the global object, do it explicitly with `window.woo` in the browser or `global.goo` in node.js.
 
@@ -71,9 +71,9 @@ In this example we will create a simple factory method that generates a closure 
 
 <br style="clear:left"/>
 
-When we call `description1()`, the VM looks up the function that it references and executes it.  Since that function looks for a local variable named `name`, it finds it in the closure scope.  This factory method is nice since each generated function has it's own space for local variables.
+When we call `description1()`, the VM looks up the function that it references and executes it.  Since that function looks for a local variable named `name`, it finds it in the closure scope.  This factory method is nice since each generated function has its own space for local variables.
 
-See the article [why use closure][] for more in-depth reading on this topic and it's many uses.
+See the article [why use closure][] for more in-depth reading on this topic and its many uses.
 
 ### Shared Functions and `this`
 
@@ -87,7 +87,7 @@ Here we'll create a few objects that all share a common function.  This function
 
 <br style="clear:left"/>
 
-In the diagram, we see that even though `Fred.description` was set to `Lane.description`, it's really only referencing the function.  Thus all three references have equal ownership of the anonymous function.  This is why I try to not call functions on constructor prototypes "methods", because that implies some sort of binding of the function to the constructor and it's "class". *(see [what is this][] for more details on the dynamic nature of `this`)*
+In the diagram, we see that even though `Fred.description` was set to `Lane.description`, it's really only referencing the function.  Thus all three references have equal ownership of the anonymous function.  This is why I try to not call functions on constructor prototypes "methods", because that implies some sort of binding of the function to the constructor and its "class". *(see [what is this][] for more details on the dynamic nature of `this`)*
 
 ## Conclusion
 
