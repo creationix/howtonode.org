@@ -45,10 +45,21 @@ We now will want to configure [upstart][], and I am shamelessly borrowing Kevin'
     script
         export HOME="/root"
 
-        exec sudo -u username /usr/local/bin/node /where/yourprogram.js 2>&1 >> /var/log/node.log
+        echo $$ > /var/run/yourprogram.pid
+        exec sudo -u username /usr/local/bin/node /where/yourprogram.js >> /var/log/yourprogram.sys.log 2>&1
     end script
 
-You will need to replace `username` with the user you want to run node as, and `/where/yourprogram.js` with the location of your application. You can then save this file to `/etc/init/yourprogram.conf` for later use. (Dont't forget to make it executable!) If you are using an older linux distribution, you may need to save the file to `/etc/event.d/yourprogram`
+    pre-start script
+        # Date format same as (new Date()).toISOString() for consistency
+        echo "[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Starting" >> /var/log/yourprogram.sys.log
+    end script
+
+    pre-stop script
+        rm /var/run/yourprogram.pid
+        echo "[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Stopping" >> /var/log/yourprogram.sys.log
+    end script
+
+You will need to replace `username` with the user you want to run node as, `/where/yourprogram.js` with the location of your application, `/var/run/yourprogram.pid` with your program's pid file and `/var/log/yourprogram.sys.log` with the location of your log file. You can then save this file to `/etc/init/yourprogram.conf` for later use. (Dont't forget to make it executable!) If you are using an older linux distribution, you may need to save the file to `/etc/event.d/yourprogram`
 
 Using your program is now a cinch:
 
@@ -71,7 +82,7 @@ I'm not going to tell you how to install it, [their website][] has plenty on inf
     #!monit
     set logfile /var/log/monit.log
 
-    check host nodejs with address 127.0.0.1
+    check process nodejs with pidfile "/var/run/yourprogram.pid"
         start program = "/sbin/start yourprogram"
         stop program  = "/sbin/stop yourprogram"
         if failed port 8000 protocol HTTP
@@ -83,7 +94,7 @@ You can save this in `/etc/monit/monitrc`. Here is the break down:
 
     set logfile /var/log/monit.log
 
-    check host nodejs with address 127.0.0.1
+    check process nodejs with pidfile "/var/run/yourprogram.pid"
 
 This will tell monit to log all output to `/var/log/monit.log`, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
 The next part is the vital part, which defines how we will test for failures:
