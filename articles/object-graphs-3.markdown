@@ -33,13 +33,13 @@ Another side effect of this difference in inheritance.  In Ruby and other classi
 
 Both languages have seemingly similar special variables that give you access to the current "scope".
 
-In Ruby `self` is the default receiver of all method calls that don't specify a receiver.  In methods it's usually the instance object itself (or it's singleton class actually).  You can't get at instance variable directly via `self`, but use the `@foo` notation instead.  Any method invocation without an explicit receiver will get looked up in `self` and it's superclasses. Thus calling `foo()` is the exact same as calling `self.foo()`.
+In Ruby `self` is the default receiver of all method calls that don't specify a receiver.  In methods it's usually the instance object itself (or its singleton class actually).  You can't get at instance variable directly via `self`, but use the `@foo` notation instead.  Any method invocation without an explicit receiver will get looked up in `self` and its superclasses. Thus calling `foo()` is the exact same as calling `self.foo()`.
 
-In JavaScript, if you call `foo()` that's not the same thing at all as `this.foo()`. The first, `foo()` will look for a `foo` local variable via the closure and set it's `this` to `global`.  But calling `this.foo()` will look for a `foo` property in `this` and call it with the old `this` as the new `this`.
+In JavaScript, if you call `foo()` that's not the same thing at all as `this.foo()`. The first, `foo()` will look for a `foo` local variable via the closure and set its `this` to `global`.  But calling `this.foo()` will look for a `foo` property in `this` and call it with the old `this` as the new `this`.
 
 ## Object Graphs
 
-Ok, enough theory, now for some sample code and diagrams!  I'll show some ruby code, it's diagram, and then the closest JavaScript implementation I could think of and it's diagram.
+Ok, enough theory, now for some sample code and diagrams!  I'll show some ruby code, its diagram, and then the closest JavaScript implementation I could think of and its diagram.
 
 Most of the ruby examples are based on the MetaProgramming chapter of Programming Ruby 1.9 by Pragmatic Programmers.
 
@@ -55,7 +55,7 @@ All values are objects, let's start out with a simple string.
 
 <br style="clear:left"/>
 
-Notice that every object has a class.  Our string is of class `String` which inherits from the class `Object`.  It's class `String` is of class `Class` which inherits `Module` and then `Object`.
+Notice that every object has a class.  Our string is of class `String` which inherits from the class `Object`.  its class `String` is of class `Class` which inherits `Module` and then `Object`.
 
 For purposes of seeing how `animal` works we don't need to worry about the classes of classes.  The diagram is much simpler by removing that part:
 
@@ -159,7 +159,7 @@ In JavaScript you can do the same by simply adding a property on the constructor
 
 <br style="clear:left"/>
 
-Here we make the constructor inherit from it's parent constructor (so that "class methods" get inherited) and inherit the prototypes so that "instance methods" get inherited.  Again there is no need for hidden classes since javascript allows storing function properties on any object.
+Here we make the constructor inherit from its parent constructor (so that "class methods" get inherited) and inherit the prototypes so that "instance methods" get inherited.  Again there is no need for hidden classes since javascript allows storing function properties on any object.
 
 ## Moving Forward
 

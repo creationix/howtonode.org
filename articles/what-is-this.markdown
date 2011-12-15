@@ -33,12 +33,12 @@ Here we see that local variables in an inner scope can shadow variables by the s
 
 <what-is-this/closure.js*>
 
-The variables `name` and `age` are local to the `myModule` function, but when we call `greeter` from the global scope, it doesn't throw an error.  This is because the `greet` function has `name` and `age` in it's lexical scope and so they're accessible as if they were local variables.  Basically the way variable lookup works is that it goes up scope by scope looking for a variable by the requested name.
+The variables `name` and `age` are local to the `myModule` function, but when we call `greeter` from the global scope, it doesn't throw an error.  This is because the `greet` function has `name` and `age` in its lexical scope and so they're accessible as if they were local variables.  Basically the way variable lookup works is that it goes up scope by scope looking for a variable by the requested name.
 
 
 ### The context of "`this`"
 
-In addition to the lexical scope.  JavaScript adds another layer of locality through the special keyword "`this`".  This keyword looks and acts like any other javascript variable except that you can't modify it.  It acts as a reference to the context object, and as an object, you can get to it's properties through normal dot or bracket notation. The magic is that the value of "`this`" changes depending on what context your executing in.  In most cases, the context is the receiver of the message.  For example:
+In addition to the lexical scope.  JavaScript adds another layer of locality through the special keyword "`this`".  This keyword looks and acts like any other javascript variable except that you can't modify it.  It acts as a reference to the context object, and as an object, you can get to its properties through normal dot or bracket notation. The magic is that the value of "`this`" changes depending on what context your executing in.  In most cases, the context is the receiver of the message.  For example:
 
 <what-is-this/this.js#person*>
 
@@ -114,7 +114,7 @@ This is especially dangerous in things like for loops:
 
 The `i` variable in both loops is the **same** variable and so the inner loop will break the outer loop and give the wrong answer.  Also if I had not put var statements before the two `n` variables, then they would walk over each other and give a wrong answer too.
 
-There is one word of caution for `var` users.  It doesn't matter where in the function body you put the `var` word.  It only matters which function body you put it in.  And it's scope is inner to function parameters. For example:
+There is one word of caution for `var` users.  It doesn't matter where in the function body you put the `var` word.  It only matters which function body you put it in.  And its scope is inner to function parameters. For example:
 
 <what-is-this/var.js#onevar*>
 

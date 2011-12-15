@@ -50,7 +50,7 @@ So to convert this to a Github POST hook, we'll keep it simple and assume all th
 
 <welcome/github-hook.js>
 
-So whenever a request is received, we call the external `rebuild` method.  The reason we pass in a callback instead of getting the return value is because the builder will need to do some of it's own IO and can't return a meaningful response right away.  When it's done, we'll be notified and then pass on the output to the browser.
+So whenever a request is received, we call the external `rebuild` method.  The reason we pass in a callback instead of getting the return value is because the builder will need to do some of its own IO and can't return a meaningful response right away.  When it's done, we'll be notified and then pass on the output to the browser.
 
 In another article I'll explain how node-blog handles the parallel processing of the various source files and how it synchronizes the output into a single message to give back to the http server.
 
