@@ -41,6 +41,7 @@ router.get('/posts/new', function(req) {
 router.post('/posts', function(req) {
   var post = req.params;
   post.type = 'post';
+  post.postedAt = new Date();
 
   return db.saveDoc(post).then(function(resp) {
     return bogart.redirect('/posts');
