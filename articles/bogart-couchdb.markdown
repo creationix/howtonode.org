@@ -143,7 +143,7 @@ A simple JSGI response:
 
 The Bogart route to render new-post.html is as follows:
 
-    get('/posts/new', function(req) {
+    router.get('/posts/new', function(req) {
       return viewEngine.respond('new-post.html', {
         locals: {
           title: 'New Post'
@@ -153,19 +153,25 @@ The Bogart route to render new-post.html is as follows:
 
 `viewEngine` should be defined at the beginning of the Bogart configuartion closure as
     
-    viewEngine = bogart.viewEngine('mustache')
+    viewEngine = bogart.viewEngine('mustache');
 
-Bogart supported `haml` and `mustache` out of the box. It is easy to add support for more
-view engines as well.
+Bogart supports `mustache` out of the box. There is a `jade` view engine in the package
+bogart-jade. If you want to use `jade` then `npm install bogart-jade` and 
+`require('bogart-jade')`. After that, `bogart.viewEngine('jade')` will work. It is easy to add
+support for more view engines as well.
 
-Bogart includes useful middleware to make working with forms easy. Normally, req.body will
+Bogart includes useful middleware to make working with forms easy. Normally, `req.body` will
 contain the raw body of a form post. It is more conveniant if this is automatically converted to
-a JSON object for us. The Bogart middleware `ParseForm` accomplishes this.
+a JSON object for us. The Bogart middleware `Parted` accomplishes this.
 
-We will make a small change to our application to add the `ParseForm` middleware into the JSGI stack.
+Adding middleware is easiest using a Bogart Application object.
+JSGI `Parted` middleware wraps the streaming multipart, json, and urlencoded parsing utility
+[Parted](https://github.com/chjj/parted).
 
-    app = bogart.middleware.ParseForm(app);
-    bogart.start(app);
+    var app = bogart.app();
+    app.use(bogart.middleware.Parted);
+    app.use(router);
+    app.start();
 
 Lets take a side-step to discuss how we can work with CouchDB using the `couchdb` package
 from the npm registry.
@@ -191,7 +197,7 @@ CouchDB users setup, please provide your username and password.
 
 Now we will create a route to handle the `POST` of our form.
 
-    post('/posts', function(req) {
+    router.post('/posts', function(req) {
       var post = req.params;
       post.type = 'post';
 
@@ -226,7 +232,7 @@ Next, lets create a Bogart route to render this template. We will query the data
 `db.view`, process the response from CouchDB, and respond with the rendered template. Bogart
 makes this easy:
 
-      get('/posts', function(req) {
+      router.get('/posts', function(req) {
     
         return db.view('blog', 'posts_by_date').then(function(resp) {
           var posts = resp.rows.map(function(x) { return x.value; });
@@ -251,7 +257,7 @@ The template will be as follows:
 The Bogart route to display this is as simple as the route to display the form
 for creating new posts.
 
-    get('/posts/:id', function(req) {
+    router.get('/posts/:id', function(req) {
       return db.openDoc(req.params.id).then(function(post) {
         return viewEngine.respond('post.html', { locals: post });
       });
@@ -260,7 +266,7 @@ for creating new posts.
 The route to accept the `POST` from the comments form is similar to the route to accept
 a new blog post:
 
-    post('/posts/:id/comments', function(req) {
+    router.post('/posts/:id/comments', function(req) {
       var comment = req.params;
 
       return db.openDoc(req.params.id).then(function(post) {
