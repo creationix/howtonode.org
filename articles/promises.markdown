@@ -88,12 +88,12 @@ jQuery implemented Promises in version 1.5.
 
 ## The Promise Contract
 
-### There is ONE Resolution or Rejection
+### There is *one* Resolution or Rejection
 
 A promise is resolved one time. It will never be fulfilled if it has been rejected
 or rejected if it has been fulfilled.
 
-### Listeners are executed ONE time
+### Listeners are executed *one* time
 
 An individual callback or errback will be executed once and only once. This follows
 from the first rule of the contract.
