@@ -3,8 +3,6 @@ Author: Nathan Stott
 Date: Tue Dec 20 2011 08:00:00 GMT-0700 (PDT)
 Node: v0.6.5
 
-# Introduction to Promises
-
 A Promise is an object that represents the result of an asynchronous function call. Promises are also
 called futures and deferreds in some communities.
 
@@ -26,9 +24,9 @@ Promises based on EventEmitters were originally a part of Node.  They looked lik
         // error
     });
 
-The style was ugly and required more allocations than strictly necessary.
-There were political issues because these "promises" did not fulfill all of
-the contracts that advocates for promises wished they did.  Between
+The style required more allocations than necessary.
+There were also political issues because these "promises" did not fulfill all of
+the contracts that advocates for promises insisted they must.  Between
 aesthetics, politics, and reductionism, Ryan removed promises in the v0.2
 era and settled on the present callback style, leaving promises as an
 exercise for user-land.
@@ -40,7 +38,6 @@ exercise for user-land.
             // ok
         }
     });
-
 
 ## Promise Terminology
 
@@ -71,11 +68,12 @@ Install with NPM: `npm install promised-io`
 
     var q = require('promised-io/promise'); // >=v2.4
 
-They are compatible with one anothers promises, so which you use is merely a matter of preference.
-These libraries do contain different helper functions outside of the basic functions necessary
-to consume and create promises.
+They are compatible and even capable of consuming each others promises, so which you use
+is a matter of preference. These libraries do different helper functions outside 
+of the basic functions necessary to consume and create promises.
 
-The rest of the server-side examples will assume that a `q` variable containing a promise module is in scope.
+The rest of the server-side examples will assume that a `q` variable referencing
+a promise module is in scope.
 
 ### Client Side
 
@@ -90,20 +88,24 @@ jQuery implemented Promises in version 1.5.
 
 ## The Promise Contract
 
-### There is ONE Resolution of Rejection
+### There is ONE Resolution or Rejection
 
-A promise is resolved one time. It will never be fulfilled if it has been rejected or rejected if it has been fulfilled.
+A promise is resolved one time. It will never be fulfilled if it has been rejected
+or rejected if it has been fulfilled.
 
 ### Listeners are executed ONE time
 
-An individual callback or errback will be executed once and only once. This follows from the first rule of the contract.
+An individual callback or errback will be executed once and only once. This follows
+from the first rule of the contract.
 
 ### Promises remember their state
 
-A promise that is resolved with a value remembers the fulfillment. If a callback is attached in the future to this promise, it will be
-executed with the previously resolved value. The same is true of errbacks. If a promise is rejected and an errback is attached
-after the rejection, it will be executed with the rejected value.  Promises behave the same way regardless of whether they are
-already resolved or resolved in the future.
+A promise that is resolved with a value remembers the fulfillment. If a
+callback is attached in the future to this promise, it will be executed
+with the previously resolved value. The same is true of errbacks. If a
+promise is rejected and an errback is attached after the rejection, it will
+be executed with the rejected value.  Promises behave the same way regardless
+of whether they are already resolved or resolved in the future.
 
 ## Thenables
 
@@ -120,10 +122,12 @@ The `then` method is the gateway to attaching callbacks, errbacks, and progressb
 
 ## When
 
-The `when` function is a helper to attach listeners to an object that you are not sure is a promise. This is useful because 
-it is often helpful for methods to be able to return a promise or a direct value. If a direct value is returned, it will not
-have a `then` method.  Also, if the promise does not implement `then` properly, the `when` function makes sure that it
-behaves properly (making sure your callbacks get called in separate events and never more than once).
+The `when` function is a helper to attach listeners to an object that you are
+not sure is a promise. This is useful because it is often helpful for methods
+to be able to return a promise or a direct value. If a direct value is returned,it will not
+have a `then` method.  Also, if the promise does not implement `then` properly,
+the `when` function makes sure that it behaves properly by ensuring your callbacks
+are called in separate events and never more than once.
 
     when(maybePromise, function() {
       // callback, executed on successful promise resolution or if maybePromise is not a promise but a value
@@ -157,19 +161,19 @@ by changing the value or error as it is bubbled.
 ## Creating Promises using the Deferred helper
 
 A Deferred is an object that helps create and manipulate promises. A Deferred
-has a `promise` property that is the promise that it is managing. It also has `resolve` and
-`reject` methods that are responsible for resolving the promise.
+has a `promise` property that references the promise that it manages. It also
+has `resolve` and `reject` methods that are responsible for resolving / rejecting
+the promise.
 
 `resolve` is a function that may be passed a value or a promise.
-If it’s passed a value, the promise is fulfilled.
-If it’s passed a promise, that promise’s resolution will eventually
+If it is passed a value, the promise is fulfilled.
+If it is passed a promise, that promise’s resolution will eventually
 be forwarded to this one.
 
-Your milage will vary from library to library if you call the resolver more
-than once, but all libraries enforce the rule that a promise can only be
-resolved once.  Kris Kowal’s Q library allows multiple users to “race” to be
-the first to resolve the promise. Kris Zyp’s PromisedIO throws an exception
-if you attempt to resolve a promise again.
+Both Kris Kowal's Q and Kris Zyp's Promised-IO libraries enforce the rule
+that a promise can only be resolved once.  Kris Kowal’s Q library allows multiple
+agents to “race” to be the first to resolve the promise. Kris Zyp’s Promised-IO
+throws an exception if you attempt to resolve a promise a second time.
 
 Reject is a function that accepts a reason for rejection. The rejection may be of any type but
 is commonly a string. The Deferred rejects its promise with the rejection reason.
