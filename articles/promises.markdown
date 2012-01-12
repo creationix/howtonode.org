@@ -257,7 +257,7 @@ With Kris Kowal’s Q:
     
 ## Conclusions
 
-Promises are a valualbe tool for managing asynchronous control flow. With jQuery adopting
+Promises are a valuable tool for managing asynchronous control flow. With jQuery adopting
 Promises, more JavaScript programmers will see them as the preferred method of managing
 asynchronous state. If you have any questions, please leave them in the comments section.
 
