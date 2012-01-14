@@ -192,6 +192,9 @@ dl a:hover {
 .article ol {
   margin: 20px;
 }
+.article img {
+  max-width: 100%;
+}
 .article ul,
 .article ol {
   list-style-position: inside;
