@@ -1,10 +1,11 @@
-!!! Strict
-%html(lang="en" xmlns="http://www.w3.org/1999/xhtml")
+!!! 5
+%html(lang="en")
   %head
-    %meta(http-equiv="content-type" content="text/html; charset=UTF-8")
+    %meta(charset="utf-8")
     %title #{(title ? title + " - " : "")}How To Node - NodeJS
     %meta(name="description" content="Learn the zen of coding in NodeJS.")
-    %link(href="/volcano.css?v2" rel="stylesheet")
+    %meta(name="viewport" content="width=device-width")
+    %link(href="/style.css" rel="stylesheet")
     %link(href="/print.css" rel="stylesheet" media="print")
     %link(rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feed.xml")
     %link(href="/favicon.ico" rel="icon" type="image/x-icon")
@@ -18,8 +19,11 @@
             The zen of coding in node.JS
       = content
       
-      #footer.clearfix
-        %p Site Design and code is &copy; 2010 to Tim Caswell under the MIT license. Content and articles are copyrighted to the individual authors. All code snippets used in the examples are in the public domain.
+      #footer
+        %p &copy; 2011 Tim Caswell under the MIT license.
+        %p Content and articles are copyrighted to the individual authors. Design by&nbsp;
+          %a{href: "http://bengourley.co.uk"} Ben Gourley
+          . All code snippets used in the examples are in the public domain.
         %p Wheat running on node #{process.version}
     :script
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

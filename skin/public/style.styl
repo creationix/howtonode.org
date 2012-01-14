@@ -1,0 +1,363 @@
+@import 'nib'
+
+$primary = #0054a6
+
+*
+  margin 0
+  padding 0
+
+body
+  font-size 14px
+  line-height 1.4em
+  font-family 'Lucida Grande', sans-serif
+  color #333
+  background-image url('groovepaper.png')
+
+a
+  color $primary
+  text-decoration none
+
+hr
+  border none
+  outline none
+  border-bottom 1px dashed #ccc
+
+p
+ul
+ol
+dl
+  a:hover
+      text-decoration underline
+
+#container
+  margin 80px 5%
+  overflow hidden
+
+#main
+  float left
+  width 65%
+  margin-right 5%
+  max-width 700px
+  position relative
+  z-index 50
+
+#sidebar
+  float left
+  width 30%
+  position relative
+  z-index 50
+  max-width 325px
+
+#footer
+  clear both
+  border-top 1px dashed #ccc
+  padding-top 15px
+  color #666
+
+  p
+    text-shadow 0px 1px 0px #fff
+    font-size 12px
+
+#header
+  z-index 100
+  position absolute
+  left 0
+  top 0
+  width 100%
+  height 50px
+  background-image linear-gradient(top, $primary, darken($primary, 20%))
+  border-bottom 1px solid darken($primary, 40%)
+  box-shadow 0px 10px 10px rgba(0,0,0,0.1), inset 0px -1px 0px rgba(255,255,255,0.2)
+
+  h1
+  h2
+    float left
+    display inline
+    color #fff
+    line-height 50px
+
+  h1
+    margin-left 5%
+    font-weight normal
+    font-size 24px
+    text-shadow 0px -1px 0px darken($primary, 30%)
+
+  h2
+    margin-left 20px
+    font-size 10px
+    font-weight normal
+    line-height 10px
+    color darken($primary, 55%)
+    text-shadow 0px -1px 0px desaturate(lighten($primary, 20%), 50%)
+    padding 5px 10px
+    border-radius 20px
+    margin-top 15px
+    background-color desaturate(lighten($primary, 20%), 40%)
+    border 1px solid darken($primary, 20%)
+
+.article
+  position relative
+  border 1px solid #ddd
+  background-color #fff
+  margin-bottom 20px
+  border-radius 3px
+  box-shadow 0px 1px 1px rgba(0,0,0,0.1)
+  overflow hidden
+
+  .sha-version
+    position absolute
+    top 0
+    right 0
+    padding 0px 6px
+    font-size 11px
+    color #aaa
+    background-color #fff
+    border-radius 0px 0px 0px 5px
+    border-bottom 1px solid #ddd
+    border-left 1px solid #ddd
+
+  .author
+    display none
+
+  .author
+    color #999
+    text-shadow 0px 1px 0px #fff
+    padding 5px
+    background-color #fafafa
+    border-radius 3px 3px 0px 0px
+    display block
+    line-height 32px
+    overflow hidden
+    margin-bottom 20px
+    font-size 12px
+    border-bottom 1px dashed #ddd
+
+    img
+      border 1px solid #fff
+      box-shadow 0px 0px 0px 1px #dadada
+      height 30px
+      width 30px
+      margin-right 10px
+      float left
+
+    .date
+      position absolute
+      top 10px 
+      right 10px
+      border-radius 5px
+      background-color #e5e5e5
+      padding 5px 8px
+      box-shadow inset 0px 1px 0px rgba(0,0,0,0.1), inset 0px -1px 0px #fff, inset 0px 2px 2px rgba(100,100,100,0.1)
+      line-height 12px
+  h1
+    padding 20px
+    background-color #fafafa
+    border-bottom 1px dashed #ddd
+    font-size 24px
+    line-height 32px
+
+  h2
+    padding 10px 20px 0px
+    font-size 20px
+
+  h3
+    padding 10px 20px 0px
+    font-size 18px
+    line-height 20px
+  
+  h4
+    padding 10px 20px 0px
+    font-size 14px
+    line-height 18px
+
+  p
+  ul
+  ol
+    margin 20px
+
+  ul
+  ol
+    list-style-position inside
+
+  .more
+    float left
+    display inline
+    text-align center
+    margin-left 20px
+    padding 5px 10px
+    margin-bottom 20px
+    background-color $primary
+    box-shadow inset 0px 0px 10px rgba(255,255,255,0.2), inset 0px 1px 0px rgba(255,255,255,0.1)
+    border 1px solid $primary
+    border-radius 3px
+    color #fff
+    text-shadow 0px -1px 0px rgba(0,0,0,0.2)
+
+    &:hover
+      background-color darken($primary, 10%)
+
+  .view-thread
+    float left
+    margin 0px 0px 10px 20px
+
+  .dsq-brlink
+    float left
+    margin 0px 0px 10px 10px
+  
+  .snippet
+    position relative
+    
+    .code-link
+      position absolute
+      padding 0px 2px
+      background #fafafa
+      border 1px solid #fff
+      border-radius 5px
+      font-size 10px
+      opacity 0.5
+      top 3px
+      right 3px
+      transition opacity 0.1s ease-in-out
+
+      &:hover
+        opacity 0.8
+    
+    .output
+      position relative
+      padding 20px 20px 10px
+      border 1px dashed #ddd
+      border-left none
+      border-right none
+      background-color #fafafa
+      box-shadow inset 0px 1px 0px #fff
+
+      dd
+        font-family 'Monaco', 'Menlo', monospace
+        font-size 13px
+        clear left
+        color #333
+        text-shadow 0px 1px 0px #fff
+
+
+      dt
+        font-size 12px
+        border-radius 5px
+        background-color #e5e5e5
+        padding 5px 8px
+        box-shadow inset 0px 1px 0px rgba(0,0,0,0.1), inset 0px -1px 0px #fff, inset 0px 2px 2px rgba(100,100,100,0.1)
+        line-height 12px
+        color #999
+        text-shadow 0px 1px 0px #fff
+        float left
+        position relative
+        top -10px
+
+      &:after
+        content ''
+        border 1px dashed #ccc
+        border-top none
+        border-bottom none
+        position absolute
+        top -21px
+        left 20px
+        right 20px
+        height 20px
+
+#sidebar
+  .aside
+  .bubble
+    margin-bottom 20px
+
+  h3
+  h4
+    padding 10px 0px
+    border-bottom 1px dashed #aaa
+    margin-bottom 10px
+    line-height 16px
+    font-size 16px
+    text-shadow 0px 1px 0px #fff
+
+  p
+    margin-bottom 20px
+
+  ul
+    border 1px solid #222
+    overflow hidden
+    border-radius 3px
+    font-size 12px
+
+  li
+    list-style none
+    background-color #333
+    background-image linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.1))
+    border-top 1px dashed #444
+    box-shadow inset 0px -1px 0px #262626
+    padding 8px
+    color #666
+    text-shadow 0px -1px 0px #000
+
+    &:first-child
+      border-top none
+
+    a
+      color #eee
+      display block
+
+    span
+      background-color desaturate(spin($primary, 180), 50%)
+      border 1px solid darken(spin($primary, 180), 60%)
+      border-radius 5px
+      margin-left 5px
+      padding 2px 3px
+      font-size 10px
+      line-height 10px
+      color darken(spin($primary, 180), 60%)
+      text-shadow none
+
+  img
+    float right
+    width 150px
+    height 150px
+    margin-left 10px
+    border 1px solid #fff
+    box-shadow 0px 0px 0px 1px #dadada
+  dt
+    font-weight bold
+  dd
+    margin-bottom 10px
+  
+  .twitter-share-button
+    margin-bottom 10px
+
+#main.index
+  h3
+    font-size 24px
+    line-height 26px
+
+#disqus_thread
+  padding 10px 20px
+
+  h3
+    font-size 14px
+
+@import 'prettify.styl'
+
+@media screen and (max-width: 800px)
+  
+  #main
+    width 100%
+    float none
+
+  #sidebar
+    float none
+    max-width none
+    width auto
+
+  #header
+    h1
+      letter-spacing -1px
+    h2
+      font-size 10px
+      margin-left 10px
+      padding-left 3px
+      padding-right 3px
