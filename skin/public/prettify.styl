@@ -1,0 +1,70 @@
+/* Pretty printing styles. Used with prettify.js. */
+
+pre code {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 13px;
+  background-color: #1c1d1e;
+  display: block;
+  padding: 20px;
+  overflow: auto;
+  margin: 20px 0px;
+  clear: both;
+}
+
+/* SPAN elements with the classes below are added by prettyprint. */
+.pln { color: #f8f7f2 }  /* plain text */
+
+@media screen {
+  .str { color: #e6d77a }  /* string content */
+  .kwd { color: #e85274 }  /* a keyword */
+  .com { color: #485457 }  /* a comment */
+  .typ { color: #f8f7f2 }  /* a type name */
+  .lit { color: #b5d93a }  /* a literal value */
+  /* punctuation, lisp open bracket, lisp close bracket */
+  .pun, .opn, .clo { color: #f8f7f2 }
+  .tag { color: #aaa }  /* a markup tag name */
+  .atn { color: #e85274 }  /* a markup attribute name */
+  .atv { color: #b5d83a }  /* a markup attribute value */
+  .dec, .var { color: #f8f7f2 }  /* a declaration; a variable name */
+  .fun { color: #e85379 }  /* a function name */
+}
+
+/* Use higher contrast and text-weight for printable form. */
+@media print, projection {
+  pre code {
+    background-color: none;
+    display: block;
+    padding: 10px;
+    overflow: visible;
+  }
+  .pln { color: #000 } 
+  .str { color: #060 }
+  .kwd { color: #006; font-weight: bold }
+  .com { color: #600; font-style: italic }
+  .typ { color: #404; font-weight: bold }
+  .lit { color: #044 }
+  .pun, .opn, .clo { color: #440 }
+  .tag { color: #006; font-weight: bold }
+  .atn { color: #404 }
+  .atv { color: #060 }
+}
+
+/* Put a border around prettyprinted code snippets. */
+pre.prettyprint { padding: 2px; border: 1px solid #888 }
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0 } /* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L5,
+li.L6,
+li.L7,
+li.L8 { list-style-type: none }
+/* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 { background: #eee }
