@@ -11,7 +11,7 @@ body
   line-height 1.4em
   font-family 'Lucida Grande', sans-serif
   color #333
-  background-image url('noise.png')
+  background-image url('groovepaper.png')
 
 a
   color $primary
@@ -67,7 +67,7 @@ dl
   height 50px
   background-image linear-gradient(top, $primary, darken($primary, 20%))
   border-bottom 1px solid darken($primary, 40%)
-  box-shadow 0px 10px 10px rgba(0,0,0,0.1)
+  box-shadow 0px 10px 10px rgba(0,0,0,0.1), inset 0px -1px 0px rgba(255,255,255,0.2)
 
   h1
   h2
@@ -158,11 +158,17 @@ dl
 
   h2
     padding 10px 20px 0px
+    font-size 20px
 
   h3
-    margin 0px 20px
-    font-size 24px
-    line-height 30px
+    padding 10px 20px 0px
+    font-size 18px
+    line-height 20px
+  
+  h4
+    padding 10px 20px 0px
+    font-size 14px
+    line-height 18px
 
   p
   ul
@@ -197,6 +203,65 @@ dl
   .dsq-brlink
     float left
     margin 0px 0px 10px 10px
+  
+  .snippet
+    position relative
+    
+    .code-link
+      position absolute
+      padding 0px 2px
+      background #fafafa
+      border 1px solid #fff
+      border-radius 5px
+      font-size 10px
+      opacity 0.5
+      top 3px
+      right 3px
+      transition opacity 0.1s ease-in-out
+
+      &:hover
+        opacity 0.8
+    
+    .output
+      position relative
+      padding 20px 20px 10px
+      border 1px dashed #ddd
+      border-left none
+      border-right none
+      background-color #fafafa
+      box-shadow inset 0px 1px 0px #fff
+
+      dd
+        font-family 'Monaco', 'Menlo', monospace
+        font-size 13px
+        clear left
+        color #333
+        text-shadow 0px 1px 0px #fff
+
+
+      dt
+        font-size 12px
+        border-radius 5px
+        background-color #e5e5e5
+        padding 5px 8px
+        box-shadow inset 0px 1px 0px rgba(0,0,0,0.1), inset 0px -1px 0px #fff, inset 0px 2px 2px rgba(100,100,100,0.1)
+        line-height 12px
+        color #999
+        text-shadow 0px 1px 0px #fff
+        float left
+        position relative
+        top -10px
+
+      &:after
+        content ''
+        border 1px dashed #ccc
+        border-top none
+        border-bottom none
+        position absolute
+        top -21px
+        left 20px
+        right 20px
+        height 20px
 
 #sidebar
   .aside
@@ -264,6 +329,11 @@ dl
   .twitter-share-button
     margin-bottom 10px
 
+#main.index
+  h3
+    font-size 24px
+    line-height 26px
+
 #disqus_thread
   padding 10px 20px
 
@@ -282,4 +352,12 @@ dl
     float none
     max-width none
     width auto
-    
+
+  #header
+    h1
+      letter-spacing -1px
+    h2
+      font-size 10px
+      margin-left 10px
+      padding-left 3px
+      padding-right 3px
