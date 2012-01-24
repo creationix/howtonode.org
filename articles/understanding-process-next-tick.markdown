@@ -1,6 +1,6 @@
 Title: Understanding process.nextTick()
 Author: Kishore Nallan
-Date: Wed Jan 24 2012 17:30:00 GMT
+Date: Tue Jan 24 2012 19:07:00 GMT
 Node: v0.6.8
 
 I have seen quite a few people being confused about `process.nextTick()`. Let's take a look at what `process.nextTick()` does, and when to use it.
