@@ -46,7 +46,7 @@ In order to use Facebook Connect, you need to [register a new Facebook applicati
 
 For Facebook integration you need to place these three files into your project folder:
 
-1. [facebook.js][] - plugin for the Express framework - to be placed in /lib
+1. [facebook.js][] - plugin for the Express framework—to be placed in /lib
 2. [jquery.facebook.js][] - a simple jQuery plugin to interface with the [Facebook JS library][] - to be placed in /public/javascripts
 3. [xd_receiver.htm][] - used by Facebook for opening up a [Cross-domain Communication Channel][] - to be placed in /public
 

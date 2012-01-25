@@ -111,7 +111,7 @@ Save this file at `/etc/init/memory_bank.conf` and set it as executable.  Now yo
 
 If all went well you should see a message stating it started successfully and give you the pid.  Now hit your server on the port you specified and see your app.
 
-*NOTE* - If you didn't design a front-end in `/public` you'll just see the blank index.html page.
+*NOTE*—If you didn't design a front-end in `/public` you'll just see the blank index.html page.
 
 ## Conclusion
 

@@ -22,8 +22,7 @@ If you're already using Node, you probably need a database, and you
 just might have considered using MongoDB.
 
 The rationale is certainly there. Working with Node's JavaScript
-means that MongoDB documents get their most natural representation
-- as JSON - right in the application layer. There's also
+means that MongoDB documents get their most natural representation—as JSON—right in the application layer. There's also
 significant continuity between your application and the MongoDB
 shell, since the shell is essentially a JavaScript interpreter, so
 you don't have to change languages when moving from application to

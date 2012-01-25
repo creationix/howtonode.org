@@ -33,7 +33,7 @@ So basically, node.js runs through the couple of lines and then waits for the ev
 
 It's worthy to note that "sub-classing" in the examples given here are a bit of an overkill, as well as using events.EventEmitter for things that only fire one event once. It's probably better to put the new methods on the instance if there's only going to be a few of them and for firing a low level of events, you might want to use asynchronous functions instead.
 
-Regarding events.EventEmitter, there's a special event that you want to note - 'error'. This is fired whenever an error is encountered, and is special in the sense that if no listeners are attached it, node will throw an exception and terminate the execution. (thanks to Tim for highlighting this.)
+Regarding events.EventEmitter, there's a special event that you want to note—'error'. This is fired whenever an error is encountered, and is special in the sense that if no listeners are attached it, node will throw an exception and terminate the execution. (thanks to Tim for highlighting this.)
 
 ## Before I go eat my chix...
 
@@ -43,6 +43,6 @@ The docs has some good runthrough, and I helped myself by searching through my f
 
 [What is "this"?](/what-is-this)
 
-In the meanwhile, you can also view my crazy goofy sketch of a ircbot + logger + real-time websockets + search enabled bot mashup in node.js - [tocho](http://github.com/kennyshen/tocho)! I had a lot of fun making him, and while I haven't posted the search feature to the demo site, you can lurk through the #node.js irc channel with a web sockets enabled browser in real-time [here](http://northpole.sg/3Z).
+In the meanwhile, you can also view my crazy goofy sketch of a ircbot + logger + real-time websockets + search enabled bot mashup in node.js—[tocho](http://github.com/kennyshen/tocho)! I had a lot of fun making him, and while I haven't posted the search feature to the demo site, you can lurk through the #node.js irc channel with a web sockets enabled browser in real-time [here](http://northpole.sg/3Z).
 
 Hope you found this article useful, and do comment below if you have any suggestions on adding to this (I'm sure I might have missed out something)

@@ -7,9 +7,9 @@ Node: v0.1.102
 
 This article will describe how the blog works.  Teach a few node concepts and describe how to contribute new articles for others to enjoy.
 
-## Sample App - The node-blog engine. ##
+## Sample App: The node-blog engine. ##
 
-**UPDATE** - This site now runs on another engine, but this article is still good as a general introduction to node.
+**UPDATE**—This site now runs on another engine, but this article is still good as a general introduction to node.
 
 This entire site is hosted by an nginx server as static html files.  That's right, you can hit refresh as many times as you want and my node code won't know about it.  Think about it as super page caching.
 
@@ -25,7 +25,7 @@ Something you'll notice coming from other languages (especially PHP) is that [no
 
 Also something that will be new is the fact that **all** IO functions are non-blocking and asynchronous.  This allows node to be single threaded at the application layer, but perform very well. Especially for use cases where time is spent in IO wait.
 
-### HTTP Server - Github Hook ###
+### HTTP Server: Github Hook ###
 
 First we need a running http server to listen to POST hooks from [github][].  This is pretty simple in [node][] and requires that we run a small http server.
 

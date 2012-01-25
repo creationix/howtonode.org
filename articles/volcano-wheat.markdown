@@ -9,7 +9,7 @@ Announcing the release of a new engine for howtonode.org, [Wheat][]!  Also in ho
 
 ![volcano](volcano-wheat/volcano.jpg)
 
-German air traffic control says Munich airport is being closed - completing a shutdown of the country's international airports due to drifting ash from an Icelandic volcano.
+German air traffic control says Munich airport is being closed—completing a shutdown of the country's international airports due to drifting ash from an Icelandic volcano.
  
 Munich's planned closure at 8 p.m. Friday came hours after that of the other 15 international airports, including Frankfurt. Flights were halted in northern cities including Berlin and Hamburg Thursday night. (AP)
 

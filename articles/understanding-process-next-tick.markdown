@@ -5,7 +5,7 @@ Node: v0.6.8
 
 I have seen quite a few people being confused about `process.nextTick()`. Let's take a look at what `process.nextTick()` does, and when to use it.
 
-As you might already know, every Node application runs on a single thread. What this means is that **apart from I/O** - at any time, only one task/event is processed by Node's event loop. You can imagine this event loop to be a queue of callbacks that are processed by Node on every **tick** of the event loop. So, even if you are running Node on a multi-core machine, you will not get any parallelism in terms of actual processing - all events will be processed only one at a time. This is why Node is a great fit for I/O bound tasks, and definitely not for CPU intensive tasks. For every I/O bound task, you can simply define a callback that will get added to the event queue. The callback will fire when the I/O operation is done, and in the mean time, the application can continue to process other I/O bound requests. 
+As you might already know, every Node application runs on a single thread. What this means is that **apart from I/O**—at any time, only one task/event is processed by Node's event loop. You can imagine this event loop to be a queue of callbacks that are processed by Node on every **tick** of the event loop. So, even if you are running Node on a multi-core machine, you will not get any parallelism in terms of actual processing—all events will be processed only one at a time. This is why Node is a great fit for I/O bound tasks, and definitely not for CPU intensive tasks. For every I/O bound task, you can simply define a callback that will get added to the event queue. The callback will fire when the I/O operation is done, and in the mean time, the application can continue to process other I/O bound requests. 
 
 Given this model, what `process.nextTick()` actually does is defer the execution of an action till the next pass around the event loop. Let's take a simple example. If we had a function `foo()` which we wanted to invoke in the next tick, this is how we do it:
 
@@ -26,7 +26,7 @@ In fact, you can get the same result by using `setTimeout()` this way:
 	setTimeout(foo, 0);
 	console.log('bar');
 
-However, `process.nextTick()` is not just a simple alias to `setTimeout(fn, 0)` - it's [far more efficient](https://gist.github.com/1257394). 
+However, `process.nextTick()` is not just a simple alias to `setTimeout(fn, 0)`—it's [far more efficient](https://gist.github.com/1257394). 
 
 Let's see where we can use `process.nextTick()`:
 
