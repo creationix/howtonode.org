@@ -3,17 +3,17 @@ Author: Tim Caswell
 Date: Mon Oct 11 2010 08:24:25 GMT-0700 (PDT)
 Node: v0.2.3
 
-The first article using graphs to describe JavaScript semantics was so popular that I've decided to try the technique with some more advanced ideas.  In this article I'll explain three common techniques for creating objects.  They are constructor with prototype, pure prototypal, and object factory.
+The first article using graphs to describe JavaScript semantics was so popular that I’ve decided to try the technique with some more advanced ideas.  In this article I’ll explain three common techniques for creating objects.  They are constructor with prototype, pure prototypal, and object factory.
 
-My goal is that this will help people understand the strengths and weaknesses of each technique and understand what's really going on.
+My goal is that this will help people understand the strengths and weaknesses of each technique and understand what’s really going on.
 
 ## Classical JavaScript Constructors
 
-First let's create a simple constructor function with a prototype.  This is the closest thing to a class you're going to find in native JavaScript.  It's extremely powerful and efficient, but doesn't quite work like you would expect if coming from a language with classes.
+First let’s create a simple constructor function with a prototype.  This is the closest thing to a class you’re going to find in native JavaScript.  It’s extremely powerful and efficient, but doesn’t quite work like you would expect if coming from a language with classes.
 
 <object-graphs-2/classical.js#rectangle>
 
-Now let's define a new class of objects called Squares that inherit from Rectangles.  To do inheritance, the constructor's `prototype` has to inherit from the parent constructor's `prototype`.  Here we're overriding `getPerimeter` to make it slightly more efficient and to show how to override functions.
+Now let’s define a new class of objects called Squares that inherit from Rectangles.  To do inheritance, the constructor’s `prototype` has to inherit from the parent constructor’s `prototype`.  Here we’re overriding `getPerimeter` to make it slightly more efficient and to show how to override functions.
 
 <object-graphs-2/classical.js#square>
 
@@ -31,13 +31,13 @@ Notice that there is little difference between the `rect` instance and `Square.p
 
 ## Pure Prototypal Objects
 
-Let's do the same example, but without using constructor functions.  This time we'll just use plain prototypal inheritance.
+Let’s do the same example, but without using constructor functions.  This time we’ll just use plain prototypal inheritance.
 
-Let's define a Rectangle prototype that the base pattern for all our objects.
+Let’s define a Rectangle prototype that the base pattern for all our objects.
 
 <object-graphs-2/prototypal.js#rectangle>
 
-Now let's define a sub-object called Square that overrides some of the properties to change the behavior.
+Now let’s define a sub-object called Square that overrides some of the properties to change the behavior.
 
 <object-graphs-2/prototypal.js#square>
 
@@ -51,7 +51,7 @@ Here is the resultant graph of objects.
 
 <br style="clear:left"/>
 
-This isn't quite as powerful as the constructor + prototype method, but is often much easier to understand since there is less indirection.  Also if you come from a language that has pure prototypal inheritance, you'll be happy to know it's possible in JavaScript too.
+This isn’t quite as powerful as the constructor + prototype method, but is often much easier to understand since there is less indirection.  Also if you come from a language that has pure prototypal inheritance, you’ll be happy to know it’s possible in JavaScript too.
 
 ## Object Factories
 
@@ -61,7 +61,7 @@ This example is a super simple MVC system.  The controller function takes in as 
 
 <object-graphs-2/factory.js#controller>
 
-To use this, simply call the function with the desired parameters.  Notice how we can use these directly as event handlers (setTimeout) without having to first bind the function to the object.  Since it (the function) doesn't use `this` internally, there is no need to mess with the value of `this`.
+To use this, simply call the function with the desired parameters.  Notice how we can use these directly as event handlers (setTimeout) without having to first bind the function to the object.  Since it (the function) doesn’t use `this` internally, there is no need to mess with the value of `this`.
 
 <object-graphs-2/factory.js#usage>
 
@@ -80,4 +80,4 @@ Here is the object graph that results from this code.  Notice that we have acces
 
 ## Conclusion
 
-There is so much more I want to explore, but I like to keep these articles somewhat short and bite-size.  If there is demand, I'll write a part three explaining how to do ruby-style mixins and other advanced topics.
+There is so much more I want to explore, but I like to keep these articles somewhat short and bite-size.  If there is demand, I’ll write a part three explaining how to do ruby-style mixins and other advanced topics.

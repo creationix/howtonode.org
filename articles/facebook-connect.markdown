@@ -7,9 +7,9 @@ A big part of building a new web application is repurposing common patterns, one
 
 ## Background
 
-Unlike some APIs, the Facebook API is very Javascript friendly, but unfortunately it can be very time consuming to go through the maze of misdirected Facebook documentation. So in order to make Facebook integration quick and easy, I've wrapped a lot of under-the-hood code into a plugin called [node-facebook][]. This plugin also provides examples and routines to get your Facebook Canvas application running quickly with Node, however, this article will focus on the FB Connect part.
+Unlike some APIs, the Facebook API is very Javascript friendly, but unfortunately it can be very time consuming to go through the maze of misdirected Facebook documentation. So in order to make Facebook integration quick and easy, I’ve wrapped a lot of under-the-hood code into a plugin called [node-facebook][]. This plugin also provides examples and routines to get your Facebook Canvas application running quickly with Node, however, this article will focus on the FB Connect part.
 
->Facebook's developer tools are increasingly going into the direction of more Javascript on the client-side. I also have a strong preference of offloading certain logic to the client-side. This article will also attempt to follow [that direction][].
+>Facebook’s developer tools are increasingly going into the direction of more Javascript on the client-side. I also have a strong preference of offloading certain logic to the client-side. This article will also attempt to follow [that direction][].
 
 ## Communication
 
@@ -19,9 +19,9 @@ As you can see in this totally unnecessary diagram, most of the integration take
 
 ## Dependencies
 
-_Note: For this article I've been using NodeJS version 0.1.31 and Express version 0.7.1_
+_Note: For this article I’ve been using NodeJS version 0.1.31 and Express version 0.7.1_
 
-You need to install both [NodeJS][] and the [Express Web Framework][]. Assuming you've installed NodeJS, you can easily include express into your Git project by adding a submodule:
+You need to install both [NodeJS][] and the [Express Web Framework][]. Assuming you’ve installed NodeJS, you can easily include express into your Git project by adding a submodule:
 
     mkdir -p lib/support
     git submodule add git://github.com/visionmedia/express.git lib/support/express
@@ -65,18 +65,18 @@ After adding the dependencies and placing these files, your directory structure 
         `-- javascript
             `-- jquery.facebook.js
 
-To make our application work, we only need to implement two files: index.html and app.js. That's right, we're only using AJAX calls and static files.
+To make our application work, we only need to implement two files: index.html and app.js. That’s right, we’re only using AJAX calls and static files.
 
 ## 3. In the Browser
 
-The provided jQuery plugin provides the following functions that we'll be using:
+The provided jQuery plugin provides the following functions that we’ll be using:
 
 * **fbInit** - initialize the JS lib and set up the cross-communication channel
 * **fbConnect** - invoke the connect procedure and to synchronize sessions and profile information with our backend
 * **fbLogout** - logout from both the Facebook Application and our NodeJS application
 * **fbIsAuthenticated** - check whether a user is logged in or not
 
-First we start out with a simple skeleton that loads jQuery and the Facebook JS library. Please note that you need the div named *fb-root* right after the body tag for Facebook's lib to work:
+First we start out with a simple skeleton that loads jQuery and the Facebook JS library. Please note that you need the div named *fb-root* right after the body tag for Facebook’s lib to work:
 
     <html>
      <head> 
@@ -91,7 +91,7 @@ First we start out with a simple skeleton that loads jQuery and the Facebook JS 
       </body> 
     </html>
   
-Now let's implement a basic UI:
+Now let’s implement a basic UI:
 
 <facebook-connect/index.html>
 
@@ -114,7 +114,7 @@ Here is an example Express application that uses no persistent storage:
 
 <facebook-connect/app.js>
 
->The verification of Facebook data by the server-side is done by using the Application Secret and the signature that's sent along with the data. First, all parameters and cookies are put together in one string and then the Application Secret is appended to it. The MD5 hash of this string should match the signature that's included. [more about verifying the signature][]
+>The verification of Facebook data by the server-side is done by using the Application Secret and the signature that’s sent along with the data. First, all parameters and cookies are put together in one string and then the Application Secret is appended to it. The MD5 hash of this string should match the signature that’s included. [more about verifying the signature][]
     
 In any subsequently added action, you can access the Facebook Session simply like this:
 
@@ -127,7 +127,7 @@ In any subsequently added action, you can access the Facebook Session simply lik
 
 In this article we went into the direction of putting a lot of UI flow and controller logic into the browser. This can be quite counter-intuitive. As a Rails-programmer and former RJS lover, I can attest to that. However, while there are still remaining issues like SEO and accessibility, this approach allows the server to really focus on data modelling/routing and has numerous scaling benefits.
 
-All examples in this article and more can be found on the [node-facebook repository][] I created. If you run into any obstacles, feel free to [contact me][] or fork the code. I hope to soon write a similar plugin for Twitter's OAUTH based login.
+All examples in this article and more can be found on the [node-facebook repository][] I created. If you run into any obstacles, feel free to [contact me][] or fork the code. I hope to soon write a similar plugin for Twitter’s OAUTH based login.
 
 ## Appendix A: Facebook Troubleshooting Checklist
 
@@ -137,7 +137,7 @@ Debugging Facebook Application problems can be a real pain in the neck, here is 
 * Are you sure the <div id="root"></div> element is present in the body?
 * If you are using Safari with iFrames, there are some [cookie hacks][] you need to do
 * Are cookies being set successfully after FB connect?
-* Are you sure you're using the correct API keys?
+* Are you sure you’re using the correct API keys?
 
 [NodeJS]: http://nodejs.org
 [Express]: http://github.com/visionmedia/express

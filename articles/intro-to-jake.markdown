@@ -2,7 +2,7 @@ Title: Intro to Jake - JavaScript build tool for Node.js
 Author: Matthew Eernisse
 Date: Wed Sep 29 2010 12:39:01 GMT+0530 (IST)
 
-Jake is a JavaScript build program for Node.js, with capabilities similar to GNU Make or Ruby's Rake. If you've ever built projects with Rake, you'll be very at home using Jake
+Jake is a JavaScript build program for Node.js, with capabilities similar to GNU Make or Ruby’s Rake. If you’ve ever built projects with Rake, you’ll be very at home using Jake
 
 Jake has the following features:
 
@@ -45,13 +45,13 @@ In your Jakefile, call `task` to define tasks. Call it with three arguments (and
 
 Where `name` is the string name of the task, `dependencies` is an array of the dependencies, and `handler` is a function to run for the task.
 
-Here's an example:
+Here’s an example:
 
 <intro-to-jake/sample-jakefile.js>
 
 This is a build tool for Node, so of course we want to support async execution, right? The `async` argument is optional, and when set to true `(async === true)` indicates the task executes asynchronously. Asynchronous tasks need to call `complete()` to signal they have completed.
 
-Here's an example of an asynchronous task:
+Here’s an example of an asynchronous task:
 
 <intro-to-jake/async-jakefile.js>
 
@@ -63,7 +63,7 @@ Use `namespace` to create a namespace of tasks to perform. Call it with two argu
 
 Where is `name` is the name of the namespace, and `namespaceTasks` is a function with calls inside it to `task` or `desc` defining all the tasks for that namespace.
 
-Here's an example:
+Here’s an example:
 
 <intro-to-jake/namespace-jakefile.js>
 
@@ -79,7 +79,7 @@ You can pass either positional or named parameters to Jake tasks (well, 'named p
 
 Single parameters passed to the jake command after the task name are passed along to the handler as positional arguments.
 
-So you can see this in action, let's set up an 'awesome' task that does nothing but print out the arguments it gets:
+So you can see this in action, let’s set up an 'awesome' task that does nothing but print out the arguments it gets:
 
 	desc('This is an awesome task.');
 	task('awesome', [], function () {
@@ -108,15 +108,15 @@ And you'd get the following output:
 	, { qux: 'zoobie', frang: 'asdf' }
 	]
 
-As you might expect if you're used to Make or Rake, running `jake` with no arguments runs the default task.
+As you might expect if you’re used to Make or Rake, running `jake` with no arguments runs the default task.
 
 ## Related projects
 
-James Coglan's "Jake": <http://github.com/jcoglan/jake>
+James Coglan’s “Jake”: <http://github.com/jcoglan/jake>
 
 Confusingly, this is a Ruby tool for building JavaScript packages from source code.
 
-280 North's Jake: <http://github.com/280north/jake>
+280 North’s Jake: <http://github.com/280north/jake>
 
 This is also a JavaScript port of Rake, but it runs on the JVM-based Narwhal platform.
 

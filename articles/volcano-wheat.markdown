@@ -9,15 +9,15 @@ Announcing the release of a new engine for howtonode.org, [Wheat][]!  Also in ho
 
 ![volcano](volcano-wheat/volcano.jpg)
 
-German air traffic control says Munich airport is being closed—completing a shutdown of the country's international airports due to drifting ash from an Icelandic volcano.
+German air traffic control says Munich airport is being closed—completing a shutdown of the country’s international airports due to drifting ash from an Icelandic volcano.
  
-Munich's planned closure at 8 p.m. Friday came hours after that of the other 15 international airports, including Frankfurt. Flights were halted in northern cities including Berlin and Hamburg Thursday night. (AP)
+Munich’s planned closure at 8 p.m. Friday came hours after that of the other 15 international airports, including Frankfurt. Flights were halted in northern cities including Berlin and Hamburg Thursday night. (AP)
 
 This means that several people who were attending JSConf had their flights canceled.
 
 ## Wheat
 
-As you may have noticed, the site looks completely different.  It works completely different under the hood as well.  Instead of pre-generating static html using [node-blog][], it runs on a node-powered web server using [wheat][].  The actual files don't exist anywhere in the file-system.  Wheat instead implements a mini virtual filesystem that can read local bare git repositories and serve files from them git the "`git show`" command.
+As you may have noticed, the site looks completely different.  It works completely different under the hood as well.  Instead of pre-generating static html using [node-blog][], it runs on a node-powered web server using [wheat][].  The actual files don’t exist anywhere in the file-system.  Wheat instead implements a mini virtual filesystem that can read local bare git repositories and serve files from them git the "`git show`" command.
 
 Thanks to some tips from the [github][] guys I was able to implement a caching system that is very efficient and responsive.  In synthetic benchmarks, most pages render at a rate around 2000 requests/second using a pure node server.
 

@@ -8,7 +8,7 @@ Sometimes all you really need is orderly execution not blocking I/O to get the j
 
 ## Implementing Simple Work Queues
 
-The other day I was converting a couple Bash installer scripts to node scripts. I recognized a familiar design pattern -- the work queue. Here's the requirements for a typical work queue approach -
+The other day I was converting a couple Bash installer scripts to node scripts. I recognized a familiar design pattern -- the work queue. Here’s the requirements for a typical work queue approach -
 
 * tasks are queued, first in first out (i.e. tracked)
 * tasks once started continue without further intervention
@@ -21,12 +21,12 @@ The other day I was converting a couple Bash installer scripts to node scripts. 
 * some tasks required a prompt and response before firing
 * I wanted to queue tasks and prompts before running the work queue
 
-A simple JavaScript array works fine as a first in first out queue (i.e. shift() pops the zeroth position off). An object's properties can keep track of what text I wanted to displayed; the callback to be fired; and if I need to show a prompt or get a response when firing a callback. tasks-and-prompts.js is a simple example of doing that:
+A simple JavaScript array works fine as a first in first out queue (i.e. shift() pops the zeroth position off). An object’s properties can keep track of what text I wanted to displayed; the callback to be fired; and if I need to show a prompt or get a response when firing a callback. tasks-and-prompts.js is a simple example of doing that:
 
 <tasks-and-prompts/tasks-and-prompts.js>
 
 ## Explanations
 
-In this simple example I prompt the user to answer a question then count to three. Pretty trivial but it's an implantation of a the work queue pattern. That pattern is common in installation or management scripts.  The only problem with the example above is that it isn't setup as a node module ... wait I did that already! See [github.com/rsdoiel/nshtools](http://github.com/rsdoiel/nshtools). nshtools.js includes a more elaborate implementation and with features like command line option processing and high level file commands like cp and mv. The github wiki and the README.md file for nshtools have some more short examples for your enjoyment.
+In this simple example I prompt the user to answer a question then count to three. Pretty trivial but it’s an implantation of a the work queue pattern. That pattern is common in installation or management scripts.  The only problem with the example above is that it isn’t setup as a node module ... wait I did that already! See [github.com/rsdoiel/nshtools](http://github.com/rsdoiel/nshtools). nshtools.js includes a more elaborate implementation and with features like command line option processing and high level file commands like cp and mv. The github wiki and the README.md file for nshtools have some more short examples for your enjoyment.
 
 Have fun!

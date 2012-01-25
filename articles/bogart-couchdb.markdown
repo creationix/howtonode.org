@@ -35,7 +35,7 @@ Bogart is in the npm registry.
 
 [CouchDB](http://couchdb.apache.org) is a document-oriented database with 
 a RESTful interface. CouchDB works well with JavaScript since CouchDB speaks JSON.
-Also, CouchDB is queried using 'views' that are, by default, written in JavaScript.
+Also, CouchDB is queried using ‘views’ that are, by default, written in JavaScript.
 [Download the latest release](http://couchdb.apache.org/downloads.html) from here.
 CouchBase also maintains [debian and rpm packages](http://www.couchbase.com/downloads) 
 for the community.
@@ -63,7 +63,7 @@ or with Narhwal.
 
 ## What will our application do?
 
-To keep things simple, we're going to only tackle basic functionality. Our blog
+To keep things simple, we’re going to only tackle basic functionality. Our blog
 application will support the following methods:
 
 * Create a new post (POST /posts)
@@ -71,12 +71,12 @@ application will support the following methods:
 * Show a single post (GET /posts/:id)
 * Comment on a post (POST /posts/:id/comments)
 
-## Lets get started!
+## Let’s get started!
 
 A Bogart application consists of a JSGI server with one or more pieces of middleware and 
 one or more Bogart routers each containing any number of routes.
 
-The canonical 'Hello World' application in Bogart can be written as follows:
+The canonical ‘Hello World’ application in Bogart can be written as follows:
 
 <bogart-couchdb/hello-world.js>
 
@@ -122,7 +122,7 @@ The mustache template to create a new post is as follows:
 <bogart-couchdb/new-post.html>
 
 This post will be rendered inside of a layout to keep the look of the site consistant.
-By convention, Bogart's view engine uses a file called `layout.html` as the layout if
+By convention, Bogart’s view engine uses a file called `layout.html` as the layout if
 it exists. A Bogart layout is a template with a `{{{body}}}` tag to include the
 view inside of the layout.
 
@@ -216,7 +216,7 @@ CouchDB is queried using [map/reduce views](http://wiki.apache.org/couchdb/HTTP_
 that are defined on design documents. This means that we need to create a design
 document before we can query a list of the posts in our database.
 
-Lets create a JavaScript file `syncDesignDoc.js` in the `lib` directory of our project.
+Let’s create a JavaScript file `syncDesignDoc.js` in the `lib` directory of our project.
 
 <bogart-couchdb/syncDesignDoc.js>
 
@@ -247,7 +247,7 @@ makes this easy:
 
 ## Show an Individaul Post
 
-It's time to create a route to show an individual post. This page will also contain
+It’s time to create a route to show an individual post. This page will also contain
 a form for adding comments.
 
 The template will be as follows:

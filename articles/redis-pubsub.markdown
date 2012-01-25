@@ -35,7 +35,7 @@ Now you can start a Redis instance locally using the `redis-server` command.
 
 ## Create the Project
 
-Create a directory for the project. We will name the project "Flight Stream".
+Create a directory for the project. We will name the project “Flight Stream”.
 
     $ mkdir flight-stream
     $ cd flight-stream
@@ -89,7 +89,7 @@ Now copy the source for the index and stylesheets from [github](http://github.co
 At this point you should be able to run `node server.js` and see the index
 page when you got to `localhost:8000`.
 
-Now lets get `redis-client` working in the server. The following lines
+Now let’s get `redis-client` working in the server. The following lines
 establish a connection to Redis. The `connected` and `reconnected` listeners
 authenticate the connection after it has been established.
 

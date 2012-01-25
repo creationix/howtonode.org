@@ -3,7 +3,7 @@ Author: Chandra Sekar S
 Date: Thu Aug 05 2010 19:03:56 GMT+0530 (IST)
 Node: v0.1.103
 
-This article demonstrates how a simple shoutbox can be built with [Grasshopper][] using CouchDB for storing the shouts.  It is inspired by [this article][attribution] on Nettuts+. I have included the design artifacts from Dan's post to retain the look and feel of the final result.
+This article demonstrates how a simple shoutbox can be built with [Grasshopper][] using CouchDB for storing the shouts.  It is inspired by [this article][attribution] on Nettuts+. I have included the design artifacts from Dan’s post to retain the look and feel of the final result.
 
 If do not want to type in the code yourself, look at the [complete source code][source] for this article.  The completed application would look like this.
 
@@ -52,7 +52,7 @@ Create the CouchDB database for storing shouts by creating a file named `created
 
 ## Model
 
-Grasshopper provides various features like, validation and ability to update models from request parameters, to make the development of your application's model layer simple.
+Grasshopper provides various features like, validation and ability to update models from request parameters, to make the development of your application’s model layer simple.
 
 Our shoutbox application has a single model named `Shout` in `app/model.js`.
 
@@ -60,13 +60,13 @@ Our shoutbox application has a single model named `Shout` in `app/model.js`.
 
 We create a simple class named `Shout` and initialize it using `gh.initModel()`.  This method mixes validation and updation methods into the model class.  It takes the constructor of the model and the properties of the model as arguments. It creates a method for each property on the model which is used to read and write a field whose name is the property name prefixed with a '_'. For example, name() to read and write _name. The method reads the field if no argument is passed else writes the given value.
 
-We then add the necessary validations.  We have hard coded the error messages as we don't care about internationalization here.  The [validation API][] of Grasshopper does a lot more.
+We then add the necessary validations.  We have hard coded the error messages as we don’t care about internationalization here.  The [validation API][] of Grasshopper does a lot more.
 
 We also add a function to generate an MD5 hash of the email which will be needed to retrieve the Gravatar for shouts.
 
 ## Repository
 
-[Repositories][] are used for data access.  Let's create a repository to store and retrieve shouts from our CouchDB database using [node-couchdb][] in `app/shoutRepository.js`. The `save()` function saves a shout as a CouchDB object, while the `all()` function retrieves all documents in the database as an array of `Shout` instances.
+[Repositories][] are used for data access.  Let’s create a repository to store and retrieve shouts from our CouchDB database using [node-couchdb][] in `app/shoutRepository.js`. The `save()` function saves a shout as a CouchDB object, while the `all()` function retrieves all documents in the database as an array of `Shout` instances.
 
 <grasshopper-shoutbox/app/shoutRepository.js>
 
@@ -76,7 +76,7 @@ Controllers in Grasshopper are just functions which are invoked with a `RequestC
 
 ### Controller to list shouts
 
-This controller reads all the shouts from the repository, adds them to the model of the current `RequestContext` (not to be confused with application models).  It then renders the `index` view (note that the view name doesn't include an extention).
+This controller reads all the shouts from the repository, adds them to the model of the current `RequestContext` (not to be confused with application models).  It then renders the `index` view (note that the view name doesn’t include an extention).
 
     gh.get('/', function() {
         var self = this;
@@ -198,7 +198,7 @@ Create a file named `boot.js` and put the following content in it.
 
 <grasshopper-shoutbox/boot.js>
 
-We're configuring Grashopper to use `views/layout` (extension not required) as layout file for the application and ask it to find all view templates within the `views` directory.  Start the application with `node boot.js` and point your browser to <http://localhost:8080>.
+We’re configuring Grashopper to use `views/layout` (extension not required) as layout file for the application and ask it to find all view templates within the `views` directory.  Start the application with `node boot.js` and point your browser to <http://localhost:8080>.
 
 ## Happy Shouting!
 

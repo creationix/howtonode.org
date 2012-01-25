@@ -15,10 +15,10 @@ them and their projects.
 ## Use Git
 
 Most people in the node community use git for all their version control
-needs.  It is an extremely powerful and robust tool.  If you don't
+needs.  It is an extremely powerful and robust tool.  If you don’t
 already use it, you should.
 
-Don't wait until your program is "ready" before using git on it!  Run
+Don’t wait until your program is “ready” before using git on it!  Run
 `git init` in the root of your project folder right away, and commit
 your changes as you make them.  It is a good habit, and can help avoid a
 lot of painful mishaps.
@@ -29,8 +29,8 @@ tremendously useful resource that most nodejs developers use.
 ## A package.json File
 
 Create a file in the root of your program named `package.json`.  This
-file is a json description of what's in your project.  If you're just
-writing a standalone server or website that isn't intended to ever be
+file is a json description of what’s in your project.  If you’re just
+writing a standalone server or website that isn’t intended to ever be
 shared, then this is not strictly necessary, but it still does make some
 things more convenient.
 
@@ -64,25 +64,25 @@ in the root of your project.
 If you enjoy the markdown format, you can write it in markdown, and save
 the file as README.md.
 
-Seriously, do this!  Even if you think you'll never have users, history
-teaches us that you'll go off and forget what this thing is for, and
+Seriously, do this!  Even if you think you’ll never have users, history
+teaches us that you’ll go off and forget what this thing is for, and
 then come back to it and curse yourself for not documenting it even a
 little.
 
 So document it.  Even a little.
 
-If you feel so inclined, it's also a great idea to put documentation in
+If you feel so inclined, it’s also a great idea to put documentation in
 a folder called `./docs`.  Markdown files should end in `.md` and html
 should end in `.html`.
 
 ## Testing
 
 There is a ton of information out there convincing you about the
-importance of testing and documentation.  I don't have to tell you how
-important that is.  It's really important, and that should be obvious.
+importance of testing and documentation.  I don’t have to tell you how
+important that is.  It’s really important, and that should be obvious.
 Do it.
 
-What's not quite so obvious is *how* you should go about doing this.
+What’s not quite so obvious is *how* you should go about doing this.
 
 First of all, testing.
 
@@ -92,7 +92,7 @@ a particular directory.  Most of those files just throw if they find an
 error, and since the tests are very low-level, that is a good system.
 
 Other projects find it useful to use test harnesses like vows or
-expresso.  Whatever testing option you go with, it's worth it.  Write
+expresso.  Whatever testing option you go with, it’s worth it.  Write
 tests.
 
 If you are writing a re-usable program that you want to distribute to
@@ -112,9 +112,9 @@ Generally, node modules fall into these rough categories:
   primarily in JavaScript.
 * A command-line program.
 * A website or server or something.  (That is, an implementation that
-  you'll put on an actual server, not a framework.)
+  you’ll put on an actual server, not a framework.)
 
-There is a lot of overlap in these categories.  A thing doesn't have to
+There is a lot of overlap in these categories.  A thing doesn’t have to
 be just one sort of thing.
 
 ## Writing a Binding
@@ -124,7 +124,7 @@ called `./src`.  C++ files usually have the extension `.cc`.  C files
 usually have the extension `.c`.
 
 Generally, the simplest and best approach is to put the minimum
-necessary effort into the C++ layer, and then make the functions "nice"
+necessary effort into the C++ layer, and then make the functions “nice”
 by wrapping a JavaScript layer around the raw binding.
 
 Node programs use the included `node-waf` program to compile.  Create a
@@ -160,23 +160,23 @@ Specify a `main` module in your package.json file.  This is the module
 that your users will load when they do `require('your-library')`.  This
 module should ideally expose all of the functionality in your library.
 
-If you want your users to be able to load sub-modules from the "guts" of
+If you want your users to be able to load sub-modules from the “guts” of
 your library, then they'll need to specify the full path to them.  That
-is a lot of work to document!  It's better and more future-proof to
+is a lot of work to document!  It’s better and more future-proof to
 simply specify a main module, and then, if necessary, have ways to
 dynamically load what they need.
 
 For example, you might have a `flip` library that is a collection of
 `widget` objects, defined by files in the `flip/lib/widgets/*.js` files.
 Rather than having your users do `require('flip/lib/widgets/blerg.js')`
-to get the blerg widget, it's better to have something like:
+to get the blerg widget, it’s better to have something like:
 `require('flip').loadWidget('blerg')`.
 
 Of course, a library may also include a build step that compiles an
 add-on that it uses.
 
 Since libraries take so many different shapes for different purposes,
-there isn't really a single way to do it.
+there isn’t really a single way to do it.
 
 Examples:
 
@@ -215,13 +215,13 @@ Examples:
 
 ## Writing a Standalone Server
 
-This is probably the most "normal" node programming model.  You just
+This is probably the most “normal” node programming model.  You just
 want to *use* these modules, and most likely have no intention of
 distributing it for others.
 
-To be most effective, it's often a good idea to avoid trying to
+To be most effective, it’s often a good idea to avoid trying to
 re-invent sections of your program that can be accomplished using
-others' modules.  npm is a wonderfully helpful tool here.  If you're
+others' modules.  npm is a wonderfully helpful tool here.  If you’re
 planning on using Redis in your site, you can do `npm ls redis` to look
 for modules that might provide bindings to it.
 
@@ -230,11 +230,11 @@ helpful.  There, you can search using the same keyword greps as `npm
 ls`, but it also shows which packages depend on which other ones, the
 dates of previous releases, the owner information, and so on.
 
-It's very important, when designing your program, to consider where you
+It’s very important, when designing your program, to consider where you
 are planning on deploying it, and how.  Joyent has a node hosting
 service at <http://no.de/>.  When you push your code to the no.de site,
 it will automatically restart the server by running the `server.js` file
-in the root of your project.  So, it's a good idea to make that your
+in the root of your project.  So, it’s a good idea to make that your
 entry point.
 
 No matter where you decide to deploy your program,
@@ -245,7 +245,7 @@ do `require('redis')` in your program to load it.  This makes it very
 easy to re-use code, while still keeping the tested versions of your
 dependencies with your code.
 
-## Don't forget...
+## Don’t forget...
 
 The node community is growing fast, and welcomes your struggles and
 experience.  If you run into troubles, jump in the #node.js IRC channel
