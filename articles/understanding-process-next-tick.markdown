@@ -88,6 +88,8 @@ We can correct `asyncFake()` to be always asynchronous this way:
 
 Let's say you are writing a library that reads from a source and emits events that contains the chunks that are read. Such a library might look like this:
 	
+	var EventEmitter = require('events').EventEmitter;
+
 	function StreamLibrary(resourceName) { 
 		this.emit('start');
 				
@@ -112,8 +114,10 @@ In the above example, the listener will never get the `start` event as that even
 
 	
 	function StreamLibrary(resourceName) { 		
+		var self = this;
+		
 		process.nextTick(function() {
-			this.emit('start');
+			self.emit('start');
 		});
 				
 		// read from the file, and for every chunk read, do:		
