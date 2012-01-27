@@ -17,7 +17,7 @@ Now let's define a new class of objects called Squares that inherit from Rectang
 
 <object-graphs-2/classical.js#square>
 
-Usage is straight-forward.  Just create an instance of each and call a function on each.
+Usage is straightforward.  Just create an instance of each and call a function on each.
 
 <object-graphs-2/classical.js#test*>
 
