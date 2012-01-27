@@ -11,7 +11,7 @@ When I switched to primarily JavaScript, I missed HAML so much I wrote two ports
 
 ## Using `haml-js` in a node website ##
 
-Using [haml-js][] is pretty straight-forward.  First, you install `haml-js` as a library for use in node.  The full docs are [here][], but I'll show how I set up my node libraries.
+Using [haml-js][] is pretty straightforward.  First, you install `haml-js` as a library for use in node.  The full docs are [here][], but I'll show how I set up my node libraries.
 
 ### Installing `haml-js` in node ###
 

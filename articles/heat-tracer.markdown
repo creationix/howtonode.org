@@ -12,7 +12,7 @@ First thing's first, you're going to need a system with DTrace. This likely mean
 
 ## Security
 
-Secondly, please be aware that at the time of writing the demo code contains a fairly substantial secruity vulnerabilty. Namely the d script is sent from the client with no authentication what so ever. If you bind to localhost this shouldn't be a big deal for a demo. Time permitting I intend to clean up the code.  
+Secondly, please be aware that at the time of writing the demo code contains a fairly substantial secruity vulnerabilty. Namely the d script is sent from the client with no authentication whatsoever. If you bind to localhost this shouldn't be a big deal for a demo. Time permitting I intend to clean up the code.  
 
 ## Dependencies 
 
