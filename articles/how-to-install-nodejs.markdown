@@ -13,7 +13,7 @@ and [Windows][].
 
 ## Mac
 
-If you're using the excellent [homebrew][] package manager, you can
+If you’re using the excellent [homebrew][] package manager, you can
 install node with one command: `brew install node`.
 
 Otherwise, follow the below steps:
@@ -65,7 +65,7 @@ see the [GitHub wiki page][].
 
 ## Hello Node.js!
 
-Here's a quick program to make sure everything is up and running
+Here’s a quick program to make sure everything is up and running
 correctly:
 
 <how-to-install-nodejs/hello_node.js>
@@ -81,7 +81,7 @@ you should see a nice message.
 
 ## Congrats!
 
-You've installed [node.js][].
+You’ve installed [node.js][].
 
   [Countdown to Knockout: Post 1 - How to Install Node.js]: http://nodeknockout.posterous.com/countdown-to-knockout-post-1-how-to-install-n
   [Node.js Knockout]: http://nodeknockout.com/

@@ -170,7 +170,7 @@ If it is passed a value, the promise is fulfilled.
 If it is passed a promise, that promise’s resolution will eventually
 be forwarded to this one.
 
-Both Kris Kowal's Q and Kris Zyp's Promised-IO libraries enforce the rule
+Both Kris Kowal’s Q and Kris Zyp’s Promised-IO libraries enforce the rule
 that a promise can only be resolved once.  Kris Kowal’s Q library allows multiple
 agents to “race” to be the first to resolve the promise. Kris Zyp’s Promised-IO
 throws an exception if you attempt to resolve a promise a second time.

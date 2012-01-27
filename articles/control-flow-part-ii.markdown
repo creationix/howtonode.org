@@ -5,7 +5,7 @@ Node: v0.1.102
 
 I had so much fun writing the last article on control flow, that I decided to play around with the feedback I received.  One thing in particular I want to talk about is the good work [inimino][] is doing.
 
-Node has two constructs that are used currently to handle async return values, namely callbacks and event emitters.  You can read all about those on the [nodejs.org][] website.  I'm going to talk about these and another way to manage asynchronous return values and streaming events.
+Node has two constructs that are used currently to handle async return values, namely callbacks and event emitters.  You can read all about those on the [nodejs.org][] website.  I’m going to talk about these and another way to manage asynchronous return values and streaming events.
 
 **UPDATE** Promises were removed from node a while back, this article has been updated to show callbacks instead of promises.  For promises see [node-promise][].
 
@@ -15,19 +15,19 @@ In node there are two event handling techniques.  They are called callbacks, and
 
 <control-flow-part-ii/callback.js>
 
-`fs.readFile()` takes a filename and "*returns*" the contents of the file.  It doesn't actually return it, but passes it to the passed in callback function.
+`fs.readFile()` takes a filename and "*returns*" the contents of the file.  It doesn’t actually return it, but passes it to the passed in callback function.
 
 Sometimes you want to listen for events that can happen several times.  For example in a web server, when processing a web request, the `data` event is fired one or more times and then the `end` event gets fired:
 
 <control-flow-part-ii/http-body.js>
 
-The difference is that with a callback you're either going to get an error or a result.  Never both, and never more than one event.  For cases where there are more than two events and/or they can be called multiple times, then you need the more powerful and flexible EventEmitters.
+The difference is that with a callback you’re either going to get an error or a result.  Never both, and never more than one event.  For cases where there are more than two events and/or they can be called multiple times, then you need the more powerful and flexible EventEmitters.
 
 ## The Node.js Callback style
 
 Node originally had promises instead of callbacks.  Read the older versions of this article for more information.  After much debate, node decided to drop Promises for simple callbacks.
 
-Any async function in node accepts a callback as it's last parameter.  Most the functions in the `'fs'` module are like this.  Then that callback is going to get the error (if any) as the first parameter.
+Any async function in node accepts a callback as it’s last parameter.  Most the functions in the `'fs'` module are like this.  Then that callback is going to get the error (if any) as the first parameter.
 
     // You call async functions like this.
     someAsyncFunction(param1, param2, callback);
@@ -43,11 +43,11 @@ Remember our first example? Suppose that fs.readFile was used like this:
 
 <control-flow-part-ii/continuable.js>
 
-Instead of expecting a callback, it returns a function that's expecting two callback methods:  One for success and one for error.  I call this the `Do` style, and you'll soon see why.
+Instead of expecting a callback, it returns a function that’s expecting two callback methods:  One for success and one for error.  I call this the `Do` style, and you’ll soon see why.
 
 ## Making callback style actions ##
 
-Often we will want to make custom functions that don't return a value right away.  Using this new style, let's make a `fileWrite` function that looks like this (assuming that the fs functions were converted to this style too):
+Often we will want to make custom functions that don’t return a value right away.  Using this new style, let’s make a `fileWrite` function that looks like this (assuming that the fs functions were converted to this style too):
 
 <control-flow-part-ii/file-write.js>
 
@@ -57,7 +57,7 @@ The key to making these actions is to, instead of creating a promise and returni
 
 ## The Do library ##
 
-I came up with a small library called `Do` earlier today.  Actually it's not much, just a single function that does parallel actions much like the Combo Library from the last article.
+I came up with a small library called `Do` earlier today.  Actually it’s not much, just a single function that does parallel actions much like the Combo Library from the last article.
 
 ### Implementation ###
 
@@ -69,7 +69,7 @@ But combined with the callback style actions, this can lead to some very powerfu
 
 ### Single Action ###
 
-Lets assume that we have a function `readFile` that uses this new technique.  Here is how it's used:
+Let’s assume that we have a function `readFile` that uses this new technique.  Here is how it’s used:
 
     // A single async action with error handling
     readFile('secretplans.txt')(function (secrets) {
@@ -80,7 +80,7 @@ Lets assume that we have a function `readFile` that uses this new technique.  He
 
 ### Parallel actions ###
 
-Now let's combine that with the Do library:
+Now let’s combine that with the Do library:
 
     Do.parallel([
     	readFile('mylib.js'),
@@ -128,7 +128,7 @@ For serial actions, simply chain the action functions.
       // File was saved
     });
 
-This will read the file 'names.txt'.  When that's done it will call `upcase_slowly`. When that's done it will pass the new string to `save_data`, which wraps `writeFile`.  When `writeFile` is done our final callback will be invoked.
+This will read the file 'names.txt'.  When that’s done it will call `upcase_slowly`. When that’s done it will pass the new string to `save_data`, which wraps `writeFile`.  When `writeFile` is done our final callback will be invoked.
 
 Just for fun, here is the same example translated to the [Jack][] language (still in development).
 
@@ -141,7 +141,7 @@ Just for fun, here is the same example translated to the [Jack][] language (stil
     | fun ->
       # File was saved
 
-**UPDATE** I have since made a more powerful library that embraces node's native callback style called Step.  Read more on it's article [step-of-conductor][].
+**UPDATE** I have since made a more powerful library that embraces node’s native callback style called Step.  Read more on it’s article [step-of-conductor][].
 
 [Jack]: http://github.com/creationix/jack
 [inimino]: http://inimino.org/~inimino/blog/fileio_first_release

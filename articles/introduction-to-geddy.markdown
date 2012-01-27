@@ -41,7 +41,7 @@ Geddy can also now be installed with NPM:
 
     $ npm install geddy
 
-If you want to use a database, you'll need database bindings for
+If you want to use a database, you’ll need database bindings for
 Node (The Geddy GitHub wiki has docs for setting up [SQLite][] or
 [Postgres][]). CouchDB does not require database bindings.
 
@@ -79,11 +79,11 @@ Create a resource-based route with a model stub using
     Updated inflections map.
     Created view templates.
 
-Geddy's pluralization code isn't that smart yet — if you want a
+Geddy’s pluralization code isn’t that smart yet—if you want a
 special plural, add it with a comma after the model name (e.g.
 `geddy-gen resource foo,fooes`).
 
-There is a nice [wiki doc for Geddy's router][(router docs)].
+There is a nice [wiki doc for Geddy’s router][(router docs)].
 
 Test your RESTful routes:
 
@@ -108,12 +108,12 @@ the following:
 
 {"params":{"method":"GET","controller":"SnowDogs","action":"index","format":"json"}}
 
-This is Geddy's content-negotiation at work. Geddy tries to do the
+This is Geddy’s content-negotiation at work. Geddy tries to do the
 right thing based on the formats your controller supports, and what
 the client wants.
 
 There is more detailed info on
-[Geddy's content-negotiation in the wiki doc][(content-negotiation docs)].
+[Geddy’s content-negotiation in the wiki doc][(content-negotiation docs)].
 
 ## Model properties, etc.
 
@@ -162,7 +162,7 @@ creating, editing, removing items.
 
 That’s pretty much it.
 
-The query API for Geddy's models is still pretty limited — it
+The query API for Geddy’s models is still pretty limited — it
 supports only find-by-id and find-by-type. You can take a look at
 the code in your controller for a closer look at the API.
 

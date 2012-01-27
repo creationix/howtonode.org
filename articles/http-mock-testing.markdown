@@ -3,7 +3,7 @@ Author: Nuno Job
 Date: Tue Dec 06 2011 10:15:00 GMT
 Node: v0.6.5
 
-One of my first node.js libraries was [nano]: A no fuss CouchDB client based on the super pervasive [request]. In foresight that was a good idea, even though there's a ton of clients for CouchDB none of them is as simple as `nano`, and the fact that its based on `request` is great.
+One of my first node.js libraries was [nano]: A no fuss CouchDB client based on the super pervasive [request]. In foresight that was a good idea, even though there’s a ton of clients for CouchDB none of them is as simple as `nano`, and the fact that its based on `request` is great.
 
 When you are writing a HTTP client you need to test with one (or several) HTTP endpoints. I was lazy about it so I choose to point nano to [iriscouch] and run the tests on real HTTP requests. This was a problematic but overall ok approach.
 
@@ -18,9 +18,9 @@ By the way Travis is super cool. You should test all your node.js libraries with
 
 ## Enter Nock
 
-[Pedro Teixeira][nodetuts]'s [nock] allows you do HTTP Mock Testing while preserving the possibility to run the tests against a real http endpoint.
+[Pedro Teixeira][nodetuts]’s [nock] allows you do HTTP Mock Testing while preserving the possibility to run the tests against a real http endpoint.
 
-Let's start on this small [tap] test `sudo npm install tap nano nock`:
+Let’s start on this small [tap] test `sudo npm install tap nano nock`:
 
       var nano = require('nano')('http://nodejsbug.iriscouch.com') 
       var test = require('tap').test;

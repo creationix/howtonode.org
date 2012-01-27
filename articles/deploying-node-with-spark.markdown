@@ -3,7 +3,7 @@ Author: Tim Caswell
 Date: Thu, 22 Jul 2010 20:44:44 GMT
 Node: v0.1.102
 
-This article will go through building a simple RESTful key/value store using [Connect][].  Then I'll explain my favorite way to host apps on [Ubuntu Server][].  This will use [upstart][] and [Spark][].  We'll setup the [node.js][] environment using the super easy [Ivy][] distribution.
+This article will go through building a simple RESTful key/value store using [Connect][].  Then I’ll explain my favorite way to host apps on [Ubuntu Server][].  This will use [upstart][] and [Spark][].  We’ll setup the [node.js][] environment using the super easy [Ivy][] distribution.
 
 ## Quick Node Install using the Ivy Distribution
 
@@ -11,12 +11,12 @@ Ivy is a my simple node distribution.  It contains pre-built node binaries and s
 
 ### On the Server
 
-Assuming you have a fresh host with Ubuntu Server 32bit, we'll get a node environment up and running in a matter of minutes.  Just install git and run the Ivy installer in your home directory.
+Assuming you have a fresh host with Ubuntu Server 32bit, we’ll get a node environment up and running in a matter of minutes.  Just install git and run the Ivy installer in your home directory.
 
     sudo apt-get install git-core
     wget -O- http://github.com/creationix/ivy/raw/master/utils/setup.sh | sh
 
-Now for this to work correctly Ivy's `bin` folder needs to be in your `$PATH`.  Add a line to your `.profile` file to make it automatic on login.
+Now for this to work correctly Ivy’s `bin` folder needs to be in your `$PATH`.  Add a line to your `.profile` file to make it automatic on login.
 
     PATH=$HOME/ivy/bin:$PATH
     
@@ -24,7 +24,7 @@ Then source your `.profile` file to get the new settings.
 
     . .profile
 
-Test it by launching node and inspecting the `require.paths`.  Make sure ivy's lib folder is in there.:
+Test it by launching node and inspecting the `require.paths`.  Make sure ivy’s lib folder is in there.:
 
     tim@TimBook:~$ node
     Type '.help' for options.
@@ -42,7 +42,7 @@ For developing I like to write apps on my laptop and then push them to my server
 
 ## Writing an Application
 
-Ok, now to get some real work done.  In this tutorial we'll make a simple RESTful key/value store.
+Okay, now to get some real work done.  In this tutorial we’ll make a simple RESTful key/value store.
 
 First create a basic app structure like this.
 
@@ -58,11 +58,11 @@ Connect makes it easy to build fully features HTTP servers complete with logging
 
 <deploying-node-with-spark/app.js>
 
-That's it, one line!
+That’s it, one line!
 
 ### RESTful Interface
 
-Now lets build the `memory_bank.js` file mentioned in the Connect setup.
+Now let’s build the `memory_bank.js` file mentioned in the Connect setup.
 
 This app will provide the following RESTful interface.
 
@@ -70,7 +70,7 @@ This app will provide the following RESTful interface.
     PUT /:key - Update or insert a value based on key.
     DELETE /:key - Remove a value by key
 
-Here we'll write these three request handlers. Since we set the `Last-Modified` header, we'll even get 304 response support through the Connect stack.
+Here we’ll write these three request handlers. Since we set the `Last-Modified` header, we’ll even get 304 response support through the Connect stack.
 
 <deploying-node-with-spark/memory_bank.js#routes>
 
@@ -97,7 +97,7 @@ I like to specify a config file instead of using command-line args in the `spark
 
 <deploying-node-with-spark/config.js>
 
-You don't want this config file on your development environment.  The easiest way is to create a `.gitignore` file and remove `config.js` from version control.
+You don’t want this config file on your development environment.  The easiest way is to create a `.gitignore` file and remove `config.js` from version control.
 
 #### Add an Upstart Config File
 
@@ -111,15 +111,15 @@ Save this file at `/etc/init/memory_bank.conf` and set it as executable.  Now yo
 
 If all went well you should see a message stating it started successfully and give you the pid.  Now hit your server on the port you specified and see your app.
 
-*NOTE* - If you didn't design a front-end in `/public` you'll just see the blank index.html page.
+*NOTE*—If you didn’t design a front-end in `/public` you’ll just see the blank index.html page.
 
 ## Conclusion
 
 Ivy, Spark, and Connect are a powerful combination that has worked great for me.  They are also useful on their own.
 
-If you want to use Spark for a raw tcp server, go ahead, Spark works for *any* `net.Server` or `http.Server` instance as long as it's exported as `app.js`.  Connect even allows for embedding an `http.Server` instance as a last middleware layer.
+If you want to use Spark for a raw tcp server, go ahead, Spark works for *any* `net.Server` or `http.Server` instance as long as it’s exported as `app.js`.  Connect even allows for embedding an `http.Server` instance as a last middleware layer.
 
-I've set up a few sites this way on more than one server and I find it very useful.  I hope this article fits your use case as well, or at least gets you in the right direction.
+I’ve set up a few sites this way on more than one server and I find it very useful.  I hope this article fits your use case as well, or at least gets you in the right direction.
 
 [Connect]: http://senchalabs.github.com/connect/
 [Ubuntu Server]: http://www.ubuntu.com/server
