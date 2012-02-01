@@ -70,34 +70,25 @@ dl a:hover {
   -webkit-box-shadow: 0px 10px 10px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
   -moz-box-shadow: 0px 10px 10px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
   box-shadow: 0px 10px 10px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
+  overflow: hidden;
 }
-#header h1,
-#header h2 {
+#header .logo {
+  position: absolute;
+  top: -35px;
+  left: 18px;
+}
+#header .tagline {
   float: left;
   display: inline;
   color: #fff;
-  line-height: 50px;
-}
-#header h1 {
-  margin-left: 5%;
-  font-weight: normal;
-  font-size: 24px;
-  text-shadow: 0px -1px 0px #003b74;
-}
-#header h2 {
-  margin-left: 20px;
-  font-size: 10px;
+  margin-left: 240px;
+  font-size: 12px;
   font-weight: normal;
   line-height: 10px;
-  color: #00264b;
-  text-shadow: 0px -1px 0px #3b76b0;
-  padding: 5px 10px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
-  margin-top: 15px;
-  background-color: #2f76bc;
-  border: 1px solid #004385;
+  margin-top: 19px;
 }
 .article {
   position: relative;
@@ -523,10 +514,7 @@ li.L9 {
   #header h1 {
     letter-spacing: -1px;
   }
-  #header h2 {
+  #header .tagline {
     font-size: 10px;
-    margin-left: 10px;
-    padding-left: 3px;
-    padding-right: 3px;
   }
 }
