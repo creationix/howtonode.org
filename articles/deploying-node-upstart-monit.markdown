@@ -14,7 +14,7 @@ There are two well-known technologies that can save us from this mess, and you'd
 
 ## Problems ##
 
-The first problem we will get thrown by, is the fact that we can not run Node.js as a daemon. A daemon, for the unaware, is a child process that spawns from a process, leaving the parent to die. Tragic story I know, but this allows things to run in the background. But why is this a problem? Well if [Kevin's blog post][] isn't enough for you, it essentially allows one to separate node from any form of interface, meaning terminal doesn't have stay open all day. I highly recommend you pause now and read Kevin's material, as it will expand more on daemonizing the node process.
+The first problem we will get thrown by, is the fact that we cannot run Node.js as a daemon. A daemon, for the unaware, is a child process that spawns from a process, leaving the parent to die. Tragic story I know, but this allows things to run in the background. But why is this a problem? Well if [Kevin's blog post][] isn't enough for you, it essentially allows one to separate node from any form of interface, meaning terminal doesn't have stay open all day. I highly recommend you pause now and read Kevin's material, as it will expand more on daemonizing the node process.
 
 
 ## upstart ##

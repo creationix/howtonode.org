@@ -23,4 +23,7 @@
           &=" by " + article.author.name
           :if article.node
             %span.versiontag&= article.node
-  .bubble= markdownEncode(description)
+  .bubble
+    %h4 Related Reading
+    %a{target:"books",href:"http://affiliate.manning.com/idevaffiliate.php?id=1209_277"}
+      %img{style:"height:188px;width:150px;border:0;",src:"http://www.manning.com/cantelon/cantelon_cover150.jpg"}
