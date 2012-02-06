@@ -27,11 +27,11 @@ Let's verify your Node.js installation and start the MongoDB server:
     $ node -v
     $ mongod
 
-### Introducing MongoJS
+## Introducing MongoJS
 MongoJS is a brilliant little Node.js package that lets you access MongoDB using an API that is extremely similar to
 MongoDB's JavaScript shell.
 
-### Installing MongoJS
+## Installing MongoJS
 Once Node.js has been setup correctly on your machine, you can use its internal package manager NPM to install MongoJS:
 
     $ npm install mongojs

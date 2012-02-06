@@ -11,7 +11,7 @@ Unfortunately all the articles / posts out there are either outdated, too comple
 most obvious thing - post a question on the mailing list. As always Mr. Holowaychuk was incredibly quick to respond.
 His answer lead me to do what I should have done in the first place - read the docs.
 
-### The upload form
+## The upload form
 This is the most obvious part of the challenge. You're probably familiar with this already. Anyway, for the sake of
 completeness of this article, here it is.
 
@@ -22,7 +22,7 @@ You will need a form in your browser for the file upload. I use Jade to generate
 
 The *form.action* will point to a route that handles the file upload. More below.
 
-### Accessing the uploaded file
+## Accessing the uploaded file
 If you're using recents versions of Node and Express, file uploads are a piece of cake. And I'll back this claim but
 before we go any further make sure you're familiar with [routes, requests and responses in Express](http://expressjs.com/guide.html).
 
@@ -59,7 +59,7 @@ In the *req.files* object above, the property *displayImage* is the name of the 
 
 The file object contains the *type*, *size* and *name* properties for your server side validations.
 
-### Saving the uploaded file
+## Saving the uploaded file
 
 Assuming the file is valid, you use the *path* property for the next step. The *path* would typically contain a location
 in the *tmp* folder. Your application logic could either require you to access the contents of the file or simply move
