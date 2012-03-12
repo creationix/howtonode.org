@@ -182,7 +182,7 @@ Examples:
 
 * <https://github.com/learnboost/Socket.IO-node>
 * <http://documentcloud.github.com/underscore>
-* <https://github.com/visionmedia/connect>
+* <https://github.com/senchalabs/connect>
 * <https://github.com/mikeal/request>
 * <http://github.com/tmpvar/jsdom>
 
