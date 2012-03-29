@@ -12,16 +12,14 @@ var Rectangle = {
   }
 };
 //square
-var Square = {
-  name: "Square",
-  getArea: function getArea() {
-    return this.width * this.width;
-  },
-  getPerimeter: function getPerimeter() {
-    return this.width * 4;
-  },
+var Square = Object.create(Rectangle);
+Square.name = "Square";
+Square.getArea = function getArea() {
+  return this.width * this.width;
 };
-Square.__proto__ = Rectangle;
+Square.getPerimeter = function getPerimeter() {
+  return this.width * 4;
+};
 //test
 var rect = Object.create(Rectangle);
 rect.width = 6;
