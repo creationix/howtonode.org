@@ -17,7 +17,9 @@ function Square(side) {
   this.width = side;
   this.height = side;
 }
-Square.prototype.__proto__ = Rectangle.prototype;
+// Make Square inherit from Rectangle
+Square.prototype = Object.create(Rectangle.prototype, { constructor: { value: Square } });
+// Override a method
 Square.prototype.getPerimeter = function getPerimeter() {
   return this.width * 4;
 };
