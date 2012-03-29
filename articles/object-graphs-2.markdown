@@ -1,7 +1,7 @@
 Title: Learning Javascript with Object Graphs (Part II)
 Author: Tim Caswell
 Date: Mon Oct 11 2010 08:24:25 GMT-0700 (PDT)
-Node: v0.2.3
+Node: v0.6.14
 
 The first article using graphs to describe JavaScript semantics was so popular that I've decided to try the technique with some more advanced ideas.  In this article I'll explain three common techniques for creating objects.  They are constructor with prototype, pure prototypal, and object factory.
 
@@ -21,7 +21,7 @@ Usage is straightforward.  Just create an instance of each and call a function o
 
 <object-graphs-2/classical.js#test*>
 
-This is the resulting data structure.  Dashed lines mean object inheritance.  
+This is the resulting data structure.  Dashed lines mean object inheritance.
 
 ![classical](object-graphs-2/classical.dot)
 
