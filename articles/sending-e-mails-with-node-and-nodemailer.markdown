@@ -7,176 +7,188 @@ Sending e-mails with [NodeJS][] is almost a breeze. Almost. First, you have to p
 
 The first thing you tend to do is to create a wrapper class to manage all this tasks. So, I wrapped it in an Eamiler class to centralize the mail sending in my app.
 
+```coffeescript
+# /lib/emailer.coffee
 
-  # /lib/emailer.coffee
+emailer = require("nodemailer")
+fs      = require("fs")
+_       = require("underscore")
 
-  emailer = require("nodemailer")
-  fs      = require("fs")
-  _       = require("underscore")
+class Emailer
 
-  class Emailer
+  options: {}
 
-    options: {}
+  data: {}
 
-    data: {}
+  # Define attachments here
+  attachments: [
+    fileName: "logo.png"
+    filePath: "./public/images/email/logo.png"
+    cid: "logo@myapp"
+  ]
 
-    # Define attachments here
-    attachments: [
-      fileName: "logo.png"
-      filePath: "./public/images/email/logo.png"
-      cid: "logo@myapp"
-    ]
+  constructor: (@options, @data)->
 
-    constructor: (@options, @data)->
+  send: (callback)->
+    html = @getHtml(@options.template, @data)
+    attachments = @getAttachments(html)
+    messageData =
+      to: "'#{@options.to.name} #{@options.to.surname}' <#{@options.to.email}>"
+      from: "'Myapp.com'"
+      subject: @options.subject
+      html: html
+      generateTextFromHTML: true
+      attachments: attachments
+    transport = @getTransport()
+    transport.sendMail messageData, callback
 
-    send: (callback)->
-      html = @getHtml(@options.template, @data)
-      attachments = @getAttachments(html)
-      messageData =
-        to: "'#{@options.to.name} #{@options.to.surname}' <#{@options.to.email}>"
-        from: "'Myapp.com'"
-        subject: @options.subject
-        html: html
-        generateTextFromHTML: true
-        attachments: attachments
-      transport = @getTransport()
-      transport.sendMail messageData, callback
+  getTransport: ()->
+    emailer.createTransport "SMTP",
+      service: "Gmail"
+      auth:
+        user: "myappemail@gmail.com"
+        pass: "secretpass"
 
-    getTransport: ()->
-      emailer.createTransport "SMTP",
-        service: "Gmail"
-        auth:
-          user: "myappemail@gmail.com"
-          pass: "secretpass"
+  getHtml: (templateName, data)->
+    templatePath = "./views/emails/#{templateName}.html"
+    templateContent = fs.readFileSync(templatePath, encoding="utf8")
+    _.template templateContent, data, {interpolate: /\{\{(.+?)\}\}/g}
 
-    getHtml: (templateName, data)->
-      templatePath = "./views/emails/#{templateName}.html"
-      templateContent = fs.readFileSync(templatePath, encoding="utf8")
-      _.template templateContent, data, {interpolate: /\{\{(.+?)\}\}/g}
+  getAttachments: (html)->
+    attachments = []
+    for attachment in @attachments
+      attachments.push(attachment) if html.search("cid:#{attachment.cid}") > -1
+    attachments
 
-    getAttachments: (html)->
-      attachments = []
-      for attachment in @attachments
-        attachments.push(attachment) if html.search("cid:#{attachment.cid}") > -1
-      attachments
+exports = module.exports = Emailer
+```
 
-  exports = module.exports = Emailer
 
 In a standard [ExpressJS][] project structure you'll store this file in `/lib/emailer.coffee`.
 You'll need to have the email templates stored in `/views/emails/` as HTML files and the attachments in `/public/images/email/`.
 
 A potential email view will look like this:
 
-  &lt;!-- invite.html --&gt;
-  &lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;Invite from Myapp&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;p&gt;
-      Hi {{name}} {{surname}},
-    &lt;/p&gt;
-    &lt;p&gt;
-      Myapp would like you to join it's network on &lt;a href="http://myapp.com"&gt;Myapp.com&lt;/a&gt;.
-      &lt;br /&gt;
-      Please follow the link bellow to register:
-    &lt;/p&gt;
-    &lt;p&gt;
-      &lt;a href="http://myapp.com/register?invite={{id}}"&gt;http://myapp.com/register?invite={{id}}&lt;/a&gt;
-    &lt;/p&gt;
-    &lt;p&gt;
-      Thank you,
-      &lt;br /&gt;
-      Myapp Team
-    &lt;/p&gt;
-    &lt;p&gt;
-      &lt;a href="http://myapp.com">&lt;img src="cid:logo@myapp" /&gt;&lt;/a&gt;
-    &lt;/p&gt;
-  &lt;/body&gt;
-  &lt;/html&gt;
+
+```html
+&lt;!-- invite.html --&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Invite from Myapp&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;
+    Hi {{name}} {{surname}},
+  &lt;/p&gt;
+  &lt;p&gt;
+    Myapp would like you to join it's network on &lt;a href="http://myapp.com"&gt;Myapp.com&lt;/a&gt;.
+    &lt;br /&gt;
+    Please follow the link bellow to register:
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a href="http://myapp.com/register?invite={{id}}"&gt;http://myapp.com/register?invite={{id}}&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Thank you,
+    &lt;br /&gt;
+    Myapp Team
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;a href="http://myapp.com">&lt;img src="cid:logo@myapp" /&gt;&lt;/a&gt;
+  &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+```
 
 
 [UnderscoreJS][] template will take care about your variables in the template and the `getAttachments()` function will automatically attache the files you need by the `cid` from the template.
 
 To use the class in your code you have to instantiate a new Emailer object with the desired options, the template data and send the email:
 
-  options =
-    to:
-      email: "username@domain.com"
-      name: "Rick"
-      surname: "Roll"
-      subject: "Invite from Myapp"
-      template: "invite"
 
-  data =
+```coffeescript
+options =
+  to:
+    email: "username@domain.com"
     name: "Rick"
-    surname "Roll"
-    id: "3434_invite_id"
+    surname: "Roll"
+    subject: "Invite from Myapp"
+    template: "invite"
 
-  Emailer = require "../lib/emailer"
-  emailer = new Emailer options, data
-  emailer.send (err, result)->
-    if err
-      console.log err
+data =
+  name: "Rick"
+  surname "Roll"
+  id: "3434_invite_id"
+
+Emailer = require "../lib/emailer"
+emailer = new Emailer options, data
+emailer.send (err, result)->
+  if err
+    console.log err
+```
 
 
 Using a [MongooseJS]: http://mongoosejs.com/ model for the invites you would have something like this:
 
 
-  InviteSchema = new Schema
-    email:
-      type: String
-    name:
-      type: String
-    surname:
-      type: String
-    status:
-      type: String
-      enum: ["pending", "accepted"]
-      default: "pending"
-    clicks:
-      type: Number
-      default: 0
-    created_at:
-      type: Date
-      default: Date.now
+```coffeescript
+InviteSchema = new Schema
+  email:
+    type: String
+  name:
+    type: String
+  surname:
+    type: String
+  status:
+    type: String
+    enum: ["pending", "accepted"]
+    default: "pending"
+  clicks:
+    type: Number
+    default: 0
+  created_at:
+    type: Date
+    default: Date.now
 
-  InviteSchema.methods.send = ()->
-    options =
-      to:
-        email: @email
-        name: @name
-        surname: @surname
-      subject: "Invite from Myapp"
-      template: "invite"
-    Emailer = require "../lib/emailer"
-    emailer = new Emailer options, @
-    emailer.send (err, result)->
-      if err
-        console.log err
+InviteSchema.methods.send = ()->
+  options =
+    to:
+      email: @email
+      name: @name
+      surname: @surname
+    subject: "Invite from Myapp"
+    template: "invite"
+  Emailer = require "../lib/emailer"
+  emailer = new Emailer options, @
+  emailer.send (err, result)->
+    if err
+      console.log err
 
-  Invite = mongoose.model("Invite", InviteSchema)
-  exports = module.exports = Invite
+Invite = mongoose.model("Invite", InviteSchema)
+exports = module.exports = Invite
+```
 
 
 And you'll call it from an ExpressJS router:
 
 
-  Invite = require('../models/invite')
+```coffeescript
+Invite = require('../models/invite')
 
-  module.exports = (app)->
+module.exports = (app)->
 
-    app.post '/invites', (req, res)->
-      data = req.body
-      invite = new Invite data
-      invite.save ()->
-        invite.send()
-      res.writeHead(303, {'Location': "/invites"})
-      res.end()
+  app.post '/invites', (req, res)->
+    data = req.body
+    invite = new Invite data
+    invite.save ()->
+      invite.send()
+    res.writeHead(303, {'Location': "/invites"})
+    res.end()
 
-    app.get '/invites', (req, res)->
-      Invite.find().desc("created_at").run (err, invites)->
-        res.render 'invites/invites', {title: "Invites", invites: invites}
+  app.get '/invites', (req, res)->
+    Invite.find().desc("created_at").run (err, invites)->
+      res.render 'invites/invites', {title: "Invites", invites: invites}
+```
 
 
 That's all about it.
