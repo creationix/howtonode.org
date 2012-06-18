@@ -5,6 +5,8 @@ Node: v0.6.0
 
 Sending e-mails with [NodeJS][] is almost a breeze. Almost. First, you have to plug-in the [NodeMailer][] module than set up a transport type, load the templates, add attachments and finally send...
 
+## The Code
+
 The first thing you tend to do is to create a wrapper class to manage all this tasks. So, I wrapped it in an Eamiler class to centralize the mail sending in my app.
 
     # /lib/emailer.coffee
