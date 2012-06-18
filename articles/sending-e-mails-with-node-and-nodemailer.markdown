@@ -71,33 +71,33 @@ A potential email view will look like this:
 
 
 ```html
-&lt;!-- invite.html --&gt;
-&lt;html&gt;
-&lt;head&gt;
-  &lt;title&gt;Invite from Myapp&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;p&gt;
+<!-- invite.html -->
+<html>
+<head>
+  <title>Invite from Myapp</title>
+</head>
+<body>
+  <p>
     Hi {{name}} {{surname}},
-  &lt;/p&gt;
-  &lt;p&gt;
-    Myapp would like you to join it's network on &lt;a href="http://myapp.com"&gt;Myapp.com&lt;/a&gt;.
-    &lt;br /&gt;
+  </p>
+  <p>
+    Myapp would like you to join it's network on <a href="http://myapp.com">Myapp.com</a>.
+    <br />
     Please follow the link bellow to register:
-  &lt;/p&gt;
-  &lt;p&gt;
-    &lt;a href="http://myapp.com/register?invite={{id}}"&gt;http://myapp.com/register?invite={{id}}&lt;/a&gt;
-  &lt;/p&gt;
-  &lt;p&gt;
+  </p>
+  <p>
+    <a href="http://myapp.com/register?invite={{id}}">http://myapp.com/register?invite={{id}}</a>
+  </p>
+  <p>
     Thank you,
-    &lt;br /&gt;
+    <br />
     Myapp Team
-  &lt;/p&gt;
-  &lt;p&gt;
-    &lt;a href="http://myapp.com">&lt;img src="cid:logo@myapp" /&gt;&lt;/a&gt;
-  &lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </p>
+  <p>
+    <a href="http://myapp.com"><img src="cid:logo@myapp" /></a>
+  </p>
+</body>
+</html>
 ```
 
 
