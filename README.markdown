@@ -51,6 +51,14 @@ Every author has a markdown file located in `authors` folder. You should name th
 
     A few words about you.
 
+### Starting the project on your local machine
+
+Please check if the project is still working after you add your contribution to it. You can run the project in three easy steps:
+
+1. Install the `npm`packages: `npm install`
+2. Start the server: `node server/server.js`
+3. Enjoy your local blog clone at `http://localhost:8080`
+
 More docs to come soon...
 
 ## Licensing
