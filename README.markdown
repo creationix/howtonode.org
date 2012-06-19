@@ -30,14 +30,26 @@ Every article is a markdown file with some meta-data at the top of the file.
     I had so much fun writing the last article on control flow, that I decided to...
 
     ## First section: Display JavaScript files
-    
+
     * display contents of external JavaScript file (path is relative to .markdown file)
     <test-code/test-file.js>
 
-    * display contents of external JavaScript file and evaluate its contents 
+    * display contents of external JavaScript file and evaluate its contents
     <test-code/evaluate-file.js*>
 
     More content goes here.
+
+### Author format
+
+Every author is a markdown file located in `authors` folder. The author file will get your name and surname in the `Name Surname.markdown` format.
+
+    Github:   your_github_account
+    Email:    your_email@domain.com
+    Homepage: http://yourhomepage.com
+    Twitter:  your_twitter_account
+    Location: City, State, Country
+
+    A few words about you.
 
 More docs to come soon...
 
