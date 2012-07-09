@@ -11,13 +11,13 @@ a better experience to their users by build more capable, performant and scalabl
 
 So what is Node.js?
 
-    Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. 
-    Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for 
-    data-intensive real-time applications that run across distributed devices.
+> Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. 
+> Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for 
+> data-intensive real-time applications that run across distributed devices.
 
 ..and what is MongoDB?
 
-    MongoDB is a scalable, high-performance, open source NoSQL database.
+> MongoDB is a scalable, high-performance, open source NoSQL database.
 
 This post will cover the basics and get you started with your Node.js + MongoDB app. Make sure you have Node.js 
 installed and MongoDB setup on your developer machine.
