@@ -54,7 +54,7 @@ You can install these however you please, but here is how I'd do it.  The follow
 That's it for now, this article was going to explain more, but it seems it got lost and fell through the cracks.  Hopefully this will help you get started working with node.JS, it's a blast!.
 
 [proto]: http://github.com/creationix/proto
-[node docs on modules]: http://nodejs.org/api.html#_modules
+[node docs on modules]: http://nodejs.org/api/modules.html
 [node-router]: http://github.com/creationix/node-router
 [haml-js]: http://github.com/creationix/haml-js
 [less.js]: http://github.com/cloudhead/less.js
