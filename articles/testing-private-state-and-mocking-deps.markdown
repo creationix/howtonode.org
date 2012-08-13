@@ -4,7 +4,7 @@ Date: Sun Jan 08 2012 00:11:06 GMT-0800 (PST)
 Node: v0.6.5
 
 
-During Christmas I've been working on [SlimJim] and found some tricks how to make my testing life
+During Christmas I've been working on [Testacular] and found some tricks how to make my testing life
 easier. It's nothing special at all, just a simple way **how to access private state of a module**
 and **how to mock out some dependencies**. I've found these two techniques pretty usefull, so I
 believe it might help someone else as well...
@@ -114,7 +114,7 @@ stuff. The important point here is, that **it's fast, because it doesn't touch t
 and still does test what needs to be tested - our code**.
 
 
-[SlimJim]: http://github.com/vojtajina/slim-jim/
+[Testacular]: http://github.com/vojtajina/testacular/
 [G.Meszaros]: http://xunitpatterns.com/Test%20Double.html
 [vm.runInNewContext]: http://nodejs.org/docs/latest/api/vm.html#vm.runInNewContext
 [Dart]: http://www.dartlang.org/
