@@ -1,0 +1,22 @@
+<html>
+<head>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	<script>
+    tick = io.connect('http://localhost:3000/');
+    tick.on('data', function (data) {
+        console.log(data);
+    });
+
+    tick.on('error', function (reason){
+      console.error('Unable to connect Socket.IO', reason);
+    });
+
+    tick.on('connect', function (){
+      console.info('successfully established a working connection');
+    });
+	</script>
+</head>
+<body>
+Hello!
+</body>
+</html>
