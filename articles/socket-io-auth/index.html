@@ -1,0 +1,22 @@
+<html>
+    <head>
+    	<script src="http://localhost:3000/socket.io/socket.io.js" type="text/javascript"></script>
+    	<script type="text/javascript">
+            tick = io.connect('http://localhost:3000/');
+            tick.on('data', function (data) {
+                console.log(data);
+            });
+
+            tick.on('error', function (reason){
+              console.error('Unable to connect Socket.IO', reason);
+            });
+
+            tick.on('connect', function (){
+              console.info('successfully established a working and authorized connection');
+            });
+    	</script>
+    </head>
+    <body>
+        Open the browser console to see tick-tocks!
+    </body>
+</html>
