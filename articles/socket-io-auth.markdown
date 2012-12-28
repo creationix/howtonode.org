@@ -3,6 +3,8 @@ Author: Shahar Kedar
 Date: Thu Dec 12 2012 17:44:00 GMT+0200
 Node: v0.8.15
 
+Finding a decent article about session based authorization in socket.io is more difficult than one expected. This article will show how you can take advantage of Express session middleware and socket.io authorization middleware to create a very simple authorization mechanism when establishing new socket.io connections.
+
 ## Prolog
 
 I decided to write this article after getting a bit frustrated from searching the Internet for a decent example on how to use session based authorization with socket.io. To be honest, socket.io wiki page on [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing) was quite simple to follow and understand, but when it came to **session based** authorization, I got a bit lost (especially considering the fact that it's my third day using Node...). 
