@@ -1,0 +1,11 @@
+{
+  "name": "socket-io-auth",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.0.5",
+    "socket.io" : "0.9.13",
+    "connect" : "2.7.1",
+    "cookie" : "0.0.5"
+  }
+}
