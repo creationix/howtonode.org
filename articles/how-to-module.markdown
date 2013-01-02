@@ -3,6 +3,14 @@ Author: Isaac Z. Schlueter
 Date: Mon Feb 28 2011 11:07:42 GMT-0800 (PST)
 Node: v0.4.1
 
+----
+
+### UPDATE: 
+
+**This article was written for Node v0.4.1 and is no longer applicable. As of node.js 0.6.3 NPM comes pre-installed.**
+
+----
+
 These are some basic steps for writing a NodeJS module.
 
 Most of the suggestions in this document are optional.  You
