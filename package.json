@@ -17,5 +17,11 @@
     "wheat": ">=0.2.0",
     "cluster": ">=0.6.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+
+  },
+  "scripts": {
+    "start": "node server/server.js"
+  }
+
 }
