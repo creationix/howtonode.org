@@ -9,6 +9,8 @@ Finding a decent article about session based authorization in socket.io is more 
 
 I decided to write this article after getting a bit frustrated from searching the Internet for a decent example on how to use session based authorization with socket.io. To be honest, socket.io wiki page on [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing) was quite simple to follow and understand, but when it came to **session based** authorization, I got a bit lost (especially considering the fact that it's my third day using Node...). 
 
+**Disclaimer**: the original concept was published in Daniel Baulig's [blog](http://www.danielbaulig.de/socket-ioexpress/). I mainly adapted it to work with Express 3.x.x.
+
 ## Reading Suggestions
 
 Before reading this article, I strongly suggest you get familiar with Express and Socket.IO. I kept things as simple and minimal as possible, so you really don't need more than a couple of hours to learn what needs to be learned if you're a complete newbie.
