@@ -1,4 +1,4 @@
-// Facilitates queries on mongodb
+// Build a regex pattern without whitespace
 function caseInsensitive(keyword){
   // Trim
   keyword = keyword.replace(/^\s+|\s+$/g, '');

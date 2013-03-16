@@ -23,13 +23,13 @@ Once the import has run, the {"first":"John"} document in mongo should look like
 
 ###Express###
 
-Now that our data is in monogoDB, we create a simple express server that will accept and process our query for data.  For now, our route just returns all the data from the employees collection.  Let's incoporate some regex and make it better. 
+Now that our data is in monogoDB, we create a simple express server that will accept and process our query.  For now, our route returns all the data from the employees collection.
 
 <search-with-express-and-mongodb/express.js>
 
 ###Singular Matching###
 
-To start, we want to take the term that comes in from the request and match that term against the index string of each document and return the results.  All this requries is a minor tweak in our route.  The Regex pattern is simple.  Match the whole term passed.  Match it globally ("g") and be INsensitive to case ("i").
+To make our query return meaningful data, we want to take the term that comes in from the request and match that term against the index string of each document and return the results.  All this requires is a minor tweak in our route.  The Regex pattern is simple.  Match the whole term passed.  Match it globally ("g") and be INsensitive to case ("i").
 
 <search-with-express-and-mongodb/single-match-route.js>
 
@@ -39,21 +39,23 @@ This gives us some pretty powerful results.  We can search for any attribute of 
 
 ###Compound Matching###
 
-We are getting close.  Let's take what we've built and allow for multiple terms to be matched.  For this, we need a delimiter, or something to denote from the query when a new term is starting or ending.  Then we know how to parse it.  Because I want users to use english-like sentences in searching, I'm just going to user a space (" ").  
+We are getting close.  Let's take what we've built and allow for multiple terms to be matched.  For this, we need a delimiter, or something to denote from the query when a new term is starting or ending.  Then we know how to parse it.  Because I want users to use english-like sentences in searching, I'm just going to use a space (" ").  
 
-Before we tweak our route again, we need a function to build our RegEx patterns.  We need this function to be a little bit more robust than our single pattern match and strip white space (in the case of a double space).
+We are going to need to build a Regex pattern for each term that we parse, so lets make a function for building patterns.  We need this function to be a little bit more robust than our single pattern match and strip white space (in the case of a double space).
 
 <search-with-express-and-mongodb/regex.js>
 
-Before we tweak our route, we need to learn something about MongoDB.  While Mongo querys are written in JSON, Mongo supports several custom operators for performing more advanced queries.  For a list of those checkout the [Mongo docs][].  We are going to use the $all operator.  This operator accepts and array of queries and ALL OF THEM have to be true in order for it to be included in the result.  We will leverage this to build and array of, you guessed it, Regex patterns and match them against the index string.  
+Before we tweak our route, we need to learn something about MongoDB.  While Mongo querys are written in JSON, Mongo supports several custom operators for performing more advanced queries.  For a list of those checkout the [Mongo docs][].  We are going to use the $all operator.  This operator accepts an array of queries and ALL of them have to match a document in order for it to be included in the result.  We will leverage this to build and array of, you guessed it, Regex patterns and match them against the index string.  
 
 <search-with-express-and-mongodb/compound-match-route.js>
 
-Search is at a whole new level.  The nice thing about regex is that I can be lazy.  I can just search for "mil" and narrow my results down to two employees.  If I query "mil hum", short of course for employees working in Milwaukee's Human Resources department, then I narrow my result down to one and I don't have to know the persons name.  Also note that we can search for employees based on the phone or email.   The algoritm gives us freedom to query from any angle.
+Search is at a whole new level.  The nice thing about regex is that I can be lazy.  I can just search for "mil" and narrow my results down to two employees who work in Milwaukee.  If I query "mil hum", short of course for employees working in Milwaukee's Human Resources department, then I narrow my result down to one and I don't have to know the persons name.  Also note that we can search for employees based on the phone or email.   The algoritm gives us freedom to query the data from any angle.
+
+<img src="/search-with-express-and-mongodb/mil_hum.png" />
 
 ###Concerns###
 
-I'm sure red flags went off for you around the data import section.  "Redundancy!", you cried!  Yes, admit it, I'm not making good use of the resources on the hard disk.  You'll have to weigh the pros and cons based on how big your data set is.  And who knows, maybe there is a better way to get the same results.
+I'm sure red flags went off for you around the data import section.  "Redundancy!", you cried!  Yes, admit it, I'm not making good use of the resources on the hard disk.  You'll have to weigh the pros and cons based on how big your data set is.  And who knows, maybe there is a better way.
 
 Enjoy!
 
@@ -67,4 +69,4 @@ __Boz__.
 [Express and MongoDB]: /express-and-mongodb
 [mongojs]: https://github.com/gett/mongojs.git
 [example project]: https://github.com/bozzltron/search-with-express-and-mongodb
-[Mongo docs]:http://docs.mongodb.org/manual/
+[Mongo docs]: http://docs.mongodb.org/manual/reference/operators/
