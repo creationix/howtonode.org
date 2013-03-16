@@ -1,0 +1,9 @@
+  {
+     "first":"John",
+     "last":"Doe",
+     "office":"Toronto",
+     "team":"Marketing",
+     "phone":"555-203-3002",
+     "email": "john@company.com",
+     "index": "JohnDoeTorontoMarketing555-203-3002john@company.com"
+  }
