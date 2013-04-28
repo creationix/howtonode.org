@@ -6,7 +6,7 @@ Node: v0.10.5
 
 At dinner tonight, I was discussing that I've been thinking about streams and how to simplify them in JavaScript.  My 7-year-old perked up and asked me:
 
-> Daddy, what is a stream?
+> Daddy, what's a stream?
 
 I explained that a stream is like a line of water along the ground.  If you dig a trench on a hill and fill up the high end using a water hose the water will run down the hill along the trench.  This is one of his favorite hobbies in the back yard, so he understood completely.  I explained that when new water is added to the top, it eventually makes its way to the bottom of the stream.  The end where water comes from is called the **upstream** and the other end is the **downstream**.  Gravity pulls water down.
 
@@ -14,7 +14,7 @@ I explained that a stream is like a line of water along the ground.  If you dig 
 
 Satisfied that I explained the concept, I continued by saying that I've been thinking a lot about how back pressure should work.  Then he asked:
 
-> Daddy, what is back pressure?
+> Daddy, what's back pressure?
 
 I thought for a moment and thought of a water hose.  I explained to him that in a water hose, if you kink the end of the hose while the water is on, eventually it will fill up and once the pressure is high enough, the house will stop putting more water into the hose.  The tap will feel the **pressure** all the way from the kink **back** to the source.
 
