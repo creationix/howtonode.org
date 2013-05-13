@@ -26,7 +26,9 @@ In fact, you can get the same result by using `setTimeout()` this way:
 	setTimeout(foo, 0);
 	console.log('bar');
 
-However, `process.nextTick()` is not just a simple alias to `setTimeout(fn, 0)` - it's [far more efficient](https://gist.github.com/1257394). 
+However, `process.nextTick()` is not just a simple alias to `setTimeout(fn, 0)` - it's [far more efficient](https://gist.github.com/1257394).
+
+More precisely, `process.nextTick()` defers the function until a completely new stack.  You can call as many functions as you want in the current stack.  The function that called nextTick has to return, as well as its parent, all the way up to the root of the stack.  Then when the event loop is looking for a new event to execute, your `nextTick`'ed function will be there in the event queue and execute on a whole new stack.
 
 Let's see where we can use `process.nextTick()`:
 
