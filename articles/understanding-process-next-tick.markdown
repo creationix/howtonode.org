@@ -10,11 +10,11 @@ As you might already know, every Node application runs on a single thread. What 
 Given this model, what `process.nextTick()` actually does is defer the execution of an action till the next pass around the event loop. Let's take a simple example. If we had a function `foo()` which we wanted to invoke in the next tick, this is how we do it:
 
 	function foo() {
-		console.log('foo');
+	    console.error('foo');
 	}
 	
 	process.nextTick(foo);
-	console.log('bar');
+	console.error('bar');
 
 If you ran the above snippet, you will notice that `bar` will be printed in your console before `foo`, as we have delayed the invokation of `foo()` till the next tick of the event loop:
 
