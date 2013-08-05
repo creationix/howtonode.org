@@ -1,0 +1,19 @@
+.selectize-control.default.multi .selectize-input > div {
+	color: #3d5d18;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.1);
+	border: 1px solid #74b21e;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background: #b8e76f;
+	background: -moz-linear-gradient(top, #b8e76f 0%, #a9e25c 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b8e76f), color-stop(100%,#a9e25c));
+	background: -webkit-linear-gradient(top, #b8e76f 0%,#a9e25c 100%);
+	background: -o-linear-gradient(top, #b8e76f 0%,#a9e25c 100%);
+	background: -ms-linear-gradient(top, #b8e76f 0%,#a9e25c 100%);
+	background: linear-gradient(to bottom, #b8e76f 0%,#a9e25c 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8e76f', endColorstr='#a9e25c',GradientType=0 );
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}

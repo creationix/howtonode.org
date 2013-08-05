@@ -1,0 +1,15 @@
+{
+  "name": "simplifying-chores-with-grunt",
+  "version": "0.0.0",
+  "description": "To show how to use Grunt for automating your chores",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Swapnil Mishra",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.4.1"
+  }
+}
