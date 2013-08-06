@@ -17,17 +17,17 @@ This will install **grunt** command in your system. Note that this is different 
 	npm install grunt --save-dev
 This will install grunt task runner and add it to [devDependencies](https://npmjs.org/doc/json.html#devDependencies) section of your package.json.
 
-_You can also install grunt by adding it to devDependency of package.json manually and running npm install_
+_You can also install grunt by adding it to devDependency of package.json manually and run npm install_
 
 ## Why is grunt-cli required
 
-grunt-cli is used to run the local grunt task runner using node.js require() system. This helps us in running grunt task runner from any sub-folder of your project. The job of the grunt-cli is simple: run the version of grunt which has been installed next to a **Gruntfile** i.e under the **node_modules** folder.
+grunt-cli is used to run the local grunt task runner using node.js require() system. This helps us in running grunt task runner from any sub-directory of your project. The job of the grunt-cli is simple: run the version of grunt which has been installed next to a **Gruntfile** i.e under the **node_modules** directory.
 
 ## What is a Gruntfile
 
-**Gruntfile** is where we define configurations for the task which we are planning to run. Think of it as what package.json is for npm. Gruntfile is always placed at the top level of project along with package.json. Below is a folder structure showing the Gruntfile for project.
+**Gruntfile** is where we define configurations for the task which we are planning to run. Think of it as what package.json is for npm. Gruntfile is always placed at the top level of project along with package.json. Below is a directory structure showing the Gruntfile for project.
 
-![Gruntfile](/simplifying-chores-with-grunt/grunt.png "Folder structure showing Gruntfile")
+![Gruntfile](/simplifying-chores-with-grunt/grunt.png "Directory structure showing Gruntfile")
 
 _Please note that though we call it Gruntfile name of the file will be **Gruntfile.js**._
 
@@ -63,7 +63,7 @@ Note that we have to wrap your Gruntfile in <code>module.exports</code>. Lets un
       // task/plugin 2
     }
 
-<code>**grunt.loadNpmTasks**</code> - This the where we load the task/plugin.
+<code>**grunt.loadNpmTasks**</code> - This is where we load the task/plugin.
 
 <code>**grunt.registerTask**</code> - This is where we register the task. I am going to explain this part a bit more in the next section where we will learn to run this task of ours.
 
@@ -78,9 +78,9 @@ Before diving into how to run a grunt task lets understand <code>grunt.registerT
   	// This is a custom task which runs if we execute grunt buildcss command
   	grunt.registerTask('buildcss', ['cssmin']);
 
-A Gruntfile is executed either by running <code>**grunt**</code> command or <code>**grunt task-name**</code>. In our Gruntfile when we say <code>grunt.registerTask('default', ['cssmin'])</code>, this is what is going to run when we only type <code>**grunt**</code> command. Also note that second argument to <code>grunt.registerTask</code> is an array of tasks to be run.
+A Gruntfile is executed either by running <code>**grunt**</code> command or <code>**grunt task-name**</code>. In our Gruntfile when we say <code>grunt.registerTask('default', ['cssmin'])</code>, this is what is going to run when we only type <code>**grunt**</code> command and that's why name of the task is **default** . Also note that second argument to <code>grunt.registerTask</code> is an array of tasks to be run.
 
-<code>grunt.registerTask('buildcss', ['cssmin']) </code> defines a new custom task and contains cssmin. We can also add some other task to it. This is what is going to run when we type <code>**grunt buildcss**</code> command.
+<code>grunt.registerTask('buildcss', ['cssmin']) </code> defines a new custom task and perform cssmin. We can also add some other task to it. This is what is going to run when we type <code>**grunt buildcss**</code> command.
 
 To summarize
 
@@ -94,15 +94,8 @@ Running any of these commands should generate our minified file with the followi
 
 ![Output](/simplifying-chores-with-grunt/output.png "Output on running Gruntfile")
 
-In both the cases, second argument to <code>grunt.registerTask</code> can have more than one task. For example if we have JavaScript minification task [uglify](https://npmjs.org/package/grunt-contrib-uglify) in our Gruntfile with default <code>grunt.registerTask</code> as 
+In both the cases, second argument to <code>grunt.registerTask</code> can have more than one task. For example if we have JavaScript minification task [uglify](https://npmjs.org/package/grunt-contrib-uglify) in our Gruntfile with default <code>grunt.registerTask</code> as:
 
 	grunt.registerTask('default', ['cssmin','uglify'])
 
-This tutorial has just touched base on Grunt but there are in-numerous things which we can do using it. I use Grunt for css/js minification, templates compilation, appending cache busting param, string replacements etc. Grunt community has built tasks for almost everything we do. So [check them out](http://gruntjs.com/plugins) and use to automate your chores.
-
-
-
-
-
-
-
+This tutorial has just touched base on Grunt but there are in-numerous things which we can do using it. I use Grunt for css/js minification, templates compilation, appending cache busting param, string replacements etc. Grunt community has built tasks for almost everything we do. So [check them out](http://gruntjs.com/plugins) and use them to automate your chores.
