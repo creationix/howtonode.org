@@ -2,29 +2,33 @@ Wait.for
 =======
 
 Node.js unavoidable style is to make everything that could **even begin to think about blocking** into a async function. 
-This ir a core node trait. You can avoid it, you can side-step it, Node will not forgive you.  
+This is a core node trait. You can't avoid it, you can't side-step it, Node will not forgive you.  
 
 But... wouldn't be great to be able to call all this great async functions in a sequential/sync mode when the need arises? 
 
-Specially the need of not to foll into callback hell?
+Specially the need not to fall into callback hell?
 
 I believe async is great, and obviouslly there are no other way to program blocking or long-running functions in Node. 
-But sometimes, like when you're progarmming business DB access logic, a sync-non blocking mode to call asnyc functions come very handy.
+But sometimes, when you're coding business DB access logic, as example, 
+a sync-non blocking mode to call asnyc functions is very handy.
 
-That's why I've developed a very small, simple lib, which bassically provides the programmer with a ***wait.for*** function.
+That's why I've developed a very small, simple lib called ***wait.for***, -I mean ***simple***, not future promises, I mean ***simple*** now. - ;)
+
+Wait.for, as it name imples, bassically provides the programmer with a ***wait.for*** function.
 
 What does wait.for does?
 --
 
 wait.for waits for the async function to callback, before continuing to the next line, and it does it WITHOUT blocking node.
-In order to acheive this, there are two version based on different thechonolgies under the hood.
 
-* one is [wait.for based on node-fibers](https://github.com/luciotato/waitfor) 
+I've developed two versions of ***Wait.for*** based on different thechonolgies under the hood.
 
-* other is [wait.for based in the upcoming ES6-Harmony generators](https://github.com/luciotato/waitfor-ES6)
+* one is [wait.for based on node-fibers](https://github.com/luciotato/waitfor) (github repo)
+
+* other is [wait.for based in the upcoming ES6-Harmony generators](https://github.com/luciotato/waitfor-ES6) (github repo)
 
 I've coded [wait.for based on node-fibers](https://github.com/luciotato/waitfor), two weeks ago. 
-After uploading the original **wait.for** based on node-fibers, several people ask me: "why not base it on ES6-Harmony generators?". So I started looking for information on such a migration. 
+After publishing it, several people ask me: "why not base it on ES6-Harmony generators?". So I started looking for information on such a migration. 
 After a quick search, the migration did not seem possible:
 (According to this: http://stackoverflow.com/questions/18293563/can-node-fibers-be-implemented-using-es6-generators
 and this: http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web)
@@ -50,11 +54,12 @@ wait.for = function(asyncFn){
     }
 ```
 
-**wait.for** based on node-fibers *actually does something*: calls ***Wait.applyAndWait*** 
+**wait.for** based on node-fibers *actually does something*: calls ***Wait.applyAndWait***, which in turn uses node-fibers to handle the async call. 
 
-In contrast ES6 based implementation of **wait.for(asyncFn)** does basically nothing (the magic control flow resides in *yield*)
+In contrast ES6 based implementation of **wait.for(asyncFn)** does basically nothing 
+(the magic control flow resides in ***yield***)
 
-You use ***wait.for*** inside a generator (function*) in conjunction with new JS/ES6 ***yield*** keyword, as in:
+You can use ***wait.for*** inside a generator (function*) in conjunction with new JS/ES6 ***yield*** keyword, as in:
 
 ```javascript
 var data = yield wait.for ( fs.readFile, '/etc/somefile' );
