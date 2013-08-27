@@ -1,7 +1,7 @@
 Wait.for
 =======
 
-Node.js unavoidable style is to make everything that could **even begin to think about blocking** into a async function. 
+Node.js unavoidable style is to make everything that could **even begin to think about blocking** into an async function. 
 This is a core node trait. You can't avoid it, you can't side-step it, Node will not forgive you.  
 
 But... wouldn't be great to be able to call all this great async functions in a sequential/sync mode when the need arises? 
