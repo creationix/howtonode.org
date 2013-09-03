@@ -1,6 +1,6 @@
 module.exports = function* (req) {
   // Simulate I/O with a sleep
-  yield sleep(100);
+  yield* sleep(100);
   // And then return the result!
   return {
     method: req.method,
@@ -9,8 +9,8 @@ module.exports = function* (req) {
   }
 };
 
-function sleep(ms) {
-  return function (callback) {
+function* sleep(ms) {
+  yield function (callback) {
     setTimeout(callback, ms);
   };
 }
