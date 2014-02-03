@@ -4,9 +4,8 @@ Date: Mon Feb 03 2014 00:12:41 GMT-0800 (PST)
 Node: v0.10.25
 
 
-Despite all my efforts to try to encapsulate some of my code into my modules, I was always founding myself exposing too much
-just for testing purpose. And even thought, it was often very complex to mock some of the library I was using.
-That was before I found the [rewire] library!
+Despite all my efforts to try to encapsulate some of my code into my modules, I was always founding myself exposing too much just for unit testing purpose. And even thought, it was often very complex to mock out some of the external libraries I was using.
+That was before I found the [rewire] library.
 As they say it only: "adds a special setter and getter to modules so you can modify their behaviour for better unit testing".
 
 This is all what you need!
@@ -18,17 +17,18 @@ I have a very simple controller like this:
 
 <mocking-private-dependencies-using-rewire/user-controller.js>
 
-In my test driven development all I want to test about is:
-- this method will call getUsers on userService
-- if the passed-in callback receive an error then it will call next passing the error
-- else json is called on the response with the users as arguments
+In my test driven development all I want to test is:
+- this method will call `getUsers` on `userService`
+- if the callback receive an error then it will call `next` passing the error
+- else `json` is called on the response with the users as arguments
 
 **Setting up a mock is easy** (I use [sinon] but any mocking will do it):
 
+    // given
     var userController = require('./user-controller'),
         userServiceMock = {};
 
-    // given
+    // and
     userServiceMock.getUser = sinon.stub().callsArgWith(1, null, [{id: 'user1'}, {id: 'user2'}]);
 
     // when
@@ -37,9 +37,9 @@ In my test driven development all I want to test about is:
     // then
     userServiceMock.getUser.calledOnce.should.equal(true);
 
-**But how can I inject the mock instead of the real user service ?**
+But how can I **inject the mock instead of the real user service** ?
 
-=> Rewire!
+=> **Rewire**!
 
 Instead of require the user-controller I'm using rewire:
 
