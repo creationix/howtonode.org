@@ -1,6 +1,6 @@
 Title: Mocking Dependencies using [rewire]
 Author: Caroline BDA
-Date: Mon Feb 03 2014 00:12:41 GMT-0800 (PST)
+Date: Mon Feb 17 2014 23:05:41 GMT-0800 (PST)
 Node: v0.10.25
 
 
