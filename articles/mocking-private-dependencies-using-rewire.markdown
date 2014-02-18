@@ -10,6 +10,7 @@ As they say it only: "adds a special setter and getter to modules so you can mod
 
 This is all what you need!
 
+--------
 
 ### Let's see an example
 
