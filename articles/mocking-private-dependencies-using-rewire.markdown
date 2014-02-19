@@ -3,14 +3,11 @@ Author: Caroline BDA
 Date: Mon Feb 17 2014 23:05:41 GMT-0800 (PST)
 Node: v0.10.25
 
-
 Despite all my efforts to try to encapsulate some of my code into my modules, I was always founding myself exposing too much just for unit testing purpose. And even thought, it was often very complex to mock out some of the external libraries I was using.
 That was before I found the [rewire] library.
 As they say, it only: "adds a special setter and getter to modules so you can modify their behaviour for better unit testing".
 
 This is all you need!
-
---------
 
 ### Let's see an example
 
