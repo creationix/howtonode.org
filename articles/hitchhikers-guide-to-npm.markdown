@@ -1,6 +1,6 @@
 Title: Hitchhikers guide to npm
 Author: Hemanth.HM
-Date: Sat Jun 23 2012 06:11:00 GMT
+Date: Wed Feb 26 23:12:39 IST 2014
 Node: v0.6.8
 
 __Hello hackers, this post is just a simple hello-world packing tutorial for packing nodejs with npm.__
