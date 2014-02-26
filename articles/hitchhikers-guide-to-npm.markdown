@@ -7,9 +7,7 @@ __Hello hackers, this post is just a simple hello-world packing tutorial for pac
 
 P.S : This does not talk about how npm works in depth, but gets one started with npm and assumption is you have dealt with some nodejs and npm installs before!
 
-**First up, if you have not installed node.js and npm (which is bundled with latest version) please do :**
-
-    $ bash < <(curl h3manth.com/njs)
+First up, if you have not installed node.js and npm (which is bundled with latest version) please do [so](https://github.com/joyent/node/wiki/Building-and-installing-Node.js
 
 
 __The below are the steps for packing and publishing packages to npm registry :__
@@ -109,13 +107,13 @@ __A bit of digging into npm -- node package manager:__
        modules in place so that node can find  them,  and  manages  dependency
        conflicts intelligently.
 
- **npm-init** -> Interactively create a package.json file. Make sure that you provide the Main module/entry point.
+**npm-init**     -> Interactively create a package.json file. Make sure that you provide the Main module/entry point.
 
-**npm-adduser** ->  Adds a registry user account.
+**npm-adduser**  -> Adds a registry user account.
 
 **npm-publish**  -> Publish a package  to  the  registry so that it can be installed by name.
 
-**npm-unpublih**  -> To remove the package from the registry.
+**npm-unpublih** -> To remove the package from the registry.
 
          
 __Adding dependencies:__
