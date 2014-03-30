@@ -1,0 +1,11 @@
+{
+  "name": "sample-eastjs-app",
+  "version": "0.0.1",
+  "dependencies": {
+    "mongoose": "~3.8.8",
+    "express": "~3.5.1"
+  },
+  "devDependencies": {
+    "east-mongo": "~0.1.2"
+  }
+}
