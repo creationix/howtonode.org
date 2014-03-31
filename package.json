@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "stack": ">=0.0.3",
-    "creationix": ">=0.1.2",
+    "creationix": ">=0.1.2 <=0.3.1",
     "wheat": ">=0.2.0",
     "cluster": ">=0.6.4"
   },
