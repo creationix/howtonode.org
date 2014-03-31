@@ -1,7 +1,4 @@
 
-/*
- * Include our project database file
- */
 var db = require('../db');
 
 var usersData = [{

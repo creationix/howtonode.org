@@ -1,6 +1,6 @@
 Title: Migrate mongodb data with east.js
 Author: Oleg Korobenko
-Date: Sun Mar 30 2014 15:28:58 GMT+0400 (MSK)
+Date: Mon Mar 31 2014 23:24:29 GMT+0400 (MSK)
 Node: v0.10.26
 
 
@@ -56,10 +56,6 @@ correspond to each other.
 
 Consider sample [express] + [mongoose] app which creates and returns users.
 
-*NOTE 1: in the example below two versions (initial application version and
-version with changed data model) of application will be used instead of two commits
-in source control system.*
-
 Create new directory for our project and put following files into it
 
 <migrate-mongodb-data-with-eastjs/package.json>
@@ -73,7 +69,7 @@ install dependencies via
 
 	npm install
 
-and run server after installation
+and run the server
 
 	node app.js
 
@@ -103,23 +99,24 @@ returns
 	  "_id": "5337f52df31e857f13b8aeeb"
 	}
 
-*NOTE 2: code created and it works, now (in a real project) you should commit
-your changes to the source control system.*
+First version of application is done (it consists from `package.json`, `app.js`,
+`db.js`). It could be deployed on other hosts (e.g. via source control system).
 
 Assume that later we decided to move `email` field to `contacts.email` and
-add optional field `contacts.phone`. So we need to change our user model
+add optional field `contacts.phone`. So we need to change our user model at
+`db.js`
 
-<migrate-mongodb-data-with-eastjs/db-v2.js#user model>
+<migrate-mongodb-data-with-eastjs/modifications.js#db user model>
 
 and creation code at `app.js`
 
-<migrate-mongodb-data-with-eastjs/app-v2.js#create user>
+<migrate-mongodb-data-with-eastjs/modifications.js#app create user>
 
-stop the server and run it modified version
+stop and start server with modified code
 
-	node app-v2.js
+	node app.js
 
-now we can create new users (via our app) with `phone` and `email` which will
+now we can create new users with `phone` and `email` which will
 be stored in `contacts`
 
 	curl -X POST -d 'name=robi&email=robi@example.com&phone=1732-757-2923' 'http://127.0.0.1:3000/users'
@@ -136,8 +133,8 @@ returns
 	  }
 	}
 
-But users which were added earlier remained in old format.
-Let's eliminate that inconsistency using [east.js].
+as we can see user was added in a new format. But users which were added earlier
+remained in old format. Let's eliminate that inconsistency using [east.js].
 
 install east
 
@@ -147,7 +144,8 @@ initialize east at project root (will create `migrations` directory)
 
 	east init
 
-create `.eastrc` file with content (same `url` as at `db.js` passed to `mongoose.connect`)
+create `.eastrc` file with content (`url` the same as in `db.js` at
+`mongoose.connect` call)
 
 	{
 	    "adapter": "node_modules/east-mongo",
@@ -160,86 +158,21 @@ create migration which will move `email` to `contacts.email`
 
 open and edit created `migrations/1_moveEmailToContacts.js` file
 
-
-	exports.migrate = function(client, done) {
-		var db = client.db;
-		db.collection('users').update({}, {
-			$rename: {email: 'contacts.email'}
-		}, {multi: true}, done);
-	};
-
-	exports.rollback = function(client, done) {
-		var db = client.db;
-		db.collection('users').update({}, {
-			$rename: {'contacts.email': 'email'}
-		}, {multi: true}, done);
-	};
-
+<migrate-mongodb-data-with-eastjs/1_moveEmailToContacts.js>
 
 `client.db` is an instance of [mongodb native Db]
 which is already connected to the database. So you can use full mongodb native
 functionality to change your existing data according to code changes.
 
-
-Since migration files it's just regular node.js modules you can use same access
-to db as from application (via `db.js` in our case). Let's create migration
-which will add some test users using `db.js`
-
-	east create addingTestUsers
-
-open and edit created `migrations/2_addingTestUsers.js` file
-
-	var db = require('../db-v2');
-
-	var usersData = [{
-		name: 'user',
-		contacts: {email: 'user@example.com'}
-	}, {
-		name: 'admin',
-		contacts: {email: 'admin@example.com'}
-	}];
-
-	exports.migrate = function(client, done) {
-		db.connect();
-		var saved = 0;
-		usersData.forEach(function(userData) {
-			var user = new db.User(userData);
-			user.save(function(err) {
-				if (err) return done(err);
-				saved++;
-				if (saved === usersData.length) {
-					db.disconnect();
-					done();
-				}
-			});
-		});
-	};
-
-	exports.rollback = function(client, done) {
-		db.connect();
-		db.User.remove({name: {'$in': usersData.map(function(userData) {
-			return userData.name;
-		})}}, function() {
-			db.disconnect();
-			done();
-		});
-	};
-
-You can also use your favorite control flow module ([step], [twostep], [async],
-etc) for simplifying migrations creation.
-
-Now we can run our migrations
+Run our migration with
 
 	east migrate
 
-it will produce
+produces
 
 	target migrations:
 		1_moveEmailToContacts
-		2_addingTestUsers
 	migrate `1_moveEmailToContacts`
-	migration done
-	migrate `2_addingTestUsers`
 	migration done
 
 list of users
@@ -273,48 +206,22 @@ returns
 	    "contacts": {
 	      "email": "bob@example.com"
 	    }
-	  },
-	  {
-	    "name": "user",
-	    "_id": "5337f64e1ed25a0d14f77db5",
-	    "__v": 0,
-	    "contacts": {
-	      "email": "user@example.com"
-	    }
-	  },
-	  {
-	    "name": "admin",
-	    "_id": "5337f64e1ed25a0d14f77db6",
-	    "__v": 0,
-	    "contacts": {
-	      "email": "admin@example.com"
-	    }
 	  }
 	]
 
-as we can see all users stores in new format.
+the job is done - they all are in a new format.
 
-*NOTE 3: code changed and it works, migrations crated and also work so now
-(in a real project) you should commit your changes (`db.js`, `app.js`, `.eastrc`
-and `migrations` directory) to the source control system.*
-
-Now we can pull (via source control system) our changes and migrations to
-another deployment run `east migrate` and it will update databse.
-
-if we run `east migrate` again (on the same deployment) nothing will happen with
+if we run `east migrate` again nothing will happen with
 our db, because all migrations already executed for current database.
 
 we can roll our migrations back with
 
 	east rollback
 
-it will produce
+produces
 
 	target migrations:
-		2_addingTestUsers
 		1_moveEmailToContacts
-	rollback `2_addingTestUsers`
-	migration successfully rolled back
 	rollback `1_moveEmailToContacts`
 	migration successfully rolled back
 
@@ -326,15 +233,34 @@ path) migration e.g.
 `migrate` command supports `--force` flag which can execute already executed
 migration. It's useful for testing during migration creation.
 
-to see all comands run
+Second version of application is done(it consists from `package.json`, `app.js`,
+`db.js`, `.eastrc`, `migrations/1_moveEmailToContacts.js`) and it could be
+deployed to update first version or for the fresh install. After `east migrate`
+(on another host) database will be updated according to the current code state.
 
-	east --help
 
-or `east <command> --help` to see command details e.g.
+## Writing migrations using application database access
 
-	east migrate --help
+Since migration files it's just regular node.js modules we can use same access
+to db as from application (via `db.js` in our case) instead of database access
+provided by adapter. Let's create migration which will add some test users
+using `db.js`
 
-see other command examples, existing adapters and more on [east.js project page][east.js]
+	east create addingTestUsers
+
+open and edit created `migrations/2_addingTestUsers.js` file
+
+<migrate-mongodb-data-with-eastjs/2_addingTestUsers.js>
+
+You can also use your favorite control flow module ([step], [twostep], [async],
+etc) for simplifying migrations creation.
+
+
+## Conclusion
+
+That's it. It was example of basic usage with mongodb you can find examples of
+other commands, existing adapters and more on [east.js project page][east.js].
+
 
 [east.js]: https://github.com/okv/east
 [east-mongo]: https://github.com/okv/east-mongo
