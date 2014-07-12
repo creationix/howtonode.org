@@ -1,14 +1,12 @@
 // Load the net module to create a tcp server.
 var net = require('net');
 
-// Setup a tcp server
+// Creates a new TCP server. The handler argument is automatically set as a listener for the 'connection' event
 var server = net.createServer(function (socket) {
   
   // Every time someone connects, tell them hello and then close the connection.
-  socket.addListener("connect", function () {
-    sys.puts("Connection from " + socket.remoteAddress);
-    socket.end("Hello World\n");
-  });
+  console.log("Connection from " + socket.remoteAddress);
+  socket.end("Hello World\n");
   
 });
 
