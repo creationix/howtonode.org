@@ -185,6 +185,12 @@ dl a:hover {
 .article ol {
   margin: 20px;
 }
+
+.article p.old-node-warning {
+  background-color: #e85274;
+  color: white;
+  padding: 1em;
+}
 .article img {
   max-width: 100%;
 }
