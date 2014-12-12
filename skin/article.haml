@@ -4,7 +4,7 @@
       %a.sha-version{ href: "/#{article.version}/#{article.name}" } Static Version
     %h1
       %a{href: "/" + article.name}&= article.title
-    :if article.node && article.node.match(/^v?0\.(6|8)\./)
+    :if article.node && article.node.match(/^v?0\.([0-9])\./)
       %p.old-node-warning
         HEADS UP! This article was written for an older version of node.&nbsp;
         More up-to-date information may be available elsewhere.
