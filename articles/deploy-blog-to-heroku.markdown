@@ -15,7 +15,7 @@ Friday evening. I came home from work, fed my cat, grabbed some pizza, and wante
 To be honest, this is not what typically happens when you are surfing the web. But when it does... Man, it's so annoying! It's annoying, but we're curious, aren't we? And, for our curiosity to be satisfied, we will build a simple web server by ourselves. It will help us to see how it works (or how it won’t work) from within.
 ##How can I?
 We will use [Node.js](http://nodejs.org/ "Node.js home page") for our project. Node.js is an open source, cross-platform runtime environment, which allows you to build server-side and networking applications. It's written in JavaScript and can be run within the Node.js runtime on any platform. First of all, of course, you need to install it. You'd better check the [download page](http://nodejs.org/download/ "Node.js download page") for more details. I'll wait until you finish, so don't worry. Is it done? Great! Now you can create your first web server. And it will be one of the easiest tasks in your life.
-###Bloody simple, but it's a server!
+###Pretty simple, but it's a server!
 First of all, we need to create a JavaScript file. Let's name it server.js:
 ```js
 var http = require("http");
