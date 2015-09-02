@@ -25,7 +25,7 @@ You know how I said that a module is just a javascript file? Well, that's true, 
 
 ## If you can't add to the global name space, then how do you share your code?
 
-Inside your javascript file, there is a special object. When Node creates the new context for your module, it sprinkles some objects in there like a little salt and pepper.  The [official Global Objects API](http://nodejs.org/api.html#global-objects-40) hints at the answer, but seeing is much simpler.
+Inside your javascript file, there is a special object. When Node creates the new context for your module, it sprinkles some objects in there like a little salt and pepper.  The [official Global Objects API](https://nodejs.org/api/globals.html) hints at the answer, but seeing is much simpler.
 
 <creating-custom-modules/simplest-module-ever-complete.js>
 
@@ -41,13 +41,13 @@ The basic example on the [Node.JS Home Page](http://nodejs.org) shows you how to
 When you want to use a port of a Module you use the require function like usual, but only save a reference to a member of the returned exports object:
 
     var inspect = require('sys').inspect;
-    
+
 This creates a local variable, 'inspect' and assigns it to the 'inspect' property of the sys module.
 
-So now you can 
+So now you can
 
     inspect({Hello:"World"})
-    
+
 which is like `sys.inspect({Hello:"World"})` without having to type `sys.inspect` all the time.
 
-Normal JavaScript function binding rules apply, so if you have any weirdness that you can't figure out, just import the whole module and use it like usual until you [Learn more about JavaScript Binding](http://www.robertsosinski.com/2009/04/28/binding-scope-in-javascript/)
+Normal JavaScript function binding rules apply, so if you have any weirdness that you can't figure out, just import the whole module and use it like usual until you [Learn more about JavaScript Binding](http://www.reactive.io/tips/2009/04/28/binding-scope-in-javascript/)
