@@ -26,11 +26,53 @@ Otherwise, follow the below steps:
 
 You can check it worked with a simple [Hello, World!][] example.
 
-## Ubuntu
+## Debian (Ubuntu/ Mint)
 
-1.  Install the dependencies:
-    -   `sudo apt-get install g++ curl libssl-dev apache2-utils`
-    -   `sudo apt-get install git-core`
+With Aptitude package manager one can install the package nodeJS then edit there bash to redirect the command node to nodejs.
+
+    sudo apt-get update
+    sudo apt-get install nodejs
+    sudo apt-get install npm
+nano (edit / vim) the file ~/.bashrc and add the line:
+    Allias node="nodejs"
+
+## Redhat (Fedora / CentOs)
+
+Simply install from official repos:
+
+    sudo yum install nodejs npm
+    
+If that fails, enable EPEL repo:
+
+    curl --silent --location https://rpm.nodesource.com/setup | bash -
+
+Then simply install from repo:
+
+    yum -y install nodejs 
+    
+## Gentoo
+
+In portage tree:
+
+    emerge nodejs
+    
+## Archlinux
+
+In official repo use pacman package manager:
+
+    pacman -S nodejs npm
+    
+    
+## Linux from source
+
+1.  Install the dependencies ( Below example using debian apptitude package manager):
+g++ curl
+libssl-dev 
+apache2-utils
+git-core
+build-essential
+
+    -   `sudo apt-get install g++ curl libssl-dev apache2-utils git-core build-essential`
 
 2.  Run the following commands:
 
