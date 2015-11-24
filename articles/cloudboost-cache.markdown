@@ -45,7 +45,7 @@ You need to initialize your new application. To initialize your app,
 
 <cloudboost-cache/init.js>
 
-This JavaScript program initalizes your app with your App ID and Master Key. 
+This JavaScript program initializes your app with your App ID and Master Key. 
 
 
 ## Creating the package.json file
@@ -63,7 +63,7 @@ you to execute `npm install` to install the dependencies for your project.
 
 ##What is a Cache?
 
-Cache is bascially a key-value pair in memory. Every value has a key associated with it and the key is used to retrieve or delete an item. Data resides in memory and this is why it is really fast when compared to a traditional disk based database. CloudBoost Cache is distributed which means you can scale it to store any amount of data you want.
+Cache is basically a key-value pair in memory. Every value has a key associated with it and the key is used to retrieve or delete an item. Data resides in memory and this is why it is really fast when compared to a traditional disk based database. CloudBoost Cache is distributed which means you can scale it to store any amount of data you want.
 
 ## Adding an item to the cache
 
@@ -75,7 +75,7 @@ The NodeJS script to add an item to the cache is as follows:
 
 <cloudboost-cache/addItem.js>
 
-When an item is added to the cache, it stays in the cache until you delete it. It is important that you dont rely on cache as your primary data store and use it to compliment your existing infrastructure because sometimes machine goes down and when it does all the data in the cache is deleted. 
+When an item is added to the cache, it stays in the cache until you delete it. It is important that you don’t rely on cache as your primary data store and use it to compliment your existing infrastructure because sometimes machine goes down and when it does all the data in the cache is deleted. 
 
 You can use a primary database like MySQL or MongoDB to repopulate the cache. 
 
