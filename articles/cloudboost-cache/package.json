@@ -1,0 +1,12 @@
+{
+    "name": "CloudBoost Cache",
+    "description": "Simple App to demonstrate cache",
+    "version": "0.1.0",
+    "author": "Nawaz Dhandala",
+    "email": "nawazdhandala@outlook.com",
+    "main": "./app",
+    "directories": { "lib": "./lib" },
+    "dependencies": {
+      "cloudboost": ">=1.1.139",
+    }
+}

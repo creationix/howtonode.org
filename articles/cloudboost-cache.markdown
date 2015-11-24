@@ -115,7 +115,7 @@ If I request the item with key as "YourKey" then the response will be:
 
 ## Deleting an item from the cache. 
 
-To delete an item from the cache, You need to write the DELETE route. You need call the delete function of the CloudCache instance with the key and value.
+To delete an item from the cache, You need to write the DELETE route. You need call the deleteItem function of the CloudCache instance with the key and value.
 
 * DELETE /item/:key -> Delete an item from the cache.
 
