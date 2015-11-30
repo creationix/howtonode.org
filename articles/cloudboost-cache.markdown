@@ -8,15 +8,6 @@ Caching is great for your apps because it helps you to access data much faster w
 
 ## Pre-Requisites
 
-### npm ###
-
-[npm](http://github.com/isaacs/npm) is the most popular package manager for Node.js.
-Installing npm is easy.
-
-    curl http://npmjs.org/install.sh | sh
-
-A note for windows users: You can download the msi installer from [Official NodeJS Website](https://nodejs.org)
-
 ### CloudBoost ###
 
 [CloudBoost](http://www.cloudboost.io) is a Platform as a Service designed to make it easier for NodeJS developers to build apps. It has a Database Service, Queues, Cache and more built into one simple API. 
