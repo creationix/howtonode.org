@@ -15,7 +15,7 @@ Installing npm is easy.
 
     curl http://npmjs.org/install.sh | sh
 
-A note for windows users: npm does not currently work on windows. It will in the future.
+A note for windows users: You can download the msi installer from [Official NodeJS Website](https://nodejs.org)
 
 ### CloudBoost ###
 
