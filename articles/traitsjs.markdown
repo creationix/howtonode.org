@@ -2,7 +2,7 @@ Title: Creating safe and composable 'mixins' with traits.js
 Author: Tom Van Cutsem
 Date: Wed Nov 10 2010 10:33:29 GMT-0800 (PST)
 
-In this article I will introduce [_traits.js_](http://traitsjs.org), a small library to define, compose and instantiate traits. Traits are reusable sets of properties and form an alternative to multiple inheritance or mixins.
+In this article I will introduce [_traits.js_](http://soft.vub.ac.be/~tvcutsem/traitsjs/), a small library to define, compose and instantiate traits. Traits are reusable sets of properties and form an alternative to multiple inheritance or mixins.
 
 ## Traits for Javascript
 
@@ -16,9 +16,9 @@ There exist many libraries that add trait support to Javascript in one way or an
 
 ### Getting started
 
-_traits.js_ is available as a node package called "traits" via npm. A simple `npm install traits` should make it available in node.js. Then load it up as follows:
+_traits.js_ is available as a node package called "traitsjs" via npm. A simple `npm install traitsjs` should make it available in node.js. Then load it up as follows:
 
-    var Trait = require('traits').Trait;
+    var Trait = require('traitsjs');
     
 This creates a local copy of the library's single exported variable, `Trait`. Evaluating `Trait` in the shell reveals the library's entire API:
 
@@ -59,7 +59,7 @@ The workhorse of the _traits.js_ library is a function called `Trait.compose`. T
     
 Give `TMagnitude` a concrete implementation for `smaller` and it will provide an implementation for the methods `greater` and `between`. Actually, `TMagnitude` is defined as a composite trait: it combines the properties of `TEquality` with those of an anonymous nested trait. This means that `TMagnitude` actually has two required properties: `smaller` and `equals`, and that it has three provided properties: `greater`, `between` and `differs`:
 
-<img width="100%" src="/traitsjs/1-TMagnitude.png" title="TMagnitude" alt="Composition of TMagnitude"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/1-TMagnitude.png" title="TMagnitude" alt="Composition of TMagnitude"/>
   
 Let's compose `TEquality` and `TMagnitude` further into a `TCircle` trait that captures generic circle behavior:
 
@@ -86,7 +86,7 @@ There are a couple of things going on here:
  
 The following picture illustrates the composition of `TCircle`:
 
-<img width="100%" src="/traitsjs/2-TCircle.png" title="TCircle" alt="Composition of TCircle"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/2-TCircle.png" title="TCircle" alt="Composition of TCircle"/>
 
 Although this simple example doesn't do justice to it, here's the hidden power of `Trait.compose`: the ordering of its arguments _does not matter_. No matter in what order the argument traits are specified, `Trait.compose` will return an equivalent trait in all cases. For the mathematically inclined: `Trait.compose` is a commutative operator, like addition, e.g. `a + b = b + a`. Similarly, when using multiple nested calls to `Trait.compose`, it doesn't matter how the calls are nested. For the mathematically inclined: `Trait.compose` is an associative operator, like addition, e.g. `(a + b) + c = a + (b + c)`.
 
@@ -122,7 +122,7 @@ Assume we want to make our circles a bit more colorful and decide to mixin a col
 
 Both `TColor` and `TCircle` provide an `equals` method. Which one will get invoked on an instance of `TCircle`? The answer is: neither one. When `Trait.compose` detects that two or more of its argument traits define a property with the same name, it records this "conflict" by defining a special "conflicting property" in the resulting trait. No exception is thrown at this stage (that will only happen if a trait containing a conflict is instantiated, as explained later). The resulting trait will contain a "conflicting property" but may still be composed further with other traits, as shown below:
 
-<img width="100%" src="/traitsjs/3-Conflicts.png" title="Conflicts" alt="Conflicts in composition of TCircle"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/3-Conflicts.png" title="Conflicts" alt="Conflicts in composition of TCircle"/>
 
 ### Three ways to resolve a conflict
 
@@ -151,7 +151,7 @@ The first two alternatives can be accomplished using the function `Trait.resolve
 
 The call `Trait.resolve({ a: 'b' }, t)` returns a trait that is equivalent to `t` but with `t.a` bound to `t.b` instead. In the above example, we've renamed the `equals` method provided by `TColor` to `equalColors`. This renamed trait is then composed with the other traits, producing a conflict-free `TCircle` trait, as shown below:
 
-<img width="100%" src="/traitsjs/4-Renaming.png" title="Renaming" alt="Renaming"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/4-Renaming.png" title="Renaming" alt="Renaming"/>
 
 The second alternative is to exclude a conflicting property, like so:
 
@@ -172,7 +172,7 @@ The second alternative is to exclude a conflicting property, like so:
 
 The call `Trait.resolve({ a: undefined }, t)` will return a trait equivalent to `t` with `a` turned into a required property:
 
-<img width="100%" src="/traitsjs/5-Excluding.png" title="Excluding" alt="Excluding"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/5-Excluding.png" title="Excluding" alt="Excluding"/>
 
 The third alternative is for the composer to explicitly specify that one of the traits overrides the properties of another trait:
 
@@ -194,7 +194,7 @@ The third alternative is for the composer to explicitly specify that one of the 
     
 The anonymous trait and `TColor` are now composed using `Trait.override` instead of `Trait.compose`. Because of this, the `equals` method of the anonymous trait will take precedence over the `equals` method of `TColor`:
 
-<img width="100%" src="/traitsjs/6-Overriding.png" title="Overriding" alt="Overriding"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/6-Overriding.png" title="Overriding" alt="Overriding"/>
 
 Note that the order of arguments to `Trait.override` matters (left-to-right priority), which is why the two traits have been reordered compared to the previous examples. This also exposes a significant drawback of `Trait.override` compared to `Trait.compose`: it's not commutative, so you'll have to pay closer attention to the ordering of things! `Trait.override` is very similar to "standard" inheritance (with the subclass's methods implicitly overriding the superclass's methods).
 
@@ -214,7 +214,7 @@ The first argument to `Trait.create` is the _prototype_ of the trait instance. `
                            TCircle(center, radius, rgb));
     }
 
-<img width="100%" src="/traitsjs/7-Create.png" title="Create" alt="Instantiating traits"/>
+<img width="100%" src="https://raw.githubusercontent.com/creationix/howtonode.org/master/articles/traitsjs/7-Create.png" title="Create" alt="Instantiating traits"/>
 
 Now we can start creating and using circle objects:
 
@@ -257,4 +257,4 @@ In the introduction I mentioned that _traits.js_ is minimal. All in all, you onl
 - Use `Trait.resolve` to create a trait with renamed or excluded properties, in order to avoid conflicts and disambiguate property names.
 - Use `Trait.create(prototype, trait)` to instantiate a trait into a new object. If you require the trait instance to remain extensible, use `Object.create` instead.
 
-That's it. There isn't much more to it. The complete API and another tutorial can be found on the [_traits.js_ home page](http://traitsjs.org). If you want to peek under the hood of the library and know more about the format in which traits are represented, [this page](http://code.google.com/p/es-lab/wiki/Traits#Traits_as_Property_Maps) provides all the details.
+That's it. There isn't much more to it. The complete API and another tutorial can be found on the [_traits.js_ home page](http://soft.vub.ac.be/~tvcutsem/traitsjs/). If you want to peek under the hood of the library and know more about the format in which traits are represented, [this page](http://code.google.com/p/es-lab/wiki/Traits#Traits_as_Property_Maps) provides all the details.
