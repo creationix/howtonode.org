@@ -2,7 +2,7 @@ Title: Creating safe and composable 'mixins' with traits.js
 Author: Tom Van Cutsem
 Date: Wed Nov 10 2010 10:33:29 GMT-0800 (PST)
 
-In this article I will introduce [_traits.js_](http://soft.vub.ac.be/~tvcutsem/traitsjs/), a small library to define, compose and instantiate traits. Traits are reusable sets of properties and form an alternative to multiple inheritance or mixins.
+In this article I will introduce [_traits.js_](http://traitsjs.github.io/traits.js-website/), a small library to define, compose and instantiate traits. Traits are reusable sets of properties and form an alternative to multiple inheritance or mixins.
 
 ## Traits for Javascript
 
@@ -16,9 +16,9 @@ There exist many libraries that add trait support to Javascript in one way or an
 
 ### Getting started
 
-_traits.js_ is available as a node package called "traitsjs" via npm. A simple `npm install traitsjs` should make it available in node.js. Then load it up as follows:
+_traits.js_ is available as a node package called "traitsjs" via npm. A simple `npm install traits.js` should make it available in node.js. Then load it up as follows:
 
-    var Trait = require('traitsjs');
+    var Trait = require('traits.js');
     
 This creates a local copy of the library's single exported variable, `Trait`. Evaluating `Trait` in the shell reveals the library's entire API:
 
@@ -257,4 +257,4 @@ In the introduction I mentioned that _traits.js_ is minimal. All in all, you onl
 - Use `Trait.resolve` to create a trait with renamed or excluded properties, in order to avoid conflicts and disambiguate property names.
 - Use `Trait.create(prototype, trait)` to instantiate a trait into a new object. If you require the trait instance to remain extensible, use `Object.create` instead.
 
-That's it. There isn't much more to it. The complete API and another tutorial can be found on the [_traits.js_ home page](http://soft.vub.ac.be/~tvcutsem/traitsjs/). If you want to peek under the hood of the library and know more about the format in which traits are represented, [this page](http://code.google.com/p/es-lab/wiki/Traits#Traits_as_Property_Maps) provides all the details.
+That's it. There isn't much more to it. The complete API and another tutorial can be found on the [_traits.js_ home page](http://traitsjs.github.io/traits.js-website/). If you want to peek under the hood of the library and know more about the format in which traits are represented, [this page](http://code.google.com/p/es-lab/wiki/Traits#Traits_as_Property_Maps) provides all the details.
