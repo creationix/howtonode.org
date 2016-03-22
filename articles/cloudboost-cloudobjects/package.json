@@ -1,0 +1,13 @@
+{
+    "name": "CloudBoost CloudObjects",
+    "description": "Simple App to demonstrate CloudBoost Data Storage",
+    "version": "0.1.0",
+    "author": "Nawaz Dhandala",
+    "email": "hello@cloudboost.io",
+    "main": "./app",
+    "directories": { "lib": "./lib" },
+    "dependencies": {
+      "cloudboost": ">=1.1.139",
+      "express":"*"
+    }
+}
