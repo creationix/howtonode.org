@@ -12,11 +12,11 @@
     %hr{style:"clear:both"}
     #disqus_thread.body
     :script
-      var disqus_url = "http://howtonode.org/#{article.name}";
-    %script(src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript")
-    %a.view-thread(href="http://disqus.com/forums/howtonodeorg/?url=ref")
+      var disqus_url = "//howtonode.org/#{article.name}";
+    %script(src="//disqus.com/forums/howtonodeorg/embed.js" type="text/javascript")
+    %a.view-thread(href="//disqus.com/forums/howtonodeorg/?url=ref")
       View the discussion thread.
-    %a.dsq-brlink(href="http://disqus.com")
+    %a.dsq-brlink(href="//disqus.com")
       blog comments powered by
       %span.logo-disqus
         Disqus
@@ -29,7 +29,7 @@
             query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
           }
         }
-        document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+        document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
       })();
 
 
@@ -65,9 +65,9 @@
   .aside
     %h4
       About this Article
-    %a.twitter-share-button{href:"http://twitter.com/share",data-count:"horizontal",data-via:"creationix"}
+    %a.twitter-share-button{href:"//twitter.com/share",data-count:"horizontal",data-via:"creationix"}
       Tweet
-    %script{src:"http://platform.twitter.com/widgets.js"}
+    %script{src:"//platform.twitter.com/widgets.js"}
     :if article.date
       %dl{title: article.date}
         %dt
@@ -86,7 +86,7 @@
         %dt
           Node Version:
         %dd
-          %a{ href: "http://github.com/joyent/node/tree/" + article.node }
+          %a{ href: "//github.com/joyent/node/tree/" + article.node }
             node #{article.node}
 
     :if article.dependencies
@@ -97,7 +97,7 @@
           %ul
             :each dependency in article.dependencies
               %li
-                %a{ href: "http://github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
+                %a{ href: "//github.com/creationix/haml-js/tree/8ea2df3a90ff488ed253d5872e0f4a387f393e5d" }
                   haml-js v0.2.2
 
     :if article.uniqueSnippets
