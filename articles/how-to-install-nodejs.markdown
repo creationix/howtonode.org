@@ -28,13 +28,13 @@ You can check it worked with a simple [Hello, World!][] example.
 
 ## Debian (Ubuntu/ Mint)
 
-With Aptitude package manager one can install the package nodeJS then edit there bash to redirect the command node to nodejs.
+With Aptitude package manager one can install the package nodeJS then edit their bash config to redirect the command `node` to `nodejs`.
 
     sudo apt-get update
     sudo apt-get install nodejs
     sudo apt-get install npm
 nano (edit / vim) the file ~/.bashrc and add the line:
-    Allias node="nodejs"
+    `alias node="nodejs"`
 
 ## Redhat (Fedora / CentOs)
 
