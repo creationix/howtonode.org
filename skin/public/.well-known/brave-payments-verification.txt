@@ -1,0 +1,4 @@
+This is a Brave Payments publisher verification file.
+
+Domain: howtonode.org
+Token: af114d79d62b333b0dbab6d3d7487f1e26b5a00acad715a3b1b295b09a704d0c
