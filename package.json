@@ -9,7 +9,7 @@
     "url": "git://github.com/creationix/howtonode.org.git"
   },
   "engines": {
-    "node": ">=0.4.0"
+    "node": "8.11.2"
   },
   "dependencies": {
     "stack": ">=0.0.3",
@@ -17,11 +17,8 @@
     "wheat": ">=0.2.0",
     "cluster": ">=0.6.4"
   },
-  "devDependencies": {
-
-  },
+  "devDependencies": {},
   "scripts": {
     "start": "node server/server.js"
   }
-
 }
