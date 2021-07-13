@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/node-js-and-mongodb-getting-started-with-mongojs by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Node.js and MongoDB - Getting started with MongoJS - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="node-js-and-mongodb-getting-started-with-mongojs.html">Node.js and MongoDB - Getting started with MongoJS</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>It won't be an exaggeration if one claims that in the past few months Node.js and MongoDB have literally taken the 
+software and web industries by storm.</p>
+
+<p>Not just bleeding-edge startups but even medium and large enterprises are leveraging these two technologies to deliver 
+a better experience to their users by build more capable, performant and scalable apps.</p>
+
+<p>So what is Node.js?</p>
+
+<blockquote>
+  <p>Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. 
+  Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for 
+  data-intensive real-time applications that run across distributed devices.</p>
+</blockquote>
+
+<p>..and what is MongoDB?</p>
+
+<blockquote>
+  <p>MongoDB is a scalable, high-performance, open source NoSQL database.</p>
+</blockquote>
+
+<p>This post will cover the basics and get you started with your Node.js + MongoDB app. Make sure you have Node.js 
+installed and MongoDB setup on your developer machine.</p>
+
+<p>Let's verify your Node.js installation and start the MongoDB server:</p>
+
+<pre><code><span class="pln">$ node </span><span class="pun">-</span><span class="pln">v<br />$ mongod<br /></span></code></pre>
+
+<h2>Introducing MongoJS</h2>
+
+<p>MongoJS is a brilliant little Node.js package that lets you access MongoDB using an API that is extremely similar to
+MongoDB's JavaScript shell.</p>
+
+<h2>Installing MongoJS</h2>
+
+<p>Once Node.js has been setup correctly on your machine, you can use its internal package manager NPM to install MongoJS:</p>
+
+<pre><code><span class="pln">$ npm install mongojs<br /></span></code></pre>
+
+<p>We can now start building our JavaScript application and connect to our MongoDB server:</p>
+
+<pre><code><span class="com">// app.js</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> databaseUrl </span><span class="pun">=</span><span class="pln"> </span><span class="str">"mydb"</span><span class="pun">;</span><span class="pln"> </span><span class="com">// "username:password@example.com/mydb"</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> collections </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="str">"users"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"reports"</span><span class="pun">]</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> db </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">"mongojs"</span><span class="pun">).</span><span class="pln">connect</span><span class="pun">(</span><span class="pln">databaseUrl</span><span class="pun">,</span><span class="pln"> collections</span><span class="pun">);</span><span class="pln"><br /></span></code></pre>
+
+<p>The databaseUrl can contain the database server host and port along with the database name to connect to. By default
+the host is “localhost” and the port is “27017“. If you're using the default, which is likely on a developer
+environment, the databaseUrl can contain just the actual database name for our app.</p>
+
+<p>The collections is a set (array) of collections our application uses. It isn't mandatory but is preferred as it allows
+us to emulate a MongoDB JavaScript client like API within our Node.js app.</p>
+
+<p>Here's an example for finding documents within a collection specifically in this case to find all female users.</p>
+
+<pre><code><span class="com">// app.js</span><span class="pln"><br />db</span><span class="pun">.</span><span class="pln">users</span><span class="pun">.</span><span class="pln">find</span><span class="pun">({</span><span class="pln">sex</span><span class="pun">:</span><span class="pln"> </span><span class="str">"female"</span><span class="pun">},</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> users</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> err </span><span class="pun">||</span><span class="pln"> </span><span class="pun">!</span><span class="pln">users</span><span class="pun">)</span><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"No female users found"</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">else</span><span class="pln"> users</span><span class="pun">.</span><span class="pln">forEach</span><span class="pun">(</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">femaleUser</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">femaleUser</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="pun">}</span><span class="pln"> </span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>Notice how our initial query is a near duplication of the corresponding query in MongoDB's console. In addition to the
+query, in our Node.js source code (i.e. app.js) we pass a callback function to handle the results of the query.</p>
+
+<p>Node.js implements an event based concurrency paradigm and almost everything is always a callback. This allows your
+Node.js app to be non-blocking and high performing.</p>
+
+<p>What happens in our specific callback is self-explanatory — we check for errors and results, and if the query returns
+female users they are logged to the console.</p>
+
+<p>Okay, how do I save a new user in my collection? Exactly how you would do it in the console, your code will look like
+this:</p>
+
+<pre><code><span class="com">// app.js</span><span class="pln"><br />db</span><span class="pun">.</span><span class="pln">users</span><span class="pun">.</span><span class="pln">save</span><span class="pun">({</span><span class="pln">email</span><span class="pun">:</span><span class="pln"> </span><span class="str">"srirangan@gmail.com"</span><span class="pun">,</span><span class="pln"> password</span><span class="pun">:</span><span class="pln"> </span><span class="str">"iLoveMongo"</span><span class="pun">,</span><span class="pln"> sex</span><span class="pun">:</span><span class="pln"> </span><span class="str">"male"</span><span class="pun">},</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> saved</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> err </span><span class="pun">||</span><span class="pln"> </span><span class="pun">!</span><span class="pln">saved </span><span class="pun">)</span><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"User not saved"</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">else</span><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"User saved"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>Here's an example for updating a record / document:</p>
+
+<pre><code><span class="com">// app.js</span><span class="pln"><br />db</span><span class="pun">.</span><span class="pln">users</span><span class="pun">.</span><span class="pln">update</span><span class="pun">({</span><span class="pln">email</span><span class="pun">:</span><span class="pln"> </span><span class="str">"srirangan@gmail.com"</span><span class="pun">},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">$set</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">password</span><span class="pun">:</span><span class="pln"> </span><span class="str">"iReallyLoveMongo"</span><span class="pun">}},</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> updated</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> err </span><span class="pun">||</span><span class="pln"> </span><span class="pun">!</span><span class="pln">updated </span><span class="pun">)</span><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"User not updated"</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">else</span><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"User updated"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>Okay, now we run this app in the console:</p>
+
+<pre><code><span class="pln">$ node app</span><span class="pun">.</span><span class="pln">js<br /></span></code></pre>
+
+<p>And there we have it, an incredibly simple quick start for Node.js + MongoDB enthusiasts. Happy coding!</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/node-js-and-mongodb-getting-started-with-mongojs";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/40bec8c5a2a804cc48ab9d8443592b90?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Srirangan</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/Srirangan">Srirangan</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/srirangan">srirangan</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://srirangan.net/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Feb 06 2012 21:15:00 GMT+0530 (IST)"><dt>Date Released:</dt><dd>Monday, February  6, 2012</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.6.10">node v0.6.10</a></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/node-js-and-mongodb-getting-started-with-mongojs by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:04 GMT -->
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/testing-your-javascript by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:08 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Testing your JavaScript with shoulda.js - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="testing-your-javascript.html">Testing your JavaScript with shoulda.js</a></h1><p>The last thing you want this weekend is to be introducing bugs at 4:30PM on Sunday as you frantically hack in more functionality. One way to avoid that risk is to write some tests for your critical, stable bits. If you have time this weekend to hack on unit tests in between the red-bull-induced coma and the confused debates about sockets vs. ports (unlikely!), <a href="http://github.com/philc/shoulda.js">shoulda.js</a> will help you get up and running very quickly.</p>
+
+<p>Shoulda.js is a micro javascript unit testing framework inspired by Thoughtbot's Shoulda for Ruby. It gives you a tight syntax for writing terse, readable unit tests. It weighs in at under 300 lines and makes no assumptions about your javascript environment or libraries.</p>
+
+<h2>Get Started</h2>
+
+<p>Here's how to get started. You've probably seen this pattern before: tests are grouped into logical units called "contexts". Contexts can optionally share test-case setup code. This is a sample test for a massively concurrent version of super mario we've written (the source for that is not included ;-) :</p>
+
+<div class="snippet"><a href="testing-your-javascript/mario_tests.js" class="code-link">mario_tests.js</a><pre><code><span class="pln">load</span><span class="pun">(</span><span class="str">"mario.js"</span><span class="pun">);</span><span class="pln"><br /><br />context</span><span class="pun">(</span><span class="str">"super mario"</span><span class="pun">,</span><span class="pln"><br />&nbsp; setup</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; game </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">SuperMarioGame</span><span class="pun">();</span><span class="pln"><br />&nbsp; </span><span class="pun">}),</span><span class="pln"><br /><br />&nbsp; context</span><span class="pun">(</span><span class="str">"enemy interaction"</span><span class="pun">,</span><span class="pln"><br />&nbsp; &nbsp; setup</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; turtle </span><span class="pun">=</span><span class="pln"> game</span><span class="pun">.</span><span class="pln">addTurtleEnemy</span><span class="pun">({</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}),</span><span class="pln"><br /><br />&nbsp; &nbsp; should</span><span class="pun">(</span><span class="str">"kill the turtle after jumping on it"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; game</span><span class="pun">.</span><span class="pln">mario</span><span class="pun">.</span><span class="pln">jump</span><span class="pun">({</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">assert</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="str">"dead"</span><span class="pun">,</span><span class="pln"> turtle</span><span class="pun">.</span><span class="pln">state</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}),</span><span class="pln"><br /><br />&nbsp; &nbsp; should</span><span class="pun">(</span><span class="str">"end the game if mario walks into an enemy turtle"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; game</span><span class="pun">.</span><span class="pln">mario</span><span class="pun">.</span><span class="pln">move</span><span class="pun">({</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">assert</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="str">"gameOver"</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">.</span><span class="pln">state</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">})</span><span class="pln"><br />&nbsp; </span><span class="pun">)</span><span class="pln"><br /></span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="typ">Tests</span><span class="pun">.</span><span class="pln">run</span><span class="pun">();</span></code></pre></div>
+
+<p>You can run this file using v8:</p>
+
+<pre><code><span class="pln">$ v8 mario_test</span><span class="pun">.</span><span class="pln">js<br /></span><span class="typ">Pass</span><span class="pln"> </span><span class="pun">(</span><span class="lit">19</span><span class="pun">/</span><span class="lit">19</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<h2>Stubbing</h2>
+
+<p>The key to writing narrow, readable unit tests is stubbing out functionality to make your test easier to read and write. You'll often want to stub out expensive methods like talking to the network, or methods you want to manipulate in a special way to set up your test. Shoulda.js provides this syntax for stubbing out properties and methods:</p>
+
+<pre><code><span class="pln">stub</span><span class="pun">(</span><span class="pln">document</span><span class="pun">,</span><span class="pln"> </span><span class="str">"getElementById"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">id</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">assert</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="pln">id</span><span class="pun">,</span><span class="pln"> </span><span class="str">"marioCharacter"</span><span class="pun">);</span><span class="pln"> </span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>or</p>
+
+<pre><code><span class="pln">stub</span><span class="pun">(</span><span class="pln">document</span><span class="pun">,</span><span class="pln"> </span><span class="str">"getElementById"</span><span class="pun">,</span><span class="pln"> returns</span><span class="pun">(</span><span class="pln">myElement</span><span class="pun">));</span><span class="pln"><br /></span></code></pre>
+
+<h2>Writing client side unit tests for the browser.</h2>
+
+<p>If you want to write tests which need to leverage a full browser environment, use envjs. You can then test your client side javascript code from the command line, without having to launch an external browser.</p>
+
+<p>Enjoy! And good luck.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/testing-your-javascript";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/98d0d3050a684a05c1f6f08d5bafd49e?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Phil Crosby</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/philc">philc</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/philcrosby">philcrosby</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://www.ninjahacking.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Wed Sep 29 2010 23:59:28 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Thursday, September 30, 2010</dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="testing-your-javascript/mario_tests.js">mario_tests.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/testing-your-javascript by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:10 GMT -->
+</html>

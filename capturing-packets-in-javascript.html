@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/capturing-packets-in-javascript by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Capturing Packets in JavaScript with node_pcap - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="capturing-packets-in-javascript.html">Capturing Packets in JavaScript with node_pcap</a></h1><p>OK, I hear you. Capturing packets is hard and best left to kernel hackers, assembly language programmers, and black hat security
+researches. If you just want to make things for the web using node.js, why should you care?</p>
+
+<p>Pulling packets off the network can show you what your computers are saying to each other without disrupting the flow of or changing any applications. Packet capture is a fantastic debugging tool that will remove a lot of the mystery from writing and running network programs. The point of <code>node_pcap</code> is to provide a good HTTP debugging tool and a framework for doing your own network analysis.</p>
+
+<p>There are plenty of ways to do packet inspection these days, but none of them let you interact with your network traffic the way that node lets you write network programs: by writing a few event handlers in JavaScript. <code>node_pcap</code> not only let's you capture and process packets in JavaScript, but since it is built on node.js, data from the packets can be easily routed around to web browsers, databases, or whatever else you can think of.</p>
+
+<h2>Example</h2>
+
+<p>Here's an example of capturing packets and sending them back to a web browser using WebSocket:</p>
+
+<p><a href="http://pcap.ranney.com:81/">http://pcap.ranney.com:81/</a></p>
+
+<p>If you still aren't convinced, check out how easy it is to write a simple "network grep" type of program using <code>node_pcap</code>:</p>
+
+<div class="snippet"><a href="capturing-packets-in-javascript/example.js" class="code-link">example.js</a><pre><code><span class="kwd">var</span><span class="pln"> pcap </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">"pcap"</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; pcap_session </span><span class="pun">=</span><span class="pln"> pcap</span><span class="pun">.</span><span class="pln">createSession</span><span class="pun">(</span><span class="str">""</span><span class="pun">,</span><span class="pln"> </span><span class="str">"tcp"</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; matcher </span><span class="pun">=</span><span class="pln"> </span><span class="str">/safari/</span><span class="pln">i</span><span class="pun">;</span><span class="pln"><br /><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Listening on "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> pcap_session</span><span class="pun">.</span><span class="pln">device_name</span><span class="pun">);</span><span class="pln"><br /><br />pcap_session</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'packet'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">raw_packet</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> packet </span><span class="pun">=</span><span class="pln"> pcap</span><span class="pun">.</span><span class="pln">decode</span><span class="pun">.</span><span class="pln">packet</span><span class="pun">(</span><span class="pln">raw_packet</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; data </span><span class="pun">=</span><span class="pln"> packet</span><span class="pun">.</span><span class="pln">link</span><span class="pun">.</span><span class="pln">ip</span><span class="pun">.</span><span class="pln">tcp</span><span class="pun">.</span><span class="pln">data</span><span class="pun">;</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data </span><span class="pun">&amp;&amp;</span><span class="pln"> matcher</span><span class="pun">.</span><span class="pln">test</span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="pln">toString</span><span class="pun">()))</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">pcap</span><span class="pun">.</span><span class="kwd">print</span><span class="pun">.</span><span class="pln">packet</span><span class="pun">(</span><span class="pln">packet</span><span class="pun">));</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="pln">toString</span><span class="pun">());</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>This program will look at all TCP packets that flow past the default network interface and run the regular expression <code>matcher</code> against the data section of the packet. If it matches, the data section will be printed.</p>
+
+<p>Still not convinced? I understand. This packet business can be astonishingly low level compared to the abstractions you are comfortable working with. If this doesn't seem awesome yet, it probably won't until you actually need it. When you can't figure out what your program is doing by just adding log messages, come back and check out what packet capture can do for you.</p>
+
+<p><code>node_pcap</code> exposes packets as JavaScript objects, but it also comes with a few examples that are useful on their own. If you do nothing else, check out <code>http_trace</code> and <code>simple_capture</code>. Look at the source code and see how they work. It's really easy.</p>
+
+<h2>Installation</h2>
+
+<p>Anyway, if you are still here, let's get this sucker installed. The first thing you'll need is <code>libpcap</code>. If you are on OSX 10.6, you already have it. If you are on a Linux system that uses <code>apt-get</code> to install things, you can get it like this:</p>
+
+<pre><code><span class="pln">sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install libpcap</span><span class="pun">-</span><span class="pln">dev<br /></span></code></pre>
+
+<p>If you are on some other kind of system, I don't know the exact command to install <code>libpcap-dev</code>, but it is a very common library that's widely available.</p>
+
+<p>Once you have <code>libpcap</code> and node, you just need <code>npm</code>. Install <code>node_pcap</code> with <code>npm</code> like this:</p>
+
+<pre><code><span class="pln">npm install pcap<br /></span></code></pre>
+
+<p>This will install the pcap libraries and three executable.</p>
+
+<p>If you want to hack on the code, and I encourage you to do so, use <code>git</code> to clone the repository on github:</p>
+
+<pre><code><span class="pln">git clone git</span><span class="pun">:</span><span class="com">//github.com/mranney/node_pcap.git</span><span class="pln"><br /></span></code></pre>
+
+<p>You'll still need to use <code>npm</code> to build and install the files where they need to go:</p>
+
+<pre><code><span class="pln">mjr</span><span class="pun">:~/</span><span class="pln">work</span><span class="pun">/</span><span class="pln">node_pcap$ npm install </span><span class="pun">.</span><span class="pln"><br /></span></code></pre>
+
+<p>To verify that things are working, run:</p>
+
+<pre><code><span class="pln">sudo simple_capture<br /></span></code></pre>
+
+<p>It should look something like this:</p>
+
+<pre><code><span class="pln">mjr</span><span class="pun">:~</span><span class="pln">$ sudo simple_capture<br />libpcap version </span><span class="lit">1.0</span><span class="pun">.</span><span class="lit">0</span><span class="pln"><br /></span><span class="pun">*</span><span class="pln"> en0 </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.125</span><span class="pun">/</span><span class="lit">255.255</span><span class="pun">.</span><span class="lit">255.0</span><span class="pln"><br />fw0 </span><span class="kwd">no</span><span class="pln"> address<br />en1 </span><span class="kwd">no</span><span class="pln"> address<br />lo0 </span><span class="lit">127.0</span><span class="pun">.</span><span class="lit">0.1</span><span class="pun">/</span><span class="lit">255.0</span><span class="pun">.</span><span class="lit">0.0</span><span class="pln"><br /></span><span class="lit">00</span><span class="pun">:</span><span class="lit">1c</span><span class="pun">:</span><span class="lit">23</span><span class="pun">:</span><span class="pln">b9</span><span class="pun">:</span><span class="pln">e8</span><span class="pun">:</span><span class="pln">b5 </span><span class="pun">-&gt;</span><span class="pln"> ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.10</span><span class="pln"> ARP request </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.4</span><span class="pln"><br /></span><span class="lit">00</span><span class="pun">:</span><span class="lit">1e</span><span class="pun">:</span><span class="pln">c9</span><span class="pun">:</span><span class="lit">45</span><span class="pun">:</span><span class="pln">e8</span><span class="pun">:</span><span class="lit">30</span><span class="pln"> </span><span class="pun">-&gt;</span><span class="pln"> ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.1</span><span class="pln"> ARP request </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.45</span><span class="pln"><br /></span><span class="lit">00</span><span class="pun">:</span><span class="lit">1a</span><span class="pun">:</span><span class="lit">92</span><span class="pun">:</span><span class="pln">c4</span><span class="pun">:</span><span class="lit">32</span><span class="pun">:</span><span class="pln">d1 </span><span class="pun">-&gt;</span><span class="pln"> ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff</span><span class="pun">:</span><span class="pln">ff </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.179</span><span class="pln"> ARP request </span><span class="lit">10.51</span><span class="pun">.</span><span class="lit">2.126</span><span class="pln"><br /></span></code></pre>
+
+<p>Your traffic might not be ARP requests, but some packets should be flowing, and you should see one line per packet.</p>
+
+<p>Opening the capture interface on most operating systems requires root access, so most of the time that you run a program using <code>node_pcap</code> you'll need to use sudo.</p>
+
+<h2>http_trace</h2>
+
+<p><code>http_trace</code> is a tool that distills the packets involved in an HTTP session into higher level events. There are command line options to adjust the output and select different requests. Here's a simple example of looking for any requests that have "favicon" in the URL and showing request and response headers:</p>
+
+<p><img src="capturing-packets-in-javascript/http_trace_1.jpg" style="float: none"></img></p>
+
+<p>To see the full list of options do:</p>
+
+<pre><code><span class="pln">http_trace </span><span class="pun">--</span><span class="pln">help<br /></span></code></pre>
+
+<p>With no arguments, <code>http_trace</code> will listen on the default interface for any IPv4 TCP traffic on any port. If it finds HTTP on any TCP connection, it'll start decoding it. You might be surprised by how many HTTP connections your computer is making that you didn't know about, especially if you run OSX. Fire it up and see what you find.</p>
+
+<h2>Solving Problems</h2>
+
+<p>Here's why you need all of this. Let's say you have a node program that makes an outgoing connection, but the outgoing connection doesn't seem like it is working. This reason in this case is that a firewall rule is filtering the traffic. Here's how to detect it:</p>
+
+<p><img src="capturing-packets-in-javascript/http_trace_2.jpg" style="float: none"></img></p>
+
+<p>The <code>--tcp-verbose</code> option will expose events for TCP connection setup, close, and reset. It'll also let you know about SYN retries and packets retransmissions. SYN retry happens when a new TCP connection is getting set up, but the other side isn't responding. Retransmissions occur when packets are dropped by the network, and TCP on either end of the connection resends data that has already sent. If data is moving slowly, but you don't appear to be out of CPU, turn on <code>--tcp-verbose</code> and see if you are getting retransmissions or SYN retries. If so, you can blame the network and not your node program.</p>
+
+<p>Another common case is when the data going over the network isn't quite the data you were expecting. Here's a simple example using curl from the command line. Let's say you wanted to send some JSON to your local CouchDB, but CouchDB keeps rejecting it.</p>
+
+<pre><code><span class="pln">mjr</span><span class="pun">:~</span><span class="pln">$ curl </span><span class="pun">-</span><span class="pln">X POST </span><span class="str">'http://localhost:5984/test'</span><span class="pln"> </span><span class="pun">-</span><span class="pln">H </span><span class="str">"Content-Type: application/json"</span><span class="pln"> </span><span class="pun">-</span><span class="pln">d </span><span class="pun">{</span><span class="str">"foo"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"bar"</span><span class="pun">}</span><span class="pln"><br /></span><span class="pun">{</span><span class="str">"error"</span><span class="pun">:</span><span class="str">"bad_request"</span><span class="pun">,</span><span class="str">"reason"</span><span class="pun">:</span><span class="str">"invalid UTF-8 JSON"</span><span class="pun">}</span><span class="pln"><br /></span></code></pre>
+
+<p>That looks like pretty well-formed JSON, so what's going on here? Run <code>http_trace</code> with the --bodies option to dump the request and response body. Since this is a connection to <code>localhost</code>, we need to explicitly listen on the loopback interface.</p>
+
+<p><img src="capturing-packets-in-javascript/http_trace_3.jpg" style="float: none"></img></p>
+
+<p>Here we can see that the request body was simply, "{foo:", which is clearly not valid JSON. The problem in this case is that the shell and curl couldn't figure out what part of the command line arguments to use for the POST body, and they got it wrong. This works if quoted properly:</p>
+
+<pre><code><span class="pln">mjr</span><span class="pun">:~</span><span class="pln">$ curl </span><span class="pun">-</span><span class="pln">X POST </span><span class="str">'http://localhost:5984/test'</span><span class="pln"> </span><span class="pun">-</span><span class="pln">H </span><span class="str">"Content-Type: application/json"</span><span class="pln"> </span><span class="pun">-</span><span class="pln">d </span><span class="str">'{"foo": "bar"}'</span><span class="pln"><br /></span><span class="pun">{</span><span class="str">"ok"</span><span class="pun">:</span><span class="kwd">true</span><span class="pun">,</span><span class="str">"id"</span><span class="pun">:</span><span class="str">"b4385e0de2e74df4cdbf21cf6c0009d0"</span><span class="pun">,</span><span class="str">"rev"</span><span class="pun">:</span><span class="str">"1-4c6114c65e295552ab1019e2b046b10e"</span><span class="pun">}</span><span class="pln"><br /></span></code></pre>
+
+<h2>Understanding Higher Level Protocols</h2>
+
+<p><code>node_pcap</code> can piece back together a TCP session from individual packets as long as it sees them all go by. It will emit events at TCP connection setup, teardown, and reset.</p>
+
+<p>On top of TCP, it can decode HTTP and WebSocket messages, emitting events for request, response, upgrade, data, etc.</p>
+
+<p>It looks sort of like this:</p>
+
+<p><img src="capturing-packets-in-javascript/pcap_boxes.png" style="float: none"></img></p>
+
+<p>You set up <code>node_pcap</code> to capture the packets you want, and then you can work with the captured data in JavaScript at whatever level is the most useful.</p>
+
+<h2>Work in Progress</h2>
+
+<p>There are a lot of cases that <code>node_pcap</code> doesn't handle, and for these you'll need a more complete packet decoder like Wireshark. I'm trying to handle the common case of OSX/Linux, IPv4, TCP, HTTP, and WebSocket first, and then add support for other variants of the protocol stack.</p>
+
+<p>If you like this kind of stuff and want to help expand the protocols that node_pcap understands, patches are certainly welcome.</p>
+
+<p>I hope this software is useful and fun. Thanks for reading.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/capturing-packets-in-javascript";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/f2602cabcccbe70f6e73e0c86379921d?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Matt Ranney</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/mranney">mranney</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/mranney">mranney</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://mranney.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Wed Sep 29 2010 23:08:34 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Thursday, September 30, 2010</dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="capturing-packets-in-javascript/example.js">example.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/capturing-packets-in-javascript by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:15 GMT -->
+</html>

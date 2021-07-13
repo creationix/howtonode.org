@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/how-to-module by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:15 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>How To Module - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="how-to-module.html">How To Module</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><hr />
+
+<h3>UPDATE:</h3>
+
+<p><strong>This article was written for Node v0.4.1 and is no longer applicable. As of node.js 0.6.3 NPM comes pre-installed.</strong></p>
+
+<hr />
+
+<p>These are some basic steps for writing a NodeJS module.</p>
+
+<p>Most of the suggestions in this document are optional.  You
+can definitely write your program however you like, and many in the
+node community enjoy trying out new creative ways of doing things.</p>
+
+<p>This is merely a set of patterns that noders have found to work for
+them and their projects.</p>
+
+<h2>Use Git</h2>
+
+<p>Most people in the node community use git for all their version control
+needs.  It is an extremely powerful and robust tool.  If you don't
+already use it, you should.</p>
+
+<p>Don't wait until your program is "ready" before using git on it!  Run
+<code>git init</code> in the root of your project folder right away, and commit
+your changes as you make them.  It is a good habit, and can help avoid a
+lot of painful mishaps.</p>
+
+<p>If you wish to share your program with others, then github is also a
+tremendously useful resource that most nodejs developers use.</p>
+
+<h2>A package.json File</h2>
+
+<p>Create a file in the root of your program named <code>package.json</code>.  This
+file is a json description of what's in your project.  If you're just
+writing a standalone server or website that isn't intended to ever be
+shared, then this is not strictly necessary, but it still does make some
+things more convenient.</p>
+
+<p>If you plan to publish your program and let others install it using
+<a href="http://npmjs.org/">npm</a>, then a package.json file is essential.</p>
+
+<p>You can specify in this file:</p>
+
+<ul>
+<li>Name, version, description, and keywords to describe your program.</li>
+<li>A homepage where users can learn more about it.</li>
+<li>Other packages that yours depends on.</li>
+</ul>
+
+<p>If you have installed <a href="http://npmjs.org/">npm</a>, then you can use the
+<code>npm init</code> command to get started.  See <code>npm help json</code> for lots of
+information about everything you can put in this file.</p>
+
+<p>If you are writing a program that is intended to be used by others, then
+the most important thing to specify in your <code>package.json</code> file is the
+<code>main</code> module.  This is the module that is the entry point to your
+program.</p>
+
+<p>Documenting your dependencies is really handy.  It is a very polite
+practice if you are going to share this program with others, and it
+provides a lot of useful techniques if you are deploying it somewhere.</p>
+
+<h2>README, and other docs</h2>
+
+<p>Put basic entry-level documentation about your program in a README file
+in the root of your project.</p>
+
+<p>If you enjoy the markdown format, you can write it in markdown, and save
+the file as README.md.</p>
+
+<p>Seriously, do this!  Even if you think you'll never have users, history
+teaches us that you'll go off and forget what this thing is for, and
+then come back to it and curse yourself for not documenting it even a
+little.</p>
+
+<p>So document it.  Even a little.</p>
+
+<p>If you feel so inclined, it's also a great idea to put documentation in
+a folder called <code>./docs</code>.  Markdown files should end in <code>.md</code> and html
+should end in <code>.html</code>.</p>
+
+<h2>Testing</h2>
+
+<p>There is a ton of information out there convincing you about the
+importance of testing and documentation.  I don't have to tell you how
+important that is.  It's really important, and that should be obvious.
+Do it.</p>
+
+<p>What's not quite so obvious is <em>how</em> you should go about doing this.</p>
+
+<p>First of all, testing.</p>
+
+<p>There is no single way that all node modules get tested.  The node
+program itself uses a python-based system that runs all the JS files in
+a particular directory.  Most of those files just throw if they find an
+error, and since the tests are very low-level, that is a good system.</p>
+
+<p>Other projects find it useful to use test harnesses like vows or
+expresso.  Whatever testing option you go with, it's worth it.  Write
+tests.</p>
+
+<p>If you are writing a re-usable program that you want to distribute to
+others, you should also add <code>"scripts":{"test":"run some program"}</code> to
+your package.json file.  What that lets you do is <code>npm test my-program</code>
+to run the command you specify.</p>
+
+<p>Plans are underway to do interesting things with the test scripts and
+doc directories of packages that get published to the npm registry.</p>
+
+<h2>What kind of thing are you making?</h2>
+
+<p>Generally, node modules fall into these rough categories:</p>
+
+<ul>
+<li>A binding to some C or C++ library.</li>
+<li>A library of functionality to be used in other node programs, written
+primarily in JavaScript.</li>
+<li>A command-line program.</li>
+<li>A website or server or something.  (That is, an implementation that
+you'll put on an actual server, not a framework.)</li>
+</ul>
+
+<p>There is a lot of overlap in these categories.  A thing doesn't have to
+be just one sort of thing.</p>
+
+<h2>Writing a Binding</h2>
+
+<p>Typically, C++ source code is put in a subdirectory of your project
+called <code>./src</code>.  C++ files usually have the extension <code>.cc</code>.  C files
+usually have the extension <code>.c</code>.</p>
+
+<p>Generally, the simplest and best approach is to put the minimum
+necessary effort into the C++ layer, and then make the functions "nice"
+by wrapping a JavaScript layer around the raw binding.</p>
+
+<p>Node programs use the included <code>node-waf</code> program to compile.  Create a
+<code>wscript</code> file with the appropriate rules in it, and then run <code>node-waf
+configure build</code> to build your module.</p>
+
+<p>Use the <code>eio</code> thread pool to do any actions that perform synchronous
+I/O.  Note that v8 constructs may not be used on the thread pool, so
+data types must be passed into the sync code blocks as eio_request
+structs.</p>
+
+<p>See these examples to get started building a binding that leverages
+eio and node-waf:</p>
+
+<p>Example hello-world-ish programs:</p>
+
+<ul>
+<li><a href="https://github.com/pkrumins/node-async">https://github.com/pkrumins/node-async</a></li>
+<li><a href="https://github.com/isaacs/node-async-simple">https://github.com/isaacs/node-async-simple</a></li>
+</ul>
+
+<p>Examples:</p>
+
+<ul>
+<li><a href="https://github.com/pkrumins/node-png">https://github.com/pkrumins/node-png</a></li>
+<li><a href="https://github.com/mranney/node_pcap">https://github.com/mranney/node_pcap</a></li>
+<li><a href="https://github.com/ry/node_postgres">https://github.com/ry/node_postgres</a></li>
+<li><a href="https://github.com/isaacs/node-glob">https://github.com/isaacs/node-glob</a></li>
+</ul>
+
+<h2>Writing a Library</h2>
+
+<p>If you have a lot of JavaScript code, then the custom is to put it in
+the <code>./lib</code> folder in your project.</p>
+
+<p>Specify a <code>main</code> module in your package.json file.  This is the module
+that your users will load when they do <code>require('your-library')</code>.  This
+module should ideally expose all of the functionality in your library.</p>
+
+<p>If you want your users to be able to load sub-modules from the "guts" of
+your library, then they'll need to specify the full path to them.  That
+is a lot of work to document!  It's better and more future-proof to
+simply specify a main module, and then, if necessary, have ways to
+dynamically load what they need.</p>
+
+<p>For example, you might have a <code>flip</code> library that is a collection of
+<code>widget</code> objects, defined by files in the <code>flip/lib/widgets/*.js</code> files.
+Rather than having your users do <code>require('flip/lib/widgets/blerg.js')</code>
+to get the blerg widget, it's better to have something like:
+<code>require('flip').loadWidget('blerg')</code>.</p>
+
+<p>Of course, a library may also include a build step that compiles an
+add-on that it uses.</p>
+
+<p>Since libraries take so many different shapes for different purposes,
+there isn't really a single way to do it.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li><a href="https://github.com/learnboost/Socket.IO-node">https://github.com/learnboost/Socket.IO-node</a></li>
+<li><a href="http://documentcloud.github.com/underscore">http://documentcloud.github.com/underscore</a></li>
+<li><a href="https://github.com/senchalabs/connect">https://github.com/senchalabs/connect</a></li>
+<li><a href="https://github.com/mikeal/request">https://github.com/mikeal/request</a></li>
+<li><a href="http://github.com/tmpvar/jsdom">http://github.com/tmpvar/jsdom</a></li>
+</ul>
+
+<h2>Writing a Command Line Program</h2>
+
+<p>The only feature that differentiates a command-line program from a
+library is the <code>bin</code> field in the package.json file.</p>
+
+<p>When installed with npm, the <code>bin</code> field in a package.json file tells
+npm to create an executable in the PATH that runs your program.</p>
+
+<p>In a nodejs script, the <code>process.argv</code> is an array of strings that
+represent the command the user started node with.  The first item is
+always node, and the second is always your program.  Generally, the
+arguments to your program can be retrieved via:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> args </span><span class="pun">=</span><span class="pln"> process</span><span class="pun">.</span><span class="pln">argv</span><span class="pun">.</span><span class="pln">slice</span><span class="pun">(</span><span class="lit">2</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>There are a variety of option parsing libraries available via npm.</p>
+
+<p>The current working directory can be found by calling <code>process.cwd()</code>,
+and changed with <code>process.chdir(newPath)</code>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li><a href="http://npmjs.org/">http://npmjs.org/</a></li>
+<li><a href="https://github.com/zpoley/json-command">https://github.com/zpoley/json-command</a></li>
+<li><a href="https://github.com/cloudhead/vows">https://github.com/cloudhead/vows</a></li>
+<li><a href="https://github.com/LearnBoost/cluster">https://github.com/LearnBoost/cluster</a></li>
+</ul>
+
+<h2>Writing a Standalone Server</h2>
+
+<p>This is probably the most "normal" node programming model.  You just
+want to <em>use</em> these modules, and most likely have no intention of
+distributing it for others.</p>
+
+<p>To be most effective, it's often a good idea to avoid trying to
+re-invent sections of your program that can be accomplished using
+others' modules.  npm is a wonderfully helpful tool here.  If you're
+planning on using Redis in your site, you can do <code>npm ls redis</code> to look
+for modules that might provide bindings to it.</p>
+
+<p>Also, the <a href="http://search.npmjs.org/">npm search site</a> is extremely
+helpful.  There, you can search using the same keyword greps as <code>npm
+ls</code>, but it also shows which packages depend on which other ones, the
+dates of previous releases, the owner information, and so on.</p>
+
+<p>It's very important, when designing your program, to consider where you
+are planning on deploying it, and how.  Joyent has a node hosting
+service at <a href="http://no.de/">http://no.de/</a>.  When you push your code to the no.de site,
+it will automatically restart the server by running the <code>server.js</code> file
+in the root of your project.  So, it's a good idea to make that your
+entry point.</p>
+
+<p>No matter where you decide to deploy your program,
+any dependencies that you place in a <code>node_modules</code> folder in the root
+of your program will be loaded as if they are native modules.  So, if
+you drop the <code>redis</code> package into <code>./node_modules/redis</code> then you could
+do <code>require('redis')</code> in your program to load it.  This makes it very
+easy to re-use code, while still keeping the tested versions of your
+dependencies with your code.</p>
+
+<h2>Don't forget...</h2>
+
+<p>The node community is growing fast, and welcomes your struggles and
+experience.  If you run into troubles, jump in the #node.js IRC channel
+on irc.freenode.net, or ask on the <a href="http://groups.google.com/group/nodejs">nodejs mailing
+list</a>.</p>
+
+<p>If you build something useful, publish it with <a href="http://npmjs.org/">npm</a>,
+and tell people about it.</p>
+
+<p>Have fun!</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/how-to-module";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/73a2b24daecb976af81e010b7a3ce3c6?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Isaac Z. Schlueter</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/isaacs">isaacs</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/izs">izs</a></dd></dl><dl><dt>Location:</dt><dd>Oakland, CA</dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Feb 28 2011 11:07:42 GMT-0800 (PST)"><dt>Date Released:</dt><dd>Monday, February 28, 2011</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.4.1">node v0.4.1</a></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/how-to-module by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:15 GMT -->
+</html>

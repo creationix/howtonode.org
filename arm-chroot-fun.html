@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/arm-chroot-fun by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:15 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Fun Putting Node on Mobile Devices - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="arm-chroot-fun.html">Fun Putting Node on Mobile Devices</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>This article will walk you through creating an Ubuntu image that can be chrooted inside a mobile device like the recently released <a href="http://www.hpwebos.com/us/products/pads/touchpad/index.html">TouchPad</a>.  Once the Ubuntu environment is setup we'll learn how to compile and install node for fun and/or profit.</p>
+
+<h2>Create the Image</h2>
+
+<p>The first step is to create the image file that will be our virtual partition.  This is best done using <code>dd</code>.  We can resize this later using <code>resize2fs</code>, so for now make a nice small 512MB image.</p>
+
+<pre><code><span class="pln">sudo dd </span><span class="kwd">if</span><span class="pun">=</span><span class="str">/dev/</span><span class="pln">zero of</span><span class="pun">=</span><span class="typ">UbuntuNatty_armel</span><span class="pun">.</span><span class="pln">img bs</span><span class="pun">=</span><span class="lit">1M</span><span class="pln"> count</span><span class="pun">=</span><span class="lit">512</span><span class="pln"><br /></span></code></pre>
+
+<p>Then we want to put a filesystem on it.</p>
+
+<pre><code><span class="pln">sudo mkfs</span><span class="pun">.</span><span class="pln">ext3 </span><span class="typ">UbuntuNatty_armel</span><span class="pun">.</span><span class="pln">img<br /></span></code></pre>
+
+<p>Now we have a fully functional filesystem.  Let's mount it.</p>
+
+<pre><code><span class="pln">mkdir build<br />sudo mount </span><span class="typ">UbuntuNatty_armel</span><span class="pun">.</span><span class="pln">img build<br /></span></code></pre>
+
+<p>Ok, here is where the magic happens.  In this step I'm putting the Ubuntu Natty userspace in this new filesystem.  I have also done this with Debian Sid, but v8 doesn't compile without patches on arm Debian.</p>
+
+<pre><code><span class="pln">sudo qemu</span><span class="pun">-</span><span class="pln">debootstrap </span><span class="pun">--</span><span class="pln">arch armel </span><span class="pun">--</span><span class="pln">foreign natty build<br /></span></code></pre>
+
+<p>At this point your image is ready to be put onto your mobile device, but let's explore for the magic for some fun.  First we want to <code>chroot</code> into this system to interact with it.</p>
+
+<pre><code><span class="pln">sudo mount </span><span class="pun">-</span><span class="pln">t proc none build</span><span class="pun">/</span><span class="pln">proc<br />sudo mount </span><span class="pun">-</span><span class="pln">t sysfs none build</span><span class="pun">/</span><span class="pln">sys<br />sudo mount </span><span class="pun">-</span><span class="pln">o bind </span><span class="pun">/</span><span class="pln">dev build</span><span class="pun">/</span><span class="pln">dev<br />sudo cp </span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf build</span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf<br />sudo chroot build<br /></span></code></pre>
+
+<p>The <code>qemu-debootstrap</code> process didn't seed this image with any apt repos, so lets add one.</p>
+
+<pre><code><span class="pln">echo </span><span class="str">"deb http://ports.ubuntu.com/ubuntu-ports/ natty main universe"</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="str">/etc/</span><span class="pln">apt</span><span class="pun">/</span><span class="pln">sources</span><span class="pun">.</span><span class="pln">list<br /></span></code></pre>
+
+<p>Now let's see what kind of binaries live in this world.</p>
+
+<pre><code><span class="pln">apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install file </span><span class="pun">-</span><span class="pln">y<br />cd </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">bin<br /></span><span class="pun">./</span><span class="pln">file </span><span class="pun">./</span><span class="pln">file<br /></span></code></pre>
+
+<p>We just installed <code>file</code>, a program that tells us stuff about files.  Then we told it to tell us about itself.  I got as output:</p>
+
+<pre><code><span class="pln">file</span><span class="pun">:</span><span class="pln"> ELF </span><span class="lit">32</span><span class="pun">-</span><span class="pln">bit LSB executable</span><span class="pun">,</span><span class="pln"> ARM</span><span class="pun">,</span><span class="pln"> version </span><span class="lit">1</span><span class="pln"> </span><span class="pun">(</span><span class="pln">SYSV</span><span class="pun">),</span><span class="pln"> dynamically linked </span><span class="pun">(</span><span class="pln">uses shared libs</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">for</span><span class="pln"> GNU</span><span class="pun">/</span><span class="typ">Linux</span><span class="pln"> </span><span class="lit">2.6</span><span class="pun">.</span><span class="lit">16</span><span class="pun">,</span><span class="pln"> stripped<br /></span></code></pre>
+
+<p>So the file we just executed on our intel laptop was an arm executable.  This magic is thanks to 
+ file that <code>qemu-debootstrap</code> installed for us.  The file <code>/usr/bin/qemu-arm-static</code> is used to interpret arm binaries on the fly for us!</p>
+
+<p>Anyway, enough fun, let's put this on some real arm hardware.  In this article I'll use webOS since it encourages homebrew exerimentation unlike certain competitors.  It should work on any arm device where you have linux and a root login.</p>
+
+<p>To keep our host machine happy, we should logout of the chroot and clean things up.</p>
+
+<pre><code><span class="kwd">exit</span><span class="pln"><br />sudo umount build</span><span class="pun">/</span><span class="pln">sys<br />sudo umount build</span><span class="pun">/</span><span class="pln">proc<br />sudo umount build</span><span class="pun">/</span><span class="pln">dev<br />sudo umount build<br />rmdir build<br /></span></code></pre>
+
+<p>Now we have a fully functional Ubuntu system in a single file.</p>
+
+<p>On webOS the easiest way to put a file on the drive is to use <code>novacom put</code> (part of the webOS SDK).</p>
+
+<pre><code><span class="pln">novacom put file</span><span class="pun">:</span><span class="com">//media/internal/UbuntuNatty_armel.img &lt; UbuntuNatty_armel.img</span><span class="pln"><br /></span></code></pre>
+
+<p>Then log into the device and mount it on the internal drive.</p>
+
+<pre><code><span class="pln">novaterm<br />mkdir </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot<br />mount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="kwd">internal</span><span class="pun">/</span><span class="typ">UbuntuNatty_armel</span><span class="pun">.</span><span class="pln">img </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot<br />mount </span><span class="pun">-</span><span class="pln">t proc none </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">proc<br />mount </span><span class="pun">-</span><span class="pln">t sysfs none </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">sys<br />mount </span><span class="pun">-</span><span class="pln">o bind </span><span class="pun">/</span><span class="pln">dev </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">dev<br />cp </span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf<br /></span></code></pre>
+
+<p>Now we're ready to enter this chroot. I don't like being root all the time, so I created a local user. Since the chroot shares user id's with the chroot, but has it's own user listing, we have to add the user twice.  First in the host system, add a new user.</p>
+
+<pre><code><span class="pln">adduser tim<br />id tim<br /></span></code></pre>
+
+<p>Note the uid of the new user and group.  My was:</p>
+
+<pre><code><span class="pln">uid</span><span class="pun">=</span><span class="lit">1002</span><span class="pun">(</span><span class="pln">tim</span><span class="pun">)</span><span class="pln"> gid</span><span class="pun">=</span><span class="lit">1002</span><span class="pun">(</span><span class="pln">tim</span><span class="pun">)</span><span class="pln"> groups</span><span class="pun">=</span><span class="lit">1002</span><span class="pun">(</span><span class="pln">tim</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>Now let's enter the chroot and mirror the user there.</p>
+
+<pre><code><span class="pln">chroot </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot<br />adduser tim </span><span class="pun">--</span><span class="pln">uid </span><span class="lit">1002</span><span class="pln"><br /></span></code></pre>
+
+<p>Then we should add sudo access to this user.  Read up on <code>visudo</code> if you don't know how to do this.  On Ubuntu, this is as simple as installing sudo and adding our user to it's group.  </p>
+
+<pre><code><span class="pln">apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install sudo<br />adduser tim sudo<br />echo </span><span class="str">"127.0.0.1 "`hostname`</span><span class="pln"> </span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="str">/etc/</span><span class="pln">hosts<br /></span></code></pre>
+
+<p>Now we can logout and login as our user this time.  Note I use <code>login</code> instead of the default shell to make the chroot a more full experience.</p>
+
+<pre><code><span class="kwd">exit</span><span class="pln"><br />chroot </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot login<br /></span></code></pre>
+
+<p>The first thing I do is then install some useful stuff I use all the time.  These are optional, but I would recommend looking into them and seeing if they work for you.</p>
+
+<pre><code><span class="pln">sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install vim tree strace htop dstat<br /></span></code></pre>
+
+<p>Since this is a nodeJS blog, we'll download and compile node.  Note that these instructions will work for any recent ubuntu system.  First let's install the dependencies to install node.</p>
+
+<pre><code><span class="pln">sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install git curl build</span><span class="pun">-</span><span class="pln">essential libssl</span><span class="pun">-</span><span class="pln">dev<br /></span></code></pre>
+
+<p>Then I like to use nvm so I can compare multiple versions of node on the same system.</p>
+
+<pre><code><span class="pln">git clone http</span><span class="pun">:</span><span class="com">//github.com/creationix/nvm.git</span><span class="pln"><br /></span><span class="pun">.</span><span class="pln"> nvm</span><span class="pun">/</span><span class="pln">nvm</span><span class="pun">.</span><span class="pln">sh &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com"># Load the nvm function into this environment</span><span class="pln"><br /></span><span class="kwd">export</span><span class="pln"> JOBS</span><span class="pun">=</span><span class="lit">2</span><span class="pln"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="com"># This should match the number of CPUs you have.</span><span class="pln"><br />nvm install v0</span><span class="pun">.</span><span class="lit">4.9</span><span class="pln"> &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com"># Download, build, and install node and npm</span><span class="pln"><br />nvm </span><span class="kwd">alias</span><span class="pln"> </span><span class="kwd">default</span><span class="pln"> v0</span><span class="pun">.</span><span class="lit">4.9</span><span class="pln"> &nbsp; </span><span class="com"># Make this the default upon nvm load (login)</span><span class="pln"><br /></span></code></pre>
+
+<p>I would then add the <code>. $HOME/nvm/nvm.sh</code> line to my <code>.bashrc</code> so I get the nvm environment on every login.</p>
+
+<p>Now that we have a normal node environment, we can do things like install http_trace and watch traffic over wifi or the modem.</p>
+
+<pre><code><span class="pln">sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install libpcap</span><span class="pun">-</span><span class="pln">dev<br />npm install </span><span class="pun">-</span><span class="pln">g http_trace<br />sudo su<br /></span><span class="pun">.</span><span class="pln"> </span><span class="pun">/</span><span class="pln">home</span><span class="pun">/</span><span class="pln">tim</span><span class="pun">/</span><span class="pln">nvm</span><span class="pun">/</span><span class="pln">nvm</span><span class="pun">.</span><span class="pln">sh<br />http_trace </span><span class="pun">--</span><span class="pln">headers<br /></span></code></pre>
+
+<p>To make setup and teardown of the chroot easier, I'd recommend making shell scripts that contain the following.  For setup. (this runs outside the chroot)</p>
+
+<pre><code><span class="pln">mount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="kwd">internal</span><span class="pun">/</span><span class="typ">UbuntuNatty_armel</span><span class="pun">.</span><span class="pln">img </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot<br />mount </span><span class="pun">-</span><span class="pln">t proc none </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">proc<br />mount </span><span class="pun">-</span><span class="pln">t sysfs none </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">sys<br />mount </span><span class="pun">-</span><span class="pln">o bind </span><span class="pun">/</span><span class="pln">dev </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">dev<br />cp </span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">resolv</span><span class="pun">.</span><span class="pln">conf<br />chroot </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot login<br /></span></code></pre>
+
+<p>And for cleanup.</p>
+
+<pre><code><span class="pln">umount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">proc<br />umount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">sys<br />umount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot</span><span class="pun">/</span><span class="pln">dev<br />umount </span><span class="pun">/</span><span class="pln">media</span><span class="pun">/</span><span class="pln">chroot<br /></span></code></pre>
+
+<p>You now have a nice portable Ubuntu system complete with working apt-get, nvm, node, and npm. If you run out of space you can reclaim some by running <code>apt-get clean</code> from within the chroot.  Also you can resize the partition when it's not mounted using <code>resize2fs</code>.  This image can be copied to other devices and reused there.</p>
+
+<p>You'd be surprised what you can do in this environment that works in the host environment at well.  For example, I've found that Ubuntu's <code>htop</code> program will run as is in the host webOS environment.  I just copied the one in <code>/media/chroot/usr/bin/htop</code> to <code>/usr/bin/htop</code>.  Also I found that SDL programs build in the Ubuntu environment will successfully link with the sdl libraries that are part of the PDK system and they will launch as cards when run in the host environment.  With things like SDL bindings for node, you would be able to develop PDK apps in JavaScript on your TouchPad. See <a href="https://github.com/creationix/node-sdl">https://github.com/creationix/node-sdl</a> for a start on such a library.  This library was developed, compiled and tested 100% on my TouchPad using my laptop as a bigger screen and keyboard.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/arm-chroot-fun";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/c953ddd239707998340e1a6fbb3eeb46?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Caswell</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/creationix">creationix</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/creationix">creationix</a></dd></dl><dl><dt>Location:</dt><dd>Red Lick, TX</dd></dl><dl><dt>Links:</dt><dd><a href="http://creationix.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Fri Jul 01 2011 10:04:02 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Friday, July  1, 2011</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.4.9">node v0.4.9</a></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/arm-chroot-fun by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:15 GMT -->
+</html>

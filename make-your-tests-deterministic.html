@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/make-your-tests-deterministic by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Make Your Tests Deterministic - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="make-your-tests-deterministic.html">Make Your Tests Deterministic</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Non-deterministic issues like <a href="http://en.wikipedia.org/wiki/Race_condition">race conditions</a> or <a href="http://en.wikipedia.org/wiki/Deadlock">thread deadlocks</a> are very difficult to test, because they are by nature hard to reproduce. Fortunately, in the JavaScript world, we only have a single thread, so we are safe, right? Well, not really because...</p>
+
+<p><strong>Execution order of callbacks can cause the same race condition issues that plague multi-threaded environments.</strong></p>
+
+<h2>Example</h2>
+
+<p>Let's say we need a function that will return an array of timestamps representing the last modification time of a set of files.</p>
+
+<div class="snippet"><a href="make-your-tests-deterministic/get-last-modified.js" class="code-link">get-last-modified.js</a><pre><code><span class="kwd">var</span><span class="pln"> fs </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'fs'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="kwd">var</span><span class="pln"> getLastModified </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">files</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">done</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> timestamps </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[];</span><span class="pln"><br /><br />&nbsp; files</span><span class="pun">.</span><span class="pln">forEach</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">file</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; fs</span><span class="pun">.</span><span class="pln">stat</span><span class="pun">(</span><span class="pln">file</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> stat</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; timestamps</span><span class="pun">.</span><span class="pln">push</span><span class="pun">(</span><span class="pln">stat</span><span class="pun">.</span><span class="pln">mtime</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">timestamps</span><span class="pun">.</span><span class="pln">length </span><span class="pun">===</span><span class="pln"> files</span><span class="pun">.</span><span class="pln">length</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">done</span><span class="pun">(</span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> timestamps</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">};</span></code></pre></div>
+
+<p>To unit test this code, we need to mock out <code>fs</code> module (using real file system would require setting up some initial state, cleaning up afterwards and would make the test slow). That's pretty easy with <a href="https://github.com/vojtajina/node-mocks">node-mocks</a> - we can use a fake in-memory file system.</p>
+
+<div class="snippet"><a href="make-your-tests-deterministic/get-last-modified.spec.js" class="code-link">get-last-modified.spec.js</a><pre><code><span class="com">// Jasmine Syntax</span><span class="pln"><br />describe</span><span class="pun">(</span><span class="str">'getLastModified'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> mocks </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'mocks'</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> mockery </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// reate a fake in-memory FS</span><span class="pln"><br />&nbsp; &nbsp; fs</span><span class="pun">:</span><span class="pln"> mocks</span><span class="pun">.</span><span class="pln">fs</span><span class="pun">.</span><span class="pln">create</span><span class="pun">({</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="str">'one.js'</span><span class="pun">:</span><span class="pln"> mocks</span><span class="pun">.</span><span class="pln">fs</span><span class="pun">.</span><span class="pln">file</span><span class="pun">(</span><span class="str">'2012-01-01'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="str">'two.js'</span><span class="pun">:</span><span class="pln"> mocks</span><span class="pun">.</span><span class="pln">fs</span><span class="pun">.</span><span class="pln">file</span><span class="pun">(</span><span class="str">'2012-02-02'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="str">'three.js'</span><span class="pun">:</span><span class="pln"> mocks</span><span class="pun">.</span><span class="pln">fs</span><span class="pun">.</span><span class="pln">file</span><span class="pun">(</span><span class="str">'2012-02-02'</span><span class="pun">)</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">})</span><span class="pln"><br />&nbsp; </span><span class="pun">};</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// load the module (using fake FS)</span><span class="pln"><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> getLastModified </span><span class="pun">=</span><span class="pln"> mocks</span><span class="pun">.</span><span class="pln">loadFile</span><span class="pun">(</span><span class="str">'get-last-modified.js'</span><span class="pun">,</span><span class="pln"> mockery</span><span class="pun">).</span><span class="pln">getLastModified</span><span class="pun">;</span><span class="pln"><br /><br /><br />&nbsp; it</span><span class="pun">(</span><span class="str">'should return last modified timestamps for every file'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> spy </span><span class="pun">=</span><span class="pln"> jasmine</span><span class="pun">.</span><span class="pln">createSpy</span><span class="pun">(</span><span class="str">'done'</span><span class="pun">).</span><span class="pln">andCallFake</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> timestamps</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; expect</span><span class="pun">(</span><span class="pln">timestamps</span><span class="pun">).</span><span class="pln">toEqual</span><span class="pun">([</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">(</span><span class="str">'2012-01-01'</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">(</span><span class="str">'2012-02-02'</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">(</span><span class="str">'2012-02-02'</span><span class="pun">)</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">]);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; &nbsp; getLastModified</span><span class="pun">([</span><span class="str">'/one.js'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'/two.js'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'/three.js'</span><span class="pun">],</span><span class="pln"> spy</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// wait for done callback</span><span class="pln"><br />&nbsp; &nbsp; waitsFor</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="kwd">return</span><span class="pln"> spy</span><span class="pun">.</span><span class="pln">callCount</span><span class="pun">;});</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>This unit test passes, but the production code is broken. Even worse, it sometimes works, sometimes it does not... The problem is that this code relies on the order of <code>fs.stat</code> callbacks, which is preserved in the mock version of <code>fs</code>, but can't be guaranteed on real fs - it's non-deterministic.</p>
+
+<h2>Solution</h2>
+
+<p>Our solution needs to simulate the problematic behavior during the test.</p>
+
+<p>We could make the fake <code>fs</code> to fire callbacks in a random order, which would be very similar to the real <code>fs</code> behavior. However, that would result in a flaky tests that sometimes pass, sometimes not - just like our production code. Yep, we could do "stress" testing - execute the test multiple times, to make the probability of failing bigger, but that's still flaky.</p>
+
+<p>What we really want is our tests to be always deterministic - reliable, not flaky. So we need to simulate this behavior in a predictable - controlled way.
+That's why the <code>fs</code> mock uses something called <code>predictableNextTick</code>, which behaves similar to <a href="http://nodejs.org/api/process.html#process_process_nexttick_callback">process.nextTick</a>, but fires callbacks in a specific order.</p>
+
+<p>Let's add this line into our unit test:</p>
+
+<pre><code><span class="pln">mocks</span><span class="pun">.</span><span class="pln">predictableNextTick</span><span class="pun">.</span><span class="pln">pattern </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">];</span><span class="pln"><br /></span></code></pre>
+
+<p>Suddenly, the test is failing, because now the <code>fs.stat</code> callbacks are fired in different order than they were registered. They are fired in order specified by the pattern - second callback first, then first, then fourth, then third, etc...</p>
+
+<p><strong>The important thing is, they are ALWAYS fired in THIS order. It's predictable, deterministic !</strong></p>
+
+<p>This was very simple example of an issue, that can easily happen when dealing with asynchronous APIs. The same type of issues can happen in web applications as well, for instance by sending multiple xhr requests.
+<strong>In production, this behavior is out of our control. However, in order to guarantee correct behavior of our code, we need to be sure that it handles correctly all these different situations. The best way to do that is by simulating these situations in a fully controlled - a deterministic way.</strong></p>
+
+<p>The full source code of <code>predictableNextTick</code> implementation can be found on <a href="https://github.com/vojtajina/node-mocks/blob/master/lib/util.js">github</a>.</p>
+
+<p>The full source code of this example is on <a href="https://gist.github.com/3283670">gist</a>.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/make-your-tests-deterministic";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/d59bdceef864e67df13167d806d6da63?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Vojta Jina</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/vojtajina">vojtajina</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/vojtajina">vojtajina</a></dd></dl><dl><dt>Location:</dt><dd>San Mateo, CA</dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Tue Aug 13 2012 01:12:01 GMT-0800 (PST)"><dt>Date Released:</dt><dd>Monday, August 13, 2012</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.8.4">node v0.8.4</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="make-your-tests-deterministic/get-last-modified.js">get-last-modified.js</a></li><li><a href="make-your-tests-deterministic/get-last-modified.spec.js">get-last-modified.spec.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/make-your-tests-deterministic by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:04 GMT -->
+</html>

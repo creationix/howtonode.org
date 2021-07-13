@@ -1,0 +1,7 @@
+body { background: none }
+#container {max-width: 100%}
+#header {display:none}
+#sidebar {display: none}
+#main {margin: 0; padding: 0; -moz-box-shadow: none; border: none; width: 99.9%}
+#main pre code {max-height: none}
+#disqus_thread {display: none}

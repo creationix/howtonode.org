@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/connect-it by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:59:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Just Connect it Already - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="connect-it.html">Just Connect it Already</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Now that the core APIs of node are really starting to stabilize, I'm moving my attention to helping stabilize the framework scene.  One of the things I found really neat from Ruby was the <a href="http://rack.rubyforge.org/">Rack</a> server interface.  It allowed any server that followed the spec to host any app that followed the spec.  Also (and this is the important part for node) is allowed for generic middleware libraries to do common tasks and functions in a very aspect oriented manner.</p>
+
+<p>My employer, <a href="http://sencha.com/">Sencha</a>, has sponsored <a href="http://github.com/visionmedia">TJ Holowaychuk</a> and I to write a middleware system for node called <a href="http://github.com/senchalabs/connect">Connect</a> in an effort to foster common development in the node community.</p>
+
+<p><strong>UPDATE</strong> This article has been updated to use the new connect middleware API.</p>
+
+<h2>So What's New?</h2>
+
+<p>Actually there isn't a lot new here.  But then again, there was nothing new about node either.  Node uses non-blocking IO for fast scalable servers.  That's been known about for years among the C community.  It uses event based, single thread javascript for logic.  That's exactly what the browser has. Add these together and we all see the huge splash it's made.  It's the unique combination of some simple but complimentary ideas that really make these projects zing.</p>
+
+<p><a href="http://github.com/senchalabs/connect">Connect</a> tries to abstract and repackage node as little as possible.  As a result, the API is fairly node specific, but there aren't a lot of leaky abstractions dripping all over the place.  It's fairly solid considering the short time it's been in development so far.  <a href="http://github.com/senchalabs/connect">Connect</a> adds one new unique aspect to node's HTTP server and that's the idea of layers.</p>
+
+<h2>The Integration Problem</h2>
+
+<p>In a normal node HTTP server you usually see code like this.</p>
+
+<div class="snippet"><a href="connect-it/node-http.js" class="code-link">node-http.js</a><pre><code><span class="kwd">var</span><span class="pln"> http </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'http'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// Start an HTTP server</span><span class="pln"><br />http</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">request</span><span class="pun">,</span><span class="pln"> response</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// Every request gets the same "Hello Connect" response.</span><span class="pln"><br />&nbsp; &nbsp; response</span><span class="pun">.</span><span class="pln">writeHead</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="str">"Content-Type"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"text/plain"</span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; response</span><span class="pun">.</span><span class="kwd">end</span><span class="pun">(</span><span class="str">"Hello Connect"</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="pun">}).</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">8081</span><span class="pun">);</span></code></pre></div>
+
+<p>And all requests will be served:</p>
+
+<pre><code><span class="pln">HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK<br /></span><span class="typ">Content</span><span class="pun">-</span><span class="typ">Type</span><span class="pun">:</span><span class="pln"> text</span><span class="pun">/</span><span class="pln">plain<br /></span><span class="typ">Connection</span><span class="pun">:</span><span class="pln"> close<br /></span><span class="typ">Transfer</span><span class="pun">-</span><span class="typ">Encoding</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Identity</span><span class="pln"><br /><br /></span><span class="typ">Hello</span><span class="pln"> </span><span class="typ">Connect</span><span class="pln"><br /></span></code></pre>
+
+<p>This works great for when you want fast synthetic benchmarks or always want to return the same response for every HTTP request.  In most apps, however, this isn't the case.  You want some form of request routing.  Also you'll want nice enhancements like response body gzipping, smart caching, request logging, pretty error handlers, etc...</p>
+
+<p>Implementing all these things over and over for each project is a royal pain since they are somewhat non-trivial and usually a project in and of themselves.  So ideally the node community has a collection of modules that we can use in common to solve these common tasks.  The only problem is that there is no accepted spec to follow.  All these libraries have their own style and way to integrate.  This is great for innovation, terrible for someone trying to just get work done and quickly.</p>
+
+<h2>Layers to the Rescue</h2>
+
+<p><img src="connect-it/onion.jpg" style="float:right;margin: 0 0 10px 10px" /></p>
+
+<p>So taking the ideas from <a href="http://rack.rubyforge.org/">Rack</a> and <a href="http://github.com/isaacs/ejsgi">ejsgi</a>, we introduce the idea of layers to the code handling the HTTP request and response.  An app is structured like an onion.  Every request enters the onion at the outside and traverses layer by layer till it hits something that handles it and generates a response.  In <a href="http://github.com/senchalabs/connect">Connect</a> terms, these are called filters and providers.  Once a layer provides a response, the path happens in reverse.</p>
+
+<p>The <a href="http://github.com/senchalabs/connect">Connect</a> framework simply takes the initial <code>request</code> and <code>response</code> objects that come from node's http callback and pass them layer by layer to the configured middleware modules in an application.</p>
+
+<p>The example from above, converted to a <a href="http://github.com/senchalabs/connect">Connect</a> app looks as follows:</p>
+
+<div class="snippet"><a href="connect-it/connect-http.js" class="code-link">connect-http.js</a><pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">Connect</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'connect'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="com">// Every request gets the same "Hello Connect" response.</span><span class="pln"><br />&nbsp; res</span><span class="pun">.</span><span class="pln">simpleBody</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Hello Connect"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}).</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">8080</span><span class="pun">);</span></code></pre></div>
+
+<p>And request will output this:</p>
+
+<pre><code><span class="pln">HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK<br /></span><span class="typ">Content</span><span class="pun">-</span><span class="typ">Type</span><span class="pun">:</span><span class="pln"> text</span><span class="pun">/</span><span class="pln">plain<br /></span><span class="typ">Content</span><span class="pun">-</span><span class="typ">Length</span><span class="pun">:</span><span class="pln"> </span><span class="lit">13</span><span class="pln"><br /></span><span class="typ">Connection</span><span class="pun">:</span><span class="pln"> close<br /><br /></span><span class="typ">Hello</span><span class="pln"> </span><span class="typ">Connect</span><span class="pln"><br /></span></code></pre>
+
+<h2>Walkthrough Writing Layers and an Application</h2>
+
+<p>Let's go through a simple app from the top down.  It will serve JavaScript files from a folder, cache the result in ram, and log the request and responses.  We'll implement our middleware layers from scratch to understand how they work.  There are better versions of these built-in.</p>
+
+<div class="snippet"><a href="connect-it/app.js" class="code-link">app.js</a><pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">Connect</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'connect'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="pln"><br />&nbsp; </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'./log-it'</span><span class="pun">)(),</span><span class="pln"><br />&nbsp; </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'./serve-js'</span><span class="pun">)()</span><span class="pln"><br /></span><span class="pun">);</span></code></pre></div>
+
+<p>An app is just a call to <code>Connect.createServer</code> with several handlers in a row.</p>
+
+<p>All Connect layers are simply node modules that export a <code>setup</code> function that returns a <code>handle</code> function.  The setup function is called at server startup and you can pass in configuration parameters to it.  Then on each request, you have the option at this point to either: A) Serve a response using the <code>res</code> parameter. or B) Pass on control to the next layer in the chain using the <code>next</code> parameter.  Since you have raw access to the node request and response objects and the full JavaScript language, the possibilities are endless.</p>
+
+<h3>Serve Some Files</h3>
+
+<p>Most apps will want to serve some static resources, so let's write a middleware that serves javascript files based on the request url.</p>
+
+<div class="snippet"><a href="connect-it/serve-js.js" class="code-link">serve-js.js</a><pre><code><span class="kwd">var</span><span class="pln"> fs </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'fs'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> serveJsSetup</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> serveJsHandle</span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// Serve any file relative to the process.</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// NOTE security was sacrificed in this example to make the code simple.</span><span class="pln"><br />&nbsp; &nbsp; fs</span><span class="pun">.</span><span class="pln">readFile</span><span class="pun">(</span><span class="pln">req</span><span class="pun">.</span><span class="pln">url</span><span class="pun">.</span><span class="pln">substr</span><span class="pun">(</span><span class="lit">1</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">err</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">next</span><span class="pun">(</span><span class="pln">err</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">return</span><span class="pun">;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">simpleBody</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">,</span><span class="pln"> </span><span class="str">"application/javascript"</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br />&nbsp; </span><span class="pun">};</span><span class="pln"><br /></span><span class="pun">};</span></code></pre></div>
+
+<p>Here we are using the built-in node library <code>'fs'</code> to read the requested file from the hard-drive.  Then we're using the Connect provided helper <code>simpleBody</code> on the http response object.  Nothing fancy or complicated here.</p>
+
+<h3>Log It</h3>
+
+<p>Whenever there is a problem with a server, it's really great to have a log-file somewhere to trace what went wrong.  This log module will output a line when a request comes in through the layer, and then another on the way back out.</p>
+
+<div class="snippet"><a href="connect-it/log-it.js" class="code-link">log-it.js</a><pre><code><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> logItSetup</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Initialize the counter</span><span class="pln"><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> counter </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"><br /><br />&nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> logItHandle</span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> writeHead </span><span class="pun">=</span><span class="pln"> res</span><span class="pun">.</span><span class="pln">writeHead</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Store the original function</span><span class="pln"><br /><br />&nbsp; &nbsp; counter</span><span class="pun">++;</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// Log the incoming request</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Request "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> counter </span><span class="pun">+</span><span class="pln"> </span><span class="str">" "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> req</span><span class="pun">.</span><span class="pln">method </span><span class="pun">+</span><span class="pln"> </span><span class="str">" "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> req</span><span class="pun">.</span><span class="pln">url</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// Wrap writeHead to hook into the exit path through the layers.</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">writeHead </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">code</span><span class="pun">,</span><span class="pln"> headers</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">writeHead </span><span class="pun">=</span><span class="pln"> writeHead</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Put the original back</span><span class="pln"><br /><br />&nbsp; &nbsp; &nbsp; </span><span class="com">// Log the outgoing response</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Response "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> counter </span><span class="pun">+</span><span class="pln"> </span><span class="str">" "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> code </span><span class="pun">+</span><span class="pln"> </span><span class="str">" "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> JSON</span><span class="pun">.</span><span class="pln">stringify</span><span class="pun">(</span><span class="pln">headers</span><span class="pun">));</span><span class="pln"><br /><br />&nbsp; &nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">writeHead</span><span class="pun">(</span><span class="pln">code</span><span class="pun">,</span><span class="pln"> headers</span><span class="pun">);</span><span class="pln"> </span><span class="com">// Call the original</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">};</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// Pass through to the next layer</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">next</span><span class="pun">();</span><span class="pln"><br />&nbsp; </span><span class="pun">};</span><span class="pln"><br /></span><span class="pun">};</span></code></pre></div>
+
+<p>The setup function is a great place to setup variables used by the middleware across requests.  In this case we're initializing the counter for the logger.</p>
+
+<p>In the handler we are using a wrapping idiom to hook into the call to <code>writeHead</code>.  In JavaScript functions are values just like anything else.  So a great way to wrap functions is to store a reference to the original implementation in a closure variable.  Replace the function with a new one, and in the first line of the new function, put the old function definition back.  Then on the last line of the replacement function call the original.  This is a simple and efficient way to hook into existing object methods since they just look for properties by name and not references to actual function objects.</p>
+
+<p>The standalone <code>console.log</code> call will be called at the beginning of each request cycle, and the nested <code>console.log</code> will be called on the way out by means of the nested <code>writeHead</code> function.</p>
+
+<h2>Built-in Middleware</h2>
+
+<p>Connect comes with several built-in middleware layers for easy use.  A much more robust version of this example could be written using the built-in modules.</p>
+
+<div class="snippet"><a href="connect-it/app2.js" class="code-link">app2.js</a><pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">Connect</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'connect'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">logger</span><span class="pun">(),</span><span class="pln"> </span><span class="com">// Log responses to the terminal using Common Log Format.</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">responseTime</span><span class="pun">(),</span><span class="pln"> </span><span class="com">// Add a special header with timing information.</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">conditionalGet</span><span class="pun">(),</span><span class="pln"> </span><span class="com">// Add HTTP 304 responses to save even more bandwidth.</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">cache</span><span class="pun">(),</span><span class="pln"> </span><span class="com">// Add a short-term ram-cache to improve performance.</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">gzip</span><span class="pun">(),</span><span class="pln"> </span><span class="com">// Gzip the output stream when the browser wants it.</span><span class="pln"><br />&nbsp; </span><span class="typ">Connect</span><span class="pun">.</span><span class="pln">staticProvider</span><span class="pun">(</span><span class="pln">__dirname</span><span class="pun">)</span><span class="pln"> </span><span class="com">// Serve all static files in the current dir.</span><span class="pln"><br /></span><span class="pun">);</span></code></pre></div>
+
+<p>This has proper error-handling, proper HTTP headers, and all sorts of other bells and whistles that are required from a production web server.</p>
+
+<h2>Future and Goals of Connect</h2>
+
+<p>Connect is currently in alpha state. We're looking for community feedback and hope to stabilize into a beta in the next week or so.  </p>
+
+<p>Also what's really needed is for some real frameworks and apps to be written using Connect as a base.  TJ is using it internally for a project at work and I plan to convert <a href="http://github.com/creationix/wheat">wheat</a> (The engine to this blog) to use it.</p>
+
+<p>The true goal of Connect is to help the node community work better together.   Connect is the combined effort of some JavaScripters from the node community who want a base system to build world-class web frameworks from.</p>
+
+<p>There has been a lot of discussion on the topic of middleware and now is the time to write some code, use it, and do it.  The popularity of JavaScript itself is proof that what really succeeds is real-world implementations, not substance-less discussions on the very best way to do something. Like node, our goal is to make something simple, but correct, and let others build from there.</p>
+
+<h3>What you Should Do</h3>
+
+<p>Connect is cool, I gave two presentations on it in the past week at <a href="http://www.slideshare.net/creationix/real-time-web-with-node">txjs</a> and <a href="http://www.slideshare.net/creationix/node-powered-mobile">swdc</a> and people loved it. TJ and I have done all we can for now and need some community feedback in order to move on.  If you are interested in node and want to help shape the future of web frameworks please do the following:</p>
+
+<ul>
+<li>Install node if you haven't already. (I suggest using <a href="http://github.com/creationix/ivy">ivy</a>)</li>
+<li>Clone Connect.</li>
+<li>Go through the examples in the code-base. (The <code>app.js</code> file is launched with the <code>connect</code> executable)</li>
+<li>Write your own code using Connect. (Or port your favorite node framework)</li>
+<li>Send feedback through <a href="http://github.com/senchalabs/connect/issues">github</a> and the normal node community channels. (irc and mailing list)</li>
+<li>Tweet about it to spread the word. (This only works if everyone uses it)</li>
+</ul>
+
+<h3>Deploying Connect Apps</h3>
+
+<p>See the <a href="deploying-node-with-spark.html">deploying-node-with-spark</a> article for tips on how to set up a production server using <a href="http://github.com/senchalabs/connect">Connect</a> and <a href="http://github.com/senchalabs/spark">Spark</a>.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/connect-it";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/c953ddd239707998340e1a6fbb3eeb46?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Caswell</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/creationix">creationix</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/creationix">creationix</a></dd></dl><dl><dt>Location:</dt><dd>Red Lick, TX</dd></dl><dl><dt>Links:</dt><dd><a href="http://creationix.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Jun 07 2010 12:22:52 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Monday, June  7, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.1.102">node v0.1.102</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="connect-it/node-http.js">node-http.js</a></li><li><a href="connect-it/connect-http.js">connect-http.js</a></li><li><a href="connect-it/app.js">app.js</a></li><li><a href="connect-it/serve-js.js">serve-js.js</a></li><li><a href="connect-it/log-it.js">log-it.js</a></li><li><a href="connect-it/app2.js">app2.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/connect-it by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:59:08 GMT -->
+</html>

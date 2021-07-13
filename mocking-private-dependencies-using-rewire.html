@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/mocking-private-dependencies-using-rewire by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:56:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Mocking Dependencies using [rewire] - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="mocking-private-dependencies-using-rewire.html">Mocking Dependencies using [rewire]</a></h1><p>Despite all my efforts to try to encapsulate some of my code into my modules, I was always founding myself exposing too much just for unit testing purpose. And even thought, it was often very complex to mock out some of the external libraries I was using.
+That was before I found the <a href="https://npmjs.org/package/rewire/">rewire</a> library.
+As they say, it only: "adds a special setter and getter to modules so you can modify their behaviour for better unit testing".</p>
+
+<p>This is all you need!</p>
+
+<h3>Let's see an example</h3>
+
+<p>I have a very simple controller like this:</p>
+
+<div class="snippet"><a href="mocking-private-dependencies-using-rewire/user-controller.js" class="code-link">user-controller.js</a><pre><code><span class="str">'use strict'</span><span class="pun">;</span><span class="pln"><br /><br /></span><span class="kwd">var</span><span class="pln"> userService </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'../service/user-service'</span><span class="pun">);</span><span class="pln"><br /><br />exports</span><span class="pun">.</span><span class="pln">allUsers </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; userService</span><span class="pun">.</span><span class="pln">getUsers</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">err</span><span class="pun">,</span><span class="pln"> users</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">err</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">next</span><span class="pun">(</span><span class="pln">err</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">json</span><span class="pun">(</span><span class="pln">users</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">};</span></code></pre></div>
+
+<p>In my test driven development all I want to test is:</p>
+
+<ul>
+<li>this method will call <code>getUsers</code> on <code>userService</code></li>
+<li>if the callback receive an error then it will call <code>next</code> passing the error</li>
+<li>else <code>json</code> is called on the response with the users as arguments</li>
+</ul>
+
+<p><strong>Setting up a mock is easy</strong> (I use <a href="https://npmjs.org/package/sinon/">sinon</a> but any mocking will do it):</p>
+
+<pre><code><span class="com">// given</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> userController </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'./user-controller'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; userServiceMock </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{};</span><span class="pln"><br /><br /></span><span class="com">// and</span><span class="pln"><br />userServiceMock</span><span class="pun">.</span><span class="pln">getUser </span><span class="pun">=</span><span class="pln"> sinon</span><span class="pun">.</span><span class="pln">stub</span><span class="pun">().</span><span class="pln">callsArgWith</span><span class="pun">(</span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[{</span><span class="pln">id</span><span class="pun">:</span><span class="pln"> </span><span class="str">'user1'</span><span class="pun">},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">id</span><span class="pun">:</span><span class="pln"> </span><span class="str">'user2'</span><span class="pun">}]);</span><span class="pln"><br /><br /></span><span class="com">// when</span><span class="pln"><br />userController</span><span class="pun">.</span><span class="pln">allUsers</span><span class="pun">();</span><span class="pln"><br /><br /></span><span class="com">// then</span><span class="pln"><br />userServiceMock</span><span class="pun">.</span><span class="pln">getUser</span><span class="pun">.</span><span class="pln">calledOnce</span><span class="pun">.</span><span class="pln">should</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">true</span><span class="pun">);</span><span class="pln"><br /></span></code></pre>
+
+<p>But how can I <strong>inject the mock instead of the real user service</strong> ?</p>
+
+<p>=> <strong>Rewire</strong>!</p>
+
+<p>Instead of require the user-controller I'm using rewire:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> userController </span><span class="pun">=</span><span class="pln"> rewire</span><span class="pun">(</span><span class="str">'./user-controller'</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>Then I can get and set any properties on the module. So I can do:</p>
+
+<pre><code><span class="pln">before</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(){</span><span class="pln"><br />&nbsp; &nbsp; userController</span><span class="pun">.</span><span class="pln">__set__</span><span class="pun">({</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="str">'userService'</span><span class="pun">:</span><span class="pln"> userServiceMock<br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>Et voila!</p>
+
+<p>Here is the full test for the previous controller:</p>
+
+<div class="snippet"><a href="mocking-private-dependencies-using-rewire/user-controller.spec.js" class="code-link">user-controller.spec.js</a><pre><code><span class="str">'use strict'</span><span class="pun">;</span><span class="pln"><br /><br /></span><span class="kwd">var</span><span class="pln"> sinon </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'sinon'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; rewire </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'rewire'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; userController </span><span class="pun">=</span><span class="pln"> rewire</span><span class="pun">(</span><span class="str">'./user-controller'</span><span class="pun">);</span><span class="pln"><br /><br />describe</span><span class="pun">(</span><span class="str">'allUsers'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; it </span><span class="pun">(</span><span class="str">'should return all users'</span><span class="pun">,</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// given</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> userServiceMock </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{},</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; res &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> json</span><span class="pun">:</span><span class="pln"> sinon</span><span class="pun">.</span><span class="pln">spy</span><span class="pun">()},</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; users &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[{</span><span class="pln">id</span><span class="pun">:</span><span class="pln"> </span><span class="str">'user1'</span><span class="pun">},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">id</span><span class="pun">:</span><span class="pln"> </span><span class="str">'user2'</span><span class="pun">}],</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; nextStub &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="pun">=</span><span class="pln"> sinon</span><span class="pun">.</span><span class="pln">stub</span><span class="pun">();</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// and</span><span class="pln"><br />&nbsp; &nbsp; userServiceMock</span><span class="pun">.</span><span class="pln">getUser </span><span class="pun">=</span><span class="pln"> sinon</span><span class="pun">.</span><span class="pln">stub</span><span class="pun">().</span><span class="pln">callsArgWith</span><span class="pun">(</span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> users</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// when</span><span class="pln"><br />&nbsp; &nbsp; userController</span><span class="pun">.</span><span class="pln">allUsers</span><span class="pun">({},</span><span class="pln"> res</span><span class="pun">,</span><span class="pln"> nextStub</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// then</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">json</span><span class="pun">.</span><span class="pln">calledWith</span><span class="pun">(</span><span class="pln">users</span><span class="pun">).</span><span class="pln">should</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">true</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; nextStub</span><span class="pun">.</span><span class="pln">called</span><span class="pun">.</span><span class="pln">should</span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/mocking-private-dependencies-using-rewire";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/700263f0f9efb38cfa4bb0ab853513df?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Caroline BDA</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/carolineBda">carolineBda</a></dd></dl><dl><dt>Location:</dt><dd>London, UK</dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Feb 17 2014 23:05:41 GMT-0800 (PST)"><dt>Date Released:</dt><dd>Tuesday, February 18, 2014</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.10.25">node v0.10.25</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="mocking-private-dependencies-using-rewire/user-controller.js">user-controller.js</a></li><li><a href="mocking-private-dependencies-using-rewire/user-controller.spec.js">user-controller.spec.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/mocking-private-dependencies-using-rewire by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:56:49 GMT -->
+</html>

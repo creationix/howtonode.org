@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/hello-node by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:59:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Hello Node! - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="hello-node.html">Hello Node!</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>In programming literature it has become the standard to create a hello world program as the first example.  This article will go through a few simple hello world type examples with everything from simple terminal output to an http server that uses an external framework for some semantic sugar.</p>
+
+<p>Then we'll shift gears and go through a real example that teaches enough to get you up on your feet writing your own web application using node.JS.</p>
+
+<h2>Hello World Examples</h2>
+
+<p>Here are four simple hello world examples. The comments in the code explain how the code works and the text around it explain what it does and how to test it.</p>
+
+<h2>Hello Console</h2>
+
+<p>This example is about as plain as it can get. It prints the words "Hello World" to the terminal.</p>
+
+<div class="snippet"><a href="hello-node/hello-console.js" class="code-link">hello-console.js</a><pre><code><span class="com">// Call the console.log function.</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Hello World"</span><span class="pun">);</span></code></pre></div>
+
+<p>You can run this by putting it in a file called "hello-console.js" and running it with <code>node hello-console.js</code></p>
+
+<h2>Hello HTTP</h2>
+
+<p>I'd guess that while it's not the only use case for node.JS, most people are using it as a web application platform.  So the next example will be a simple HTTP server that responds to every request with the plain text message "Hello World"</p>
+
+<div class="snippet"><a href="hello-node/hello-http.js" class="code-link">hello-http.js</a><pre><code><span class="com">// Load the http module to create an http server.</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> http </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'http'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// Configure our HTTP server to respond with Hello World to all requests.</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> server </span><span class="pun">=</span><span class="pln"> http</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">request</span><span class="pun">,</span><span class="pln"> response</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; response</span><span class="pun">.</span><span class="pln">writeHead</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="str">"Content-Type"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"text/plain"</span><span class="pun">});</span><span class="pln"><br />&nbsp; response</span><span class="pun">.</span><span class="kwd">end</span><span class="pun">(</span><span class="str">"Hello World\n"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br /></span><span class="com">// Listen on port 8000, IP defaults to 127.0.0.1</span><span class="pln"><br />server</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">8000</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// Put a friendly message on the terminal</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Server running at http://127.0.0.1:8000/"</span><span class="pun">);</span></code></pre></div>
+
+<h2>Hello TCP</h2>
+
+<p>Node also makes an excellent TCP server, and here is an example that responds to all TCP connections with the message "Hello World" and then closes the connection.</p>
+
+<div class="snippet"><a href="hello-node/hello-tcp.js" class="code-link">hello-tcp.js</a><pre><code><span class="com">// Load the net module to create a tcp server.</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> net </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'net'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// Creates a new TCP server. The handler argument is automatically set as a listener for the 'connection' event</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> server </span><span class="pun">=</span><span class="pln"> net</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">socket</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Every time someone connects, tell them hello and then close the connection.</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Connection from "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> socket</span><span class="pun">.</span><span class="pln">remoteAddress</span><span class="pun">);</span><span class="pln"><br />&nbsp; socket</span><span class="pun">.</span><span class="kwd">end</span><span class="pun">(</span><span class="str">"Hello World\n"</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="pun">});</span><span class="pln"><br /><br /></span><span class="com">// Fire up the server bound to port 7000 on localhost</span><span class="pln"><br />server</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">7000</span><span class="pun">,</span><span class="pln"> </span><span class="str">"localhost"</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// Put a friendly message on the terminal</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"TCP server listening on port 7000 at localhost."</span><span class="pun">);</span></code></pre></div>
+
+<h2>Hello Router</h2>
+
+<p>Often you won't be using the node built-in libraries because they are designed to be very low level.  This makes node quick, nimble, and easy to maintain, but is usually not enough to get started on a real world application.  My first node framework is <code>node-router</code>.  This example shows an HTTP server that responds with "Hello World" to all requests to "/" and responds with a 404 error to everything else.</p>
+
+<div class="snippet"><a href="hello-node/hello-router.js" class="code-link">hello-router.js</a><pre><code><span class="com">// Load the node-router library by creationix</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> server </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'node-router'</span><span class="pun">).</span><span class="pln">getServer</span><span class="pun">();</span><span class="pln"><br /><br /></span><span class="com">// Configure our HTTP server to respond with Hello World the root request</span><span class="pln"><br />server</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">"/"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">request</span><span class="pun">,</span><span class="pln"> response</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; response</span><span class="pun">.</span><span class="pln">simpleText</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Hello World!"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br /></span><span class="com">// Listen on port 8080 on localhost</span><span class="pln"><br />server</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">8000</span><span class="pun">,</span><span class="pln"> </span><span class="str">"localhost"</span><span class="pun">);</span></code></pre></div>
+
+<p>In order to test this, you will need to install the <code>node-router</code> library.  There are two ways to do this.  You can either install it into a path that node recognizes (I create a symlink into ~/.node_libraries) or put the <code>node-router.js</code> file in your application and reference it locally.  See the <a href="http://nodejs.org/api/modules.html">node docs on modules</a> for more details on how modules work.</p>
+
+<h1>Installing Libraries</h1>
+
+<p>I'll install the following libraries that are common to my projects:</p>
+
+<ul>
+<li><a href="http://github.com/creationix/node-router">node-router</a> - Wraps the built-in http library with many convenience functions like request routing and message body decoding.</li>
+<li><a href="http://github.com/creationix/haml-js">haml-js</a> - Template engine that compiles HAML templates into HTML</li>
+<li><a href="http://github.com/creationix/proto">proto</a> - Baby library that adds some useful stuff to Object.prototype</li>
+</ul>
+
+<p>You can install these however you please, but here is how I'd do it.  The following code will clone the four libraries and install them into your local node library search path:</p>
+
+<div class="snippet"><a href="hello-node/install.sh" class="code-link">install.sh</a><pre><code><span class="pln">mkdir </span><span class="pun">~</span><span class="str">/NodeLibs<br />cd ~/</span><span class="typ">NodeLibs</span><span class="pln"><br />git clone git</span><span class="pun">:</span><span class="com">//github.com/creationix/node-router.git</span><span class="pln"><br />git clone git</span><span class="pun">:</span><span class="com">//github.com/creationix/haml-js.git</span><span class="pln"><br />git clone git</span><span class="pun">:</span><span class="com">//github.com/creationix/proto.git</span><span class="pln"><br />mkdir </span><span class="pun">~</span><span class="str">/.node_libraries<br />cd ~/</span><span class="pun">.</span><span class="pln">node_libraries<br />ln </span><span class="pun">-</span><span class="pln">s </span><span class="pun">~</span><span class="str">/NodeLibs/</span><span class="pun">*</span><span class="str">/lib/</span><span class="pun">*</span><span class="pln"> </span><span class="pun">./</span></code></pre></div>
+
+<p>That's it for now, this article was going to explain more, but it seems it got lost and fell through the cracks.  Hopefully this will help you get started working with node.JS, it's a blast!.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/hello-node";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/c953ddd239707998340e1a6fbb3eeb46?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Caswell</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/creationix">creationix</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/creationix">creationix</a></dd></dl><dl><dt>Location:</dt><dd>Red Lick, TX</dd></dl><dl><dt>Links:</dt><dd><a href="http://creationix.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Mar 22 2010 10:55:41 GMT-0500 (CDT)"><dt>Date Released:</dt><dd>Monday, March 22, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.1.102">node v0.1.102</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="hello-node/hello-console.js">hello-console.js</a></li><li><a href="hello-node/hello-http.js">hello-http.js</a></li><li><a href="hello-node/hello-tcp.js">hello-tcp.js</a></li><li><a href="hello-node/hello-router.js">hello-router.js</a></li><li><a href="hello-node/install.sh">install.sh</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/hello-node by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:59:26 GMT -->
+</html>

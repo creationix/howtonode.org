@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/understanding-process-next-tick by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Understanding process.nextTick() - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="understanding-process-next-tick.html">Understanding process.nextTick()</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>I have seen quite a few people being confused about <code>process.nextTick()</code>. Let's take a look at what <code>process.nextTick()</code> does, and when to use it.</p>
+
+<p>As you might already know, every Node application runs on a single thread. What this means is that <strong>apart from I/O</strong> - at any time, only one task/event is processed by Node's event loop. You can imagine this event loop to be a queue of callbacks that are processed by Node on every <strong>tick</strong> of the event loop. So, even if you are running Node on a multi-core machine, you will not get any parallelism in terms of actual processing - all events will be processed only one at a time. This is why Node is a great fit for I/O bound tasks, and definitely not for CPU intensive tasks. For every I/O bound task, you can simply define a callback that will get added to the event queue. The callback will fire when the I/O operation is done, and in the mean time, the application can continue to process other I/O bound requests. </p>
+
+<p>Given this model, what <code>process.nextTick()</code> actually does is defer the execution of an action till the next pass around the event loop. Let's take a simple example. If we had a function <code>foo()</code> which we wanted to invoke in the next tick, this is how we do it:</p>
+
+<pre><code><span class="kwd">function</span><span class="pln"> foo</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">error</span><span class="pun">(</span><span class="str">'foo'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /><br />process</span><span class="pun">.</span><span class="pln">nextTick</span><span class="pun">(</span><span class="pln">foo</span><span class="pun">);</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">error</span><span class="pun">(</span><span class="str">'bar'</span><span class="pun">);</span><span class="pln"><br /></span></code></pre>
+
+<p>If you ran the above snippet, you will notice that <code>bar</code> will be printed in your console before <code>foo</code>, as we have delayed the invokation of <code>foo()</code> till the next tick of the event loop:</p>
+
+<pre><code><span class="pln">bar<br />foo<br /></span></code></pre>
+
+<p>In fact, you can get the same result by using <code>setTimeout()</code> this way:</p>
+
+<pre><code><span class="pln">setTimeout</span><span class="pun">(</span><span class="pln">foo</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">);</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'bar'</span><span class="pun">);</span><span class="pln"><br /></span></code></pre>
+
+<p>However, <code>process.nextTick()</code> is not just a simple alias to <code>setTimeout(fn, 0)</code> - it's <a href="https://gist.github.com/1257394">far more efficient</a>.</p>
+
+<p>More precisely, <code>process.nextTick()</code> defers the function until a completely new stack.  You can call as many functions as you want in the current stack.  The function that called nextTick has to return, as well as its parent, all the way up to the root of the stack.  Then when the event loop is looking for a new event to execute, your <code>nextTick</code>'ed function will be there in the event queue and execute on a whole new stack.</p>
+
+<p>Let's see where we can use <code>process.nextTick()</code>:</p>
+
+<h2>Interleaving execution of a CPU intensive task with other events</h2>
+
+<p>Let's say we have a task <code>compute()</code> which needs to run almost continuously, and does some CPU intensive calculations. If we wanted to also handle other events, like serving HTTP requests in the same Node process, we can use <code>process.nextTick()</code> to interleave the execution of <code>compute()</code> with the processing of requests this way:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> http </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'http'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="kwd">function</span><span class="pln"> compute</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// performs complicated calculations continuously</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// ...</span><span class="pln"><br />&nbsp; &nbsp; process</span><span class="pun">.</span><span class="pln">nextTick</span><span class="pun">(</span><span class="pln">compute</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /><br />http</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp;res</span><span class="pun">.</span><span class="pln">writeHead</span><span class="pun">(</span><span class="lit">200</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="str">'Content-Type'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'text/plain'</span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; &nbsp;res</span><span class="pun">.</span><span class="kwd">end</span><span class="pun">(</span><span class="str">'Hello World'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}).</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">5000</span><span class="pun">,</span><span class="pln"> </span><span class="str">'127.0.0.1'</span><span class="pun">);</span><span class="pln"><br /><br />compute</span><span class="pun">();</span><span class="pln"><br /></span></code></pre>
+
+<p>In this model, instead of calling <code>compute()</code> recursively, we use <code>process.nextTick()</code> to delay the execution of <code>compute()</code> till the next tick of the event loop. By doing so, we ensure that if any other HTTP requests are queued in the event loop, they will be processed before the next time <code>compute()</code> gets invoked. If we had not used <code>process.nextTick()</code> and had simply called <code>compute()</code> recursively, the program would not have been able to process any incoming HTTP requests. Try it for yourself!</p>
+
+<p>So, alas, we don't really get any magical multi-core parallelism benefits by using <code>process.nextTick()</code>, but we can still use it to share CPU usage between different parts of our application.</p>
+
+<h2>Keeping callbacks truly asynchronous</h2>
+
+<p>When you are writing a function that takes a callback, you should always ensure that this callback is fired asynchronously. Let's look at an example <strong>which violates</strong> this convention:</p>
+
+<pre><code><span class="kwd">function</span><span class="pln"> asyncFake</span><span class="pun">(</span><span class="pln">data</span><span class="pun">,</span><span class="pln"> callback</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> &nbsp; &nbsp; &nbsp; &nbsp;<br />&nbsp; &nbsp; </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">data </span><span class="pun">===</span><span class="pln"> </span><span class="str">'foo'</span><span class="pun">)</span><span class="pln"> callback</span><span class="pun">(</span><span class="kwd">true</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">else</span><span class="pln"> callback</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /><br />asyncFake</span><span class="pun">(</span><span class="str">'bar'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">result</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// this callback is actually called synchronously!</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>Why is this inconsistency bad? Let's consider this example taken from Node's <a href="http://nodejs.org/docs/latest/api/net.html#net.createConnection">documentation</a>:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> client </span><span class="pun">=</span><span class="pln"> net</span><span class="pun">.</span><span class="pln">connect</span><span class="pun">(</span><span class="lit">8124</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> <br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'client connected'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; client</span><span class="pun">.</span><span class="pln">write</span><span class="pun">(</span><span class="str">'world!\r\n'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>In the above case, if for some reason, <code>net.connect()</code> were to become synchronous, the callback would be called immediately, and hence the <code>client</code> variable will not be initialized when the it's accessed by the callback to write to the client! </p>
+
+<p>We can correct <code>asyncFake()</code> to be always asynchronous this way:</p>
+
+<pre><code><span class="kwd">function</span><span class="pln"> asyncReal</span><span class="pun">(</span><span class="pln">data</span><span class="pun">,</span><span class="pln"> callback</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; process</span><span class="pun">.</span><span class="pln">nextTick</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; callback</span><span class="pun">(</span><span class="pln">data </span><span class="pun">===</span><span class="pln"> </span><span class="str">'foo'</span><span class="pun">);</span><span class="pln"> &nbsp; &nbsp; &nbsp; <br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /></span></code></pre>
+
+<h2>When emitting events</h2>
+
+<p>Let's say you are writing a library that reads from a source and emits events that contains the chunks that are read. Such a library might look like this:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">EventEmitter</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'events'</span><span class="pun">).</span><span class="typ">EventEmitter</span><span class="pun">;</span><span class="pln"><br /><br /></span><span class="kwd">function</span><span class="pln"> </span><span class="typ">StreamLibrary</span><span class="pun">(</span><span class="pln">resourceName</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> <br />&nbsp; &nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">emit</span><span class="pun">(</span><span class="str">'start'</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// read from the file, and for every chunk read, do: &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">emit</span><span class="pun">(</span><span class="str">'data'</span><span class="pun">,</span><span class="pln"> chunkRead</span><span class="pun">);</span><span class="pln"> &nbsp; &nbsp; &nbsp; <br /></span><span class="pun">}</span><span class="pln"><br /></span><span class="typ">StreamLibrary</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">.</span><span class="pln">__proto__ </span><span class="pun">=</span><span class="pln"> </span><span class="typ">EventEmitter</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">;</span><span class="pln"> &nbsp; </span><span class="com">// inherit from EventEmitter</span><span class="pln"><br /></span></code></pre>
+
+<p>Let's say that somewhere else, someone is listening to these events:</p>
+
+<pre><code><span class="kwd">var</span><span class="pln"> stream </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">StreamLibrary</span><span class="pun">(</span><span class="str">'fooResource'</span><span class="pun">);</span><span class="pln"><br /><br />stream</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'start'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'Reading has started'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br />stream</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'data'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">chunk</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'Received: '</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> chunk</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>In the above example, the listener will never get the <code>start</code> event as that event would be emitted by <code>StreamLibrary</code> immediately during the constructor call. At that time, we have not yet assigned a callback to the <code>start</code> event yet. Therefore, we would never catch this event! Once again, we can use <code>process.nextTick()</code> to defer the <code>emit</code> till the listener has had the chance to listen for the event.</p>
+
+<pre><code><span class="kwd">function</span><span class="pln"> </span><span class="typ">StreamLibrary</span><span class="pun">(</span><span class="pln">resourceName</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> &nbsp; &nbsp; &nbsp;<br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> </span><span class="kwd">self</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">;</span><span class="pln"><br /><br />&nbsp; &nbsp; process</span><span class="pun">.</span><span class="pln">nextTick</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">emit</span><span class="pun">(</span><span class="str">'start'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// read from the file, and for every chunk read, do: &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">emit</span><span class="pun">(</span><span class="str">'data'</span><span class="pun">,</span><span class="pln"> chunkRead</span><span class="pun">);</span><span class="pln"> &nbsp; &nbsp; &nbsp; <br /></span><span class="pun">}</span><span class="pln"><br /></span></code></pre>
+
+<p>I hope that demystifies <code>process.nextTick()</code>. If I have missed out something, please do share in the comments.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/understanding-process-next-tick";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/620cd7bd79109f4880586646d7a24669?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Kishore Nallan</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/kishorenc">kishorenc</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/kishorelive">kishorelive</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://kishorelive.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Tue Jan 24 2012 19:07:00 GMT"><dt>Date Released:</dt><dd>Tuesday, January 24, 2012</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.6.8">node v0.6.8</a></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/understanding-process-next-tick by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:04 GMT -->
+</html>

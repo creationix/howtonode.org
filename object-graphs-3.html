@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/object-graphs-3 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:24 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Learning Javascript with Object Graphs (Part III) - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="object-graphs-3.html">Learning Javascript with Object Graphs (Part III)</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Part I of this series explained basic object graphs and visually described references, closures, and basic inheritance in JavaScript.  Part II compared different styles for doing object-oriented programming in JavaScript.  Now in Part III we'll get creative and look as Ruby's object model and compare it to how JavaScript works.  Also I'll show how to implement some Ruby style classes.  JavaScript is a very flexible language and can support about any object model you want with enough understanding and creativity.</p>
+
+<h2>Why Ruby</h2>
+
+<p>Ok, I'll admit, I used to be a ruby guy.  I didn't so much do rails, but I loved the ruby language.  I read the pickaxe book, attended dallasrb, tried to start my own ruby based company, failed, and finally taught ruby to home-school kids.</p>
+
+<p>Also I chose ruby because I've noticed that several newcomers to the node.js community come from ruby and other languages with similar object systems.  They often have a hard time adjusting to the simple, but new semantics of a language that looks like C/Java/PHP, but acts more like Lisp/Closure/Self.</p>
+
+<h2>What are Objects</h2>
+
+<p>Both languages are object oriented languages.  The difference is one subscribes to the stricter and slightly more complicated classical OO style while the other has a plain prototypal object system.  In both languages all values are objects (or at least act like them).  A ruby class is also an object who is an instance of the class <code>Class</code>.  In JavaScript functions are also objects.  In both primitive values like numbers and booleans are objects that contain methods/functions through their classes/prototypes.  An object is simply a value that contains state and/or behavior through named channels.  Objects provide encapsulation so that you can call <code>obj.save()</code> instead of having to use some external function and pass around all the state <code>save(obj)</code>.</p>
+
+<h2>Methods versus Functions</h2>
+
+<p>Probably the biggest difference between the object models when you get down to it and ignore syntax is the fact that Ruby has methods and JavaScript has first-class functions.  I can hear you thinking how "Wait, I thought 'method' and 'function' were synonyms!" so I'll explain what I mean.</p>
+
+<h3>Gotta keep them separated</h3>
+
+<p>In classical OO, there is this idea that you must separate function from state.  The same object structure can't hold both data and executable code.  So classes hold the methods and instance objects hold the data (instance variables).  Ruby is no exception.  The language simply doesn't allow for methods on anything other than a class.  Sure you can  add singleton methods to objects, but the methods aren't actually on the object itself they are on a separate singleton class created just for the purpose of holding the methods for that single object.</p>
+
+<p>In JavaScript there is no concept of methods.  Functions are first-class, meaning they are expressions just like <code>true</code>, <code>42</code>, <code>{}</code>, and everything else you can assign to a variable or property of an object.  You can emulate classes if you explicitly put all your function properties in a shared prototype object and then have your "instance" objects all inherit from that common prototype, but the fact is you're not forced to work this way. For better or for worse, JavaScript has very few rules about what you can and can't do.</p>
+
+<h3>Controlled Inheritance</h3>
+
+<p>Another side effect of this difference in inheritance.  In Ruby and other classical OO languages, only methods can be inherited.  Instance variables only exist on instances and instances can't inherit from instances, only classes inherit from classes.  In JavaScript, any object can inherit from any object and all properties are subject to this prototypal inheritance no matter their type.</p>
+
+<h3><code>self</code> and <code>this</code></h3>
+
+<p>Both languages have seemingly similar special variables that give you access to the current "scope".</p>
+
+<p>In Ruby <code>self</code> is the default receiver of all method calls that don't specify a receiver.  In methods it's usually the instance object itself (or its singleton class actually).  You can't get at instance variable directly via <code>self</code>, but use the <code>@foo</code> notation instead.  Any method invocation without an explicit receiver will get looked up in <code>self</code> and its superclasses. Thus calling <code>foo()</code> is the exact same as calling <code>self.foo()</code>.</p>
+
+<p>In JavaScript, if you call <code>foo()</code> that's not the same thing at all as <code>this.foo()</code>. The first, <code>foo()</code> will look for a <code>foo</code> local variable via the closure and set its <code>this</code> to <code>global</code>.  But calling <code>this.foo()</code> will look for a <code>foo</code> property in <code>this</code> and call it with the old <code>this</code> as the new <code>this</code>.</p>
+
+<h2>Object Graphs</h2>
+
+<p>Ok, enough theory, now for some sample code and diagrams!  I'll show some ruby code, its diagram, and then the closest JavaScript implementation I could think of and its diagram.</p>
+
+<p>Most of the ruby examples are based on the MetaProgramming chapter of Programming Ruby 1.9 by Pragmatic Programmers.</p>
+
+<h3>A String</h3>
+
+<p>All values are objects, let's start out with a simple string.</p>
+
+<h4>Ruby</h4>
+
+<div class="snippet"><a href="object-graphs-3/animal.rb" class="code-link">animal.rb</a><pre><code><span class="pln">animal </span><span class="pun">=</span><span class="pln"> </span><span class="str">"cat"</span></code></pre></div>
+
+<p><img src="object-graphs-3/animal.rb.png" alt="animal.rb" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Notice that every object has a class.  Our string is of class <code>String</code> which inherits from the class <code>Object</code>.  its class <code>String</code> is of class <code>Class</code> which inherits <code>Module</code> and then <code>Object</code>.</p>
+
+<p>For purposes of seeing how <code>animal</code> works we don't need to worry about the classes of classes.  The diagram is much simpler by removing that part:</p>
+
+<p><img src="object-graphs-3/animal.rb.simple.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Now you can clearly see what methods are available to our <code>animal</code> object.</p>
+
+<h4>JavaScript</h4>
+
+<div class="snippet"><a href="object-graphs-3/animal.js" class="code-link">animal.js</a><pre><code><span class="kwd">var</span><span class="pln"> animal </span><span class="pun">=</span><span class="pln"> </span><span class="str">"cat"</span><span class="pun">;</span></code></pre></div>
+
+<p><img src="object-graphs-3/animal.js.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Remember that you can simulate classes in JavaScript using constructor + prototype pairs.  That's just what the built-in object types do.  The prototypes are objects and thus inherit directly from <code>Object.prototype</code> and the constructors are functions and inherit from <code>Function.prototype</code>.</p>
+
+<p>But let's see this diagram without the constructors, they don't affect the object once it's constructed and greatly complicate the image:</p>
+
+<p><img src="object-graphs-3/animal.js.simple.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>That's much better.  The literal <code>"cat"</code> inherits from the <code>String.prototype</code> which in turn inherits from <code>Object.prototype</code>.  You can see why you're able to call functions like <code>animal.trim()</code> and see where the function comes from.</p>
+
+<h3>Singletons</h3>
+
+<p>Remember that Ruby only allows methods on class objects.  So what do you do if you really want to add a method to a single object?  You'd have to create a special sub-class, add in the method you wanted, and then create your instance from that new class.  Well, ruby has some nice syntax to make this easy and automatic:</p>
+
+<div class="snippet"><a href="object-graphs-3/singleton.rb" class="code-link">singleton.rb</a><pre><code><span class="pln">animal </span><span class="pun">=</span><span class="pln"> </span><span class="str">"cat"</span><span class="pln"><br /></span><span class="kwd">def</span><span class="pln"> animal</span><span class="pun">.</span><span class="pln">speak<br />&nbsp; puts </span><span class="str">"The #{self} says miaow"</span><span class="pln"><br /></span><span class="kwd">end</span><span class="pln"><br />animal</span><span class="pun">.</span><span class="pln">speak<br />puts animal</span><span class="pun">.</span><span class="pln">upcase</span></code></pre></div>
+
+<pre><code><span class="com"># Output</span><span class="pln"><br /></span><span class="typ">The</span><span class="pln"> cat says miaow<br />CAT<br /></span></code></pre>
+
+<p>Let's see the graph of this object now that we added in a singleton method and class:</p>
+
+<p><img src="object-graphs-3/singleton.rb.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Notice that it injected a new anonymous class directly in front of the object and put the new method there for you.  This class is hidden though.  If you call the <code>animal.class()</code> then you'll get a reference to <code>String</code> directly.</p>
+
+<p>In JavaScript there is no need to create a new object to hold the function since the language allows functions to be stored anywhere.  You simply assign the function directly to the object.  There is one gotcha though.  Primitives are immutable in JavaScript meaning you can't just add some properties to a string.  This will work for any mutable object though so we'll use a regular expression instead.</p>
+
+<div class="snippet"><a href="object-graphs-3/singleton.js" class="code-link">singleton.js</a><pre><code><span class="kwd">var</span><span class="pln"> animal </span><span class="pun">=</span><span class="pln"> </span><span class="str">/cat/</span><span class="pun">;</span><span class="pln"><br /><br />animal</span><span class="pun">.</span><span class="pln">speak </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> speak</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"The "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="str">" says miaow"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">};</span><span class="pln"><br />animal</span><span class="pun">.</span><span class="pln">speak</span><span class="pun">();</span><span class="pln"><br />animal</span><span class="pun">.</span><span class="pln">test</span><span class="pun">(</span><span class="str">'caterpiller'</span><span class="pun">);</span></code></pre></div>
+
+<p><img src="object-graphs-3/singleton.js.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Notice that we just added the <code>speak</code> function in with the existing properties of the object.  There is no need to separate them out into a different layer in JavaScript.</p>
+
+<h3>A Class</h3>
+
+<p>Lets start out with a simple user-defined class and slowly add in inheritance, class methods, and mixed-in modules.</p>
+
+<p>First a simple user-defined class:</p>
+
+<div class="snippet"><a href="object-graphs-3/dave.rb" class="code-link">dave.rb</a><pre><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Dave</span><span class="pln"><br /></span><span class="kwd">end</span></code></pre></div>
+
+<p><img src="object-graphs-3/dave.rb.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>In JavaScript this is simply a constructor function: (Which is really just another function)</p>
+
+<div class="snippet"><a href="object-graphs-3/dave.js" class="code-link">dave.js</a><pre><code><span class="kwd">function</span><span class="pln"> </span><span class="typ">Dave</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{}</span></code></pre></div>
+
+<p><img src="object-graphs-3/dave.js.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Notice that the prototype object was created for us and the linking back and forth was built-in.  This is part of the ECMA spec. All functions, no matter if they are used as constructors or not, have a prototype.</p>
+
+<h3>Class Methods</h3>
+
+<p>Since a class is an object, it's possible to give it singleton methods in Ruby and have what's known as class methods.</p>
+
+<div class="snippet"><a href="object-graphs-3/dave2.rb" class="code-link">dave2.rb</a><pre><code><span class="com"># Make a parent class</span><span class="pln"><br /></span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Person</span><span class="pln"><br />&nbsp; </span><span class="com"># with an instance method</span><span class="pln"><br />&nbsp; </span><span class="kwd">def</span><span class="pln"> greet<br />&nbsp; &nbsp; puts </span><span class="str">"Hello"</span><span class="pln"><br />&nbsp; </span><span class="kwd">end</span><span class="pln"><br />&nbsp; </span><span class="com"># and a class method.</span><span class="pln"><br />&nbsp; </span><span class="kwd">def</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">create<br />&nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="kwd">new</span><span class="pln"><br />&nbsp; </span><span class="kwd">end</span><span class="pln"><br /></span><span class="kwd">end</span><span class="pln"><br /><br /></span><span class="com"># Create a subclass</span><span class="pln"><br /></span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Dave</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">Person</span><span class="pln"><br /></span><span class="kwd">end</span><span class="pln"><br /></span><span class="com"># and test it.</span><span class="pln"><br />puts </span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">create<br />puts </span><span class="typ">Dave</span><span class="pun">.</span><span class="kwd">new</span><span class="pln"><br /></span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">create</span><span class="pun">.</span><span class="pln">greet</span></code></pre></div>
+
+<pre><code><span class="com"># Output</span><span class="pln"><br /></span><span class="com">#&lt;Dave:0x0000010086d3b8&gt;</span><span class="pln"><br /></span><span class="com">#&lt;Dave:0x0000010086d340&gt;</span><span class="pln"><br /></span><span class="typ">Hello</span><span class="pln"><br /></span></code></pre>
+
+<p><img src="object-graphs-3/dave2.rb.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>You see that it inserted a new anonymous class in the chain to store the <code>create</code> method.</p>
+
+<p>In JavaScript you can do the same by simply adding a property on the constructor:</p>
+
+<div class="snippet"><a href="object-graphs-3/dave2.js" class="code-link">dave2.js</a><pre><code><span class="com">// Make a parent class</span><span class="pln"><br /></span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Person</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{}</span><span class="pln"><br /></span><span class="com">// with an instance method</span><span class="pln"><br /></span><span class="typ">Person</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">.</span><span class="pln">greet </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> greet</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Hello"</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /></span><span class="com">// and a class method.</span><span class="pln"><br /></span><span class="typ">Person</span><span class="pun">.</span><span class="pln">create </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> create</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">();</span><span class="pln"><br /></span><span class="pun">};</span><span class="pln"><br /><br /></span><span class="com">// Create a subclass</span><span class="pln"><br /></span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Dave</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{}</span><span class="pln"><br /></span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">__proto__ </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Person</span><span class="pun">;</span><span class="pln"><br /></span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">.</span><span class="pln">__proto__ </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Person</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">;</span><span class="pln"><br /></span><span class="com">// and test it.</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">create</span><span class="pun">());</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Dave</span><span class="pun">);</span><span class="pln"><br /></span><span class="typ">Dave</span><span class="pun">.</span><span class="pln">create</span><span class="pun">().</span><span class="pln">greet</span><span class="pun">();</span></code></pre></div>
+
+<p><img src="object-graphs-3/dave2.js.png" alt="animal.js" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Here we make the constructor inherit from its parent constructor (so that "class methods" get inherited) and inherit the prototypes so that "instance methods" get inherited.  Again there is no need for hidden classes since javascript allows storing function properties on any object.</p>
+
+<h2>Moving Forward</h2>
+
+<p>Originally I wanted this article to explore how to implement Ruby modules and mixing in javascript, but life got in the way.  I started an awesome job at Palm working on node for webOS and moving to a new house.  Also I hit a technical wall where I can't fully implement ruby style module includes because it's not possible in JavaScript. (I can't make new methods added to an already included module appear in all the prototype chains that include that module)</p>
+
+<p>So instead of holding onto this useful article for ages, I'm realeasing it as is.  Hopefully when things settle down I can write the next part of the series.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/object-graphs-3";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/c953ddd239707998340e1a6fbb3eeb46?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Caswell</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/creationix">creationix</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/creationix">creationix</a></dd></dl><dl><dt>Location:</dt><dd>Red Lick, TX</dd></dl><dl><dt>Links:</dt><dd><a href="http://creationix.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Tue Nov 09 2010 10:00:57 GMT-0800 (PST)"><dt>Date Released:</dt><dd>Tuesday, November  9, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.2.4">node v0.2.4</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="object-graphs-3/animal.rb">animal.rb</a></li><li><a href="object-graphs-3/animal.js">animal.js</a></li><li><a href="object-graphs-3/singleton.rb">singleton.rb</a></li><li><a href="object-graphs-3/singleton.js">singleton.js</a></li><li><a href="object-graphs-3/dave.rb">dave.rb</a></li><li><a href="object-graphs-3/dave.js">dave.js</a></li><li><a href="object-graphs-3/dave2.rb">dave2.rb</a></li><li><a href="object-graphs-3/dave2.js">dave2.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/object-graphs-3 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:44 GMT -->
+</html>

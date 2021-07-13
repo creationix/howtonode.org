@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/simplifying-chores-with-grunt by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:56:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Simplifying Chores with Grunt - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="simplifying-chores-with-grunt.html">Simplifying Chores with Grunt</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Often in various stages of development we perform repetitive tasks e.g minification, compilation, unit testing, linting and we would definitely want to automate them. But each of these task require different configurations or installations. What if there is a system where in we can easily configure and run these tasks from a single place. Also it would be really nice if it gels well with Node.js system. Meet <a href="http://gruntjs.com/">Grunt</a> a task runner for simplifying chores. Apart from being simple Grunt ecosystem is huge and it's growing every day with literally hundreds of plugins to choose from.</p>
+
+<p><em>Note that I will be using grunt task/plugin interchangeably which means the same.</em></p>
+
+<h2>Installation</h2>
+
+<p>In order to get started first we need to install <strong>grunt-cli</strong>.</p>
+
+<pre><code><span class="pln">npm install </span><span class="pun">-</span><span class="pln">g grunt</span><span class="pun">-</span><span class="pln">cli<br /></span></code></pre>
+
+<p>This will install <strong>grunt</strong> command in your system. Note that this is different from the grunt task runner. Notice that we are installing grunt-cli in global scope. After this install grunt in your package.json directory using</p>
+
+<pre><code><span class="pln">npm install grunt </span><span class="pun">--</span><span class="pln">save</span><span class="pun">-</span><span class="pln">dev<br /></span></code></pre>
+
+<p>This will install grunt task runner and add it to <a href="https://npmjs.org/doc/json.html#devDependencies">devDependencies</a> section of your package.json.</p>
+
+<p><em>You can also install grunt by adding it to devDependency of package.json manually and run npm install</em></p>
+
+<h2>Why is grunt-cli required</h2>
+
+<p>grunt-cli is used to run the local grunt task runner using node.js require() system. This helps us in running grunt task runner from any sub-directory of your project. The job of the grunt-cli is simple: run the version of grunt which has been installed next to a <strong>Gruntfile</strong> i.e under the <strong>node_modules</strong> directory.</p>
+
+<h2>What is a Gruntfile</h2>
+
+<p><strong>Gruntfile</strong> is where we define configurations for the task which we are planning to run. Think of it as what package.json is for npm. Gruntfile is always placed at the top level of project along with package.json. Below is a directory structure showing the Gruntfile for project.</p>
+
+<p><img src="simplifying-chores-with-grunt/grunt.png" alt="Gruntfile" title="Directory structure showing Gruntfile" /></p>
+
+<p><em>Please note that though we call it Gruntfile name of the file will be <strong>Gruntfile.js</strong>.</em></p>
+
+<h2>Installing a grunt task</h2>
+
+<p>Best way to learn something is by example. Lets take a very common task of minifying set of css files and then combine them to a single file.</p>
+
+<p>As I have mentioned earlier grunt has an excellent repository of plugins to perform these tasks, which can be found on <a href="http://gruntjs.com/plugins">http://gruntjs.com/plugins</a>. Doing a quick search on this page gives <a href="https://npmjs.org/package/grunt-contrib-cssmin">cssmin</a> as one of the best plugin for it. To see installation and configuration instructions, head over to the plugins <a href="https://npmjs.org/package/grunt-contrib-cssmin">npm page</a>.</p>
+
+<p>As given in the npm page of <a href="https://npmjs.org/package/grunt-contrib-cssmin">cssmin</a> install it with the given below command.</p>
+
+<pre><code><span class="pln">npm install grunt</span><span class="pun">-</span><span class="pln">contrib</span><span class="pun">-</span><span class="pln">cssmin<br /></span></code></pre>
+
+<p>Now we have successfully installed a grunt task, its time to use it in Gruntfile.</p>
+
+<h2>Using a task in Gruntfile</h2>
+
+<p>Since we have installed our task into our project its time to dive into Gruntfile and use the task in it. Below is the Gruntfile for our task. Most of the parts could be understood with the comments given.</p>
+
+<div class="snippet"><a href="simplifying-chores-with-grunt/Gruntfile.js" class="code-link">Gruntfile.js</a><pre><code><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">grunt</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// files to be minified and combined</span><span class="pln"><br />&nbsp; </span><span class="kwd">var</span><span class="pln"> cssFiles </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="str">'public/css/file1.css'</span><span class="pun">,</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="str">'public/css/file2.css'</span><span class="pln"><br />&nbsp; </span><span class="pun">];</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// this is where all the grunt configs will go</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">initConfig</span><span class="pun">({</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// read the package.json</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// pkg will contain a reference to out pakage.json file use of which we will see later</span><span class="pln"><br />&nbsp; &nbsp; pkg</span><span class="pun">:</span><span class="pln"> grunt</span><span class="pun">.</span><span class="pln">file</span><span class="pun">.</span><span class="pln">readJSON</span><span class="pun">(</span><span class="str">'package.json'</span><span class="pun">),</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="com">// configuration for the cssmin task</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// note that this syntax and options can found on npm page of any grunt plugin/task</span><span class="pln"><br />&nbsp; &nbsp; cssmin</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="com">// options for css min task</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; options</span><span class="pun">:{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// banner to be put on the top of the minified file using package name and todays date</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// note that we are reading our project name using pkg.name i.e name of our project</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; banner</span><span class="pun">:</span><span class="pln"> </span><span class="str">'/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today("yyyy-mm-dd") %&gt; */\n'</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="pun">},</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; combine</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// options for combining files</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// we have defined cssFiles variable to hold our file names at the top</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; files</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// here key part is output file which will our &lt;package name&gt;.min.css</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">// value part is set of input files which will be combined/minified</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="str">'public/css/&lt;%= pkg.name %&gt;.min.css'</span><span class="pun">:</span><span class="pln"> cssFiles<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br /><br />&nbsp; </span><span class="pun">});</span><span class="pln"> </span><span class="com">// end of configuring the grunt task</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Load the plugin that provides the "cssmin" task.</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">loadNpmTasks</span><span class="pun">(</span><span class="str">'grunt-contrib-cssmin'</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Default task(s).</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">registerTask</span><span class="pun">(</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'cssmin'</span><span class="pun">]);</span><span class="pln"><br />&nbsp; </span><span class="com">// cssmin task</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">registerTask</span><span class="pun">(</span><span class="str">'buildcss'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'cssmin'</span><span class="pun">]);</span><span class="pln"><br /><br /></span><span class="pun">};</span></code></pre></div>
+
+<p>Note that we have to wrap your Gruntfile in <code>module.exports</code>. Lets understand the various important parts of this Gruntfile.</p>
+
+<h2>Understanding parts of Gruntfile</h2>
+
+<p><code><strong>grunt.initConfig</strong></code> - Block where we define configurations specific to a plugin. In the example above i have shown configuration for 1 plugin but there could be more than 1 in it. e.g</p>
+
+<pre><code><span class="pln">cssmin</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="com">// task/plugin 1</span><span class="pln"><br /></span><span class="pun">},</span><span class="pln"><br />uglify</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="com">// task/plugin 2</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /></span></code></pre>
+
+<p><code><strong>grunt.loadNpmTasks</strong></code> - This is where we load the task/plugin.</p>
+
+<p><code><strong>grunt.registerTask</strong></code> - This is where we register the task. I am going to explain this part a bit more in the next section where we will learn to run this task of ours.</p>
+
+<h2>Running a grunt task</h2>
+
+<p>Before diving into how to run a grunt task lets understand <code>grunt.registerTask</code> in depth. Recall from our Gruntfile below block of code.</p>
+
+<pre><code><span class="com">// Default task(s).</span><span class="pln"><br /></span><span class="com">// This is the task which runs if we just execute grunt command</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">registerTask</span><span class="pun">(</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'cssmin'</span><span class="pun">]);</span><span class="pln"><br />&nbsp; </span><span class="com">// cssmin task</span><span class="pln"><br />&nbsp; </span><span class="com">// This is a custom task which runs if we execute grunt buildcss command</span><span class="pln"><br />&nbsp; grunt</span><span class="pun">.</span><span class="pln">registerTask</span><span class="pun">(</span><span class="str">'buildcss'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'cssmin'</span><span class="pun">]);</span><span class="pln"><br /></span></code></pre>
+
+<p>A Gruntfile is executed either by running <code><strong>grunt</strong></code> command or <code><strong>grunt task-name</strong></code>. In our Gruntfile when we say <code>grunt.registerTask('default', ['cssmin'])</code>, this is what is going to run when we only type <code><strong>grunt</strong></code> command and that's why name of the task is <strong>default</strong> . Also note that second argument to <code>grunt.registerTask</code> is an array of tasks to be run.</p>
+
+<p><code>grunt.registerTask('buildcss', ['cssmin']) </code> defines a new custom task and perform cssmin. We can also add some other task to it. This is what is going to run when we type <code><strong>grunt buildcss</strong></code> command.</p>
+
+<p>To summarize</p>
+
+<pre><code><span class="pln">grunt<br /></span></code></pre>
+
+<p>Runs default grunt task defined with <code>grunt.registerTask('default', ['cssmin'])</code></p>
+
+<pre><code><span class="pln">grunt buildcss<br /></span></code></pre>
+
+<p>Runs custom grunt task defined with <code>grunt.registerTask('buildcss', ['cssmin'])</code></p>
+
+<p>Running any of these commands should generate our minified file with the following output.</p>
+
+<p><img src="simplifying-chores-with-grunt/output.png" alt="Output" title="Output on running Gruntfile" /></p>
+
+<p>In both the cases, second argument to <code>grunt.registerTask</code> can have more than one task. For example if we have JavaScript minification task <a href="https://npmjs.org/package/grunt-contrib-uglify">uglify</a> in our Gruntfile with default <code>grunt.registerTask</code> as:</p>
+
+<pre><code><span class="pln">grunt</span><span class="pun">.</span><span class="pln">registerTask</span><span class="pun">(</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'cssmin'</span><span class="pun">,</span><span class="str">'uglify'</span><span class="pun">])</span><span class="pln"><br /></span></code></pre>
+
+<p>This tutorial has just touched base on Grunt but there are in-numerous things which we can do using it. I use Grunt for css/js minification, templates compilation, appending cache busting param, string replacements etc. Grunt community has built tasks for almost everything we do. So <a href="http://gruntjs.com/plugins">check them out</a> and use them to automate your chores.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/simplifying-chores-with-grunt";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/9aecb75c6567ea72b1930e57f97466d5?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Swapnil Mishra</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/swapnil-mishra">swapnil-mishra</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/swapnil_mishra">swapnil_mishra</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://about.me/swapnilmishra">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Mon Aug 5 2013 19:24:00 GMT+0530"><dt>Date Released:</dt><dd>Monday, August  5, 2013</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.8.22">node v0.8.22</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="simplifying-chores-with-grunt/Gruntfile.js">Gruntfile.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/simplifying-chores-with-grunt by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:56:58 GMT -->
+</html>

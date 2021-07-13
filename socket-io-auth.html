@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/socket-io-auth by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:56:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Session-based Authorization with Socket.IO - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="socket-io-auth.html">Session-based Authorization with Socket.IO</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Finding a decent article about session based authorization in socket.io is more difficult than one expected. This article will show how you can take advantage of Express session middleware and socket.io authorization middleware to create a very simple authorization mechanism when establishing new socket.io connections.</p>
+
+<h2>Prolog</h2>
+
+<p>I decided to write this article after getting a bit frustrated from searching the Internet for a decent example on how to use session based authorization with socket.io. To be honest, socket.io wiki page on <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a> was quite simple to follow and understand, but when it came to <strong>session based</strong> authorization, I got a bit lost (especially considering the fact that it's my third day using Node...). </p>
+
+<p><strong>Disclaimer</strong>: the original concept was published in Daniel Baulig's <a href="http://www.danielbaulig.de/socket-ioexpress/">blog</a>. I mainly adapted it to work with Express 3.x.x.</p>
+
+<h2>Reading Suggestions</h2>
+
+<p>Before reading this article, I strongly suggest you get familiar with Express and Socket.IO. I kept things as simple and minimal as possible, so you really don't need more than a couple of hours to learn what needs to be learned if you're a complete newbie.</p>
+
+<p>I also suggest reading the Authorization wiki page referenced in the prolog.</p>
+
+<h2>Global Authorization vs Namespace Authorization</h2>
+
+<p>First I would like to distinguish between two authorization scopes that are currently supported by socket.io, namely - Global and Namespace. <em>Global</em> authorization will be used to authorize any attempt to open a (socket.io) connection against our Node application. <em>Namespace</em> authorization, on the other hand, allows you to use different authorization rules when accepting connections to a specific socket.io namespace (more on namespaces can be found <a href="http://socket.io/#how-to-use">here</a>)</p>
+
+<p>In this article I will exemplify only how to enable Global authorization, although from the looks of things, namespace authorization is quite straightforward once you understand global authorization.</p>
+
+<h2>A Few Words about Timing</h2>
+
+<p>It's important to understand that the authorization process takes place during handshake. This means that, prior to authorization, no socket connection is established. As a matter of fact, because the handshakes in socket.io are implemented as HTTP calls, one can use the HTTP context to get relevant information on the user who's trying to connect. As you'll see next, I will be using cookie data to authorize any user that tried to establish a socket connection to the server.</p>
+
+<h2>Session-based Authorization</h2>
+
+<p>As I said, I will be using cookie data to authorize our John Dow. Specifically, I will be using the user's session id to make sure that indeed this user went through the system. The trick here is to use Express' session middleware to assign a <strong>signed</strong> session id to the user, so the next time he sends a request (in our case that would be during socket.io handshake) it will be possible to ascertain that this user is a valid user and not a scoundrel. Theoretically, I could also fetch more information about the user using his session id, but I felt that it's out of scope for this article. I admit that this kind of authorization method is naive, but it's good enough to get you started.</p>
+
+<h2>Time to Code!</h2>
+
+<p>I believe I said more than enough on the subject at hand, and now would be the right time to start looking at code. The complete <a href="socket-io-auth/server.js">source code</a> takes less then 70 lines (including elaborate comments) and should be enough for anyone with some experience with Express and Socket.IO. Nonetheless I will guide you through the code so there are no complaints.</p>
+
+<h2>Client side: index.html</h2>
+
+<p>We begin by creating an HTML file called (surprisingly) index.html:</p>
+
+<div class="snippet"><a href="socket-io-auth/index.html" class="code-link">index.html</a><pre><code><span class="tag">&lt;html&gt;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="tag">&lt;head&gt;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"http://localhost:3000/socket.io/socket.io.js"</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="tag">&gt;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tick </span><span class="pun">=</span><span class="pln"> io</span><span class="pun">.</span><span class="pln">connect</span><span class="pun">(</span><span class="str">'http://localhost:3000/'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tick</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'data'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">data</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tick</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'error'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">reason</span><span class="pun">){</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">error</span><span class="pun">(</span><span class="str">'Unable to connect Socket.IO'</span><span class="pun">,</span><span class="pln"> reason</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tick</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'connect'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(){</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">info</span><span class="pun">(</span><span class="str">'successfully established a working and authorized connection'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="tag">&lt;/script&gt;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="tag">&lt;/head&gt;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="tag">&lt;body&gt;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; Open the browser console to see tick-tocks!<br />&nbsp; &nbsp; </span><span class="tag">&lt;/body&gt;</span><span class="pln"><br /></span><span class="tag">&lt;/html&gt;</span></code></pre></div>
+
+<p>As you can see, our client side is nothing more then several lines of javascript establishing a socket.io connection with our local server. Once connection is established, you will be able to see time slipping away between your fingertips (millisecond ticks) inside your browser console. </p>
+
+<p>Notice that I'm also listening to the <em>error</em> event, in case the connection cannot be established, or access is denied by the authorization process.</p>
+
+<h2>Configuring Express</h2>
+
+<p>Now let's create and configure Express:</p>
+
+<div class="snippet"><a href="socket-io-auth/express-snippet.js" class="code-link">express-snippet.js</a><pre><code><span class="kwd">var</span><span class="pln"> app </span><span class="pun">=</span><span class="pln"> express</span><span class="pun">();</span><span class="pln"><br /><br />app</span><span class="pun">.</span><span class="pln">configure</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; app</span><span class="pun">.</span><span class="kwd">use</span><span class="pun">(</span><span class="pln">express</span><span class="pun">.</span><span class="pln">cookieParser</span><span class="pun">());</span><span class="pln"><br />&nbsp; &nbsp; app</span><span class="pun">.</span><span class="kwd">use</span><span class="pun">(</span><span class="pln">express</span><span class="pun">.</span><span class="pln">session</span><span class="pun">({</span><span class="pln">secret</span><span class="pun">:</span><span class="pln"> </span><span class="str">'secret'</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">:</span><span class="pln"> </span><span class="str">'express.sid'</span><span class="pun">}));</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br /><br />app</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'/'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">sendfile</span><span class="pun">(</span><span class="pln">__dirname </span><span class="pun">+</span><span class="pln"> </span><span class="str">'/index.html'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br />server </span><span class="pun">=</span><span class="pln"> http</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">(</span><span class="pln">app</span><span class="pun">)</span><span class="pln"><br />server</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">(</span><span class="lit">3000</span><span class="pun">);</span></code></pre></div>
+
+<p>Pay special notice to the the fact that we're using the session middleware that ships with Express to support sessions. This middleware is responsible for generating session ids for new users when they first login to the system.</p>
+
+<p>The session middleware uses a <em>secret</em> value to sign the session id. We will use this mechanism to our advantage when we try to authorize an incoming socket.io connection.</p>
+
+<p>The lines following the Express configuration code are responsible for serving our precious index.html when a user connects to the server.</p>
+
+<p>The last two lines construct an HTTP server over the Express application, and binding it port 3000. Feel free to run <code>node server.js</code> and open your browser at <a href="http://localhost:3000/">http://localhost:3000</a>. You should be seeing a single line saying: <em>Open the browser console to see tick-tocks!</em></p>
+
+<h2>Configuring Socket.IO</h2>
+
+<p>Next we need to configure socket.io:</p>
+
+<div class="snippet"><a href="socket-io-auth/socket-io-snippet.js" class="code-link">socket-io-snippet.js</a><pre><code><span class="pln">io </span><span class="pun">=</span><span class="pln"> io</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">(</span><span class="pln">server</span><span class="pun">);</span><span class="pln"><br /><br />io</span><span class="pun">.</span><span class="kwd">set</span><span class="pun">(</span><span class="str">'authorization'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">handshakeData</span><span class="pun">,</span><span class="pln"> accept</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">handshakeData</span><span class="pun">.</span><span class="pln">headers</span><span class="pun">.</span><span class="pln">cookie</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; &nbsp; handshakeData</span><span class="pun">.</span><span class="pln">cookie </span><span class="pun">=</span><span class="pln"> cookie</span><span class="pun">.</span><span class="pln">parse</span><span class="pun">(</span><span class="pln">handshakeData</span><span class="pun">.</span><span class="pln">headers</span><span class="pun">.</span><span class="pln">cookie</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; handshakeData</span><span class="pun">.</span><span class="pln">sessionID </span><span class="pun">=</span><span class="pln"> connect</span><span class="pun">.</span><span class="pln">utils</span><span class="pun">.</span><span class="pln">parseSignedCookie</span><span class="pun">(</span><span class="pln">handshakeData</span><span class="pun">.</span><span class="pln">cookie</span><span class="pun">[</span><span class="str">'express.sid'</span><span class="pun">],</span><span class="pln"> </span><span class="str">'secret'</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">handshakeData</span><span class="pun">.</span><span class="pln">cookie</span><span class="pun">[</span><span class="str">'express.sid'</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> handshakeData</span><span class="pun">.</span><span class="pln">sessionID</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> accept</span><span class="pun">(</span><span class="str">'Cookie is invalid.'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br /><br />&nbsp; </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">else</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> accept</span><span class="pun">(</span><span class="str">'No cookie transmitted.'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="pun">}</span><span class="pln"> <br /><br />&nbsp; accept</span><span class="pun">(</span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>Now we're getting to the tricky part. First we need to bind socket.io to our HTTP server. That would be the first line of code - piece of cake.</p>
+
+<p>The next block is the reason we're all here - by calling <code>io.set('authorization', function (handshakeData, accept)</code> we instruct socket.io to run our authorization code when performing a handshake.</p>
+
+<p>The logic goes as follows: first we check if there's a cookie associated with the handshake request. In case the user already logged into our system there should be a cookie containing his session id. If no cookie is found the user is rejected.</p>
+
+<p>If a cookie is found, we try to parse it. The crucial line here is <code>connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret')</code>, which tries to unsign the session id cookie value using the same secret key used for signing. If the cookie was indeed signed by our server than the reverse operation should give us the real session id. This is actually our way of making sure that the user trying to connect is someone we "know" and not some fake user trying to hack into our system. Notice that in case we did not succeed in unsigning the value, the return value should equal to the original value, indicating a problem.</p>
+
+<p>The next couple of lines in the full source code are standard socket.io and I won't go into details explaining them.</p>
+
+<h2>Epilogue</h2>
+
+<p>That's it! You're ready to implement whatever authorization algorithm you want. Enjoy socket.io!</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/socket-io-auth";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/369c83603d93d80b7c6842d9870dd96c?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Shahar Kedar</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/shaharke">shaharke</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/shahar_kedar">shahar_kedar</a></dd></dl><dl><dt>Location:</dt><dd>Tel Aviv, Israel</dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Thu Dec 12 2012 17:44:00 GMT+0200"><dt>Date Released:</dt><dd>Wednesday, December 12, 2012</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.8.15">node v0.8.15</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="socket-io-auth/index.html">index.html</a></li><li><a href="socket-io-auth/express-snippet.js">express-snippet.js</a></li><li><a href="socket-io-auth/socket-io-snippet.js">socket-io-snippet.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/socket-io-auth by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:02 GMT -->
+</html>

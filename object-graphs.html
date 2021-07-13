@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/object-graphs by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:57:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Learning Javascript with Object Graphs - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="object-graphs.html">Learning Javascript with Object Graphs</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>One of the secrets to being a super effective JavaScript developer is to truly understand the semantics of the language.  This article will explain the basic elemental parts of JavaScript using easy to follow diagrams.</p>
+
+<h2>References Everywhere</h2>
+
+<p>A variable in JavaScript is simply a label that references a value in memory somewhere.  These values can be primitives like strings, numbers, and booleans.  They can also be objects or functions.</p>
+
+<h3>Local Variables</h3>
+
+<p>In the following example, we will create four local variables in the top-level scope and point them to some primitive values:</p>
+
+<div class="snippet"><a href="object-graphs/variables.js" class="code-link">variables.js</a><pre><code><span class="com">// Let's create some local variables in the top scope</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> name </span><span class="pun">=</span><span class="pln"> </span><span class="str">"Tim Caswell"</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> age </span><span class="pun">=</span><span class="pln"> </span><span class="lit">28</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> isProgrammer </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> likesJavaScript </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln"><br /></span><span class="com">// Test to see if the two variables reference the same value</span><span class="pln"><br />isProgrammer </span><span class="pun">===</span><span class="pln"> likesJavaScript</span><span class="pun">;</span></code></pre></div>
+
+<p><img src="object-graphs/variables.png" alt="variables" title="" /></p>
+
+<p>Notice that the two boolean variables point to the same value in memory.  This is because primitives are immutable and so the VM can optimize and share a single instance for all references to that particular value.</p>
+
+<p>In the code snippet we checked to see if the two references pointed to the same value using <code>===</code> and the result was <code>true</code>.</p>
+
+<p>The outer box represents the outermost closure scope.  These variables are top-level local variables, not to be confused with properties of the global/window object.</p>
+
+<p><br style="clear:left"/></p>
+
+<h3>Objects and Prototype Chains</h3>
+
+<p>Objects are just collections of more references to new objects and prototypes.  The only special thing they add is the prototype chain for when you try to access a property that's not in the local object, but is in a parent object.</p>
+
+<div class="snippet"><a href="object-graphs/objects.js" class="code-link">objects.js</a><pre><code><span class="com">// Create a parent object</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> tim </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Tim Caswell"</span><span class="pun">,</span><span class="pln"><br />&nbsp; age</span><span class="pun">:</span><span class="pln"> </span><span class="lit">28</span><span class="pun">,</span><span class="pln"><br />&nbsp; isProgrammer</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln"><br />&nbsp; likesJavaScript</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /></span><span class="com">// Create a child object</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> jack </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Object</span><span class="pun">.</span><span class="pln">create</span><span class="pun">(</span><span class="pln">tim</span><span class="pun">);</span><span class="pln"><br /></span><span class="com">// Override some properties locally</span><span class="pln"><br />jack</span><span class="pun">.</span><span class="pln">name </span><span class="pun">=</span><span class="pln"> </span><span class="str">"Jack Caswell"</span><span class="pun">;</span><span class="pln"><br />jack</span><span class="pun">.</span><span class="pln">age </span><span class="pun">=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"><br /></span><span class="com">// Look up stuff through the prototype chain</span><span class="pln"><br />jack</span><span class="pun">.</span><span class="pln">likesJavaScript</span><span class="pun">;</span></code></pre></div>
+
+<p><img src="object-graphs/objects.png" alt="shared-function" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>Here we have one object with four properties referenced by the <code>tim</code> variable.  Also we created a new object that inherits from the first object and referenced it from <code>jack</code>.  Then we overrode two properties in the local object.</p>
+
+<p>Now when looking up <code>jack.likesJavaScript</code>, we first find the object that <code>jack</code> references.  Then we look for the <code>likesJavaScript</code> property.  Since it's not there, we look at the parent object and find it there.  Then we find the <code>true</code> value it references.</p>
+
+<h3>The Global Object</h3>
+
+<p>Ever wondered why tools like <a href="http://jslint.com/">jslint</a> always tell you to not forget to put <code>var</code> statements before your variables.  Well, here is what happens if you forget.</p>
+
+<div class="snippet"><a href="object-graphs/globals.js" class="code-link">globals.js</a><pre><code><span class="kwd">var</span><span class="pln"> name </span><span class="pun">=</span><span class="pln"> </span><span class="str">"Tim Caswell"</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> age </span><span class="pun">=</span><span class="pln"> </span><span class="lit">28</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> isProgrammer </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln"><br /></span><span class="com">// Oops we forgot a var</span><span class="pln"><br />likesJavaScript </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span></code></pre></div>
+
+<p><img src="object-graphs/globals.png" alt="variables" title="" /></p>
+
+<p>Notice that <code>likesJavaScript</code> is now a property of the global object instead of a free variable in the outer closure.  This only really matters if you're going to be mixing several scripts.  But in any real program that's exactly what you're going to be doing.</p>
+
+<p>Always remember to put those <code>var</code> statements in there to keep your variable's scope to the current closure and its children.  You'll be much happier by following this simple rule.</p>
+
+<p>If you must put something on the global object, do it explicitly with <code>window.woo</code> in the browser or <code>global.goo</code> in node.js.</p>
+
+<p><br style="clear:left"/></p>
+
+<h2>Functions and Closures</h2>
+
+<p>JavaScript isn't just a series of chained data structures.  It contains executable, callable code known as functions.  These functions create chained scopes and closures. </p>
+
+<h3>Visualizing Closures</h3>
+
+<p>Functions can be drawn as special objects that contain executable code as well as properties.  Every function has a special <code>[scope]</code> property that represents the environment it was in when it was defined.  If a function is returned from another function then this reference to the old environment is closed over by the new function in a "closure".</p>
+
+<p>In this example we will create a simple factory method that generates a closure and returns a function.</p>
+
+<div class="snippet"><a href="object-graphs/closure.js" class="code-link">closure.js</a><pre><code><span class="kwd">function</span><span class="pln"> makeClosure</span><span class="pun">(</span><span class="pln">name</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> name</span><span class="pun">;</span><span class="pln"><br />&nbsp; </span><span class="pun">};</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> description1 </span><span class="pun">=</span><span class="pln"> makeClosure</span><span class="pun">(</span><span class="str">"Cloe the Closure"</span><span class="pun">);</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> description2 </span><span class="pun">=</span><span class="pln"> makeClosure</span><span class="pun">(</span><span class="str">"Albert the Awesome"</span><span class="pun">);</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">description1</span><span class="pun">());</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">description2</span><span class="pun">());</span></code></pre></div>
+
+<p><img src="object-graphs/closure.png" alt="variables" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>When we call <code>description1()</code>, the VM looks up the function that it references and executes it.  Since that function looks for a local variable named <code>name</code>, it finds it in the closure scope.  This factory method is nice since each generated function has its own space for local variables.</p>
+
+<p>See the article <a href="http://howtonode.org/why-use-closure">why use closure</a> for more in-depth reading on this topic and its many uses.</p>
+
+<h3>Shared Functions and <code>this</code></h3>
+
+<p>Sometimes for performance reasons, or because you just plain prefer the style, JavaScript provides a <code>this</code> keyword that allows you to reuse a function object in different scopes depending on how it was called.</p>
+
+<p>Here we'll create a few objects that all share a common function.  This function will reference <code>this</code> internally to show how it changes from call to call.</p>
+
+<div class="snippet"><a href="object-graphs/functions.js" class="code-link">functions.js</a><pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">Lane</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Lane the Lambda"</span><span class="pun">,</span><span class="pln"><br />&nbsp; description</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">name</span><span class="pun">;</span><span class="pln"><br />&nbsp; </span><span class="pun">}</span><span class="pln"><br /></span><span class="pun">};</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> description </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Lane</span><span class="pun">.</span><span class="pln">description</span><span class="pun">;</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> </span><span class="typ">Fred</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; description</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Lane</span><span class="pun">.</span><span class="pln">description</span><span class="pun">,</span><span class="pln"><br />&nbsp; name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Fred the Functor"</span><span class="pln"><br /></span><span class="pun">};</span><span class="pln"><br /></span><span class="com">// Call the function from four different scopes</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="typ">Lane</span><span class="pun">.</span><span class="pln">description</span><span class="pun">());</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="typ">Fred</span><span class="pun">.</span><span class="pln">description</span><span class="pun">());</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">description</span><span class="pun">());</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">description</span><span class="pun">.</span><span class="pln">call</span><span class="pun">({</span><span class="pln"><br />&nbsp; name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Zed the Zetabyte"</span><span class="pln"><br /></span><span class="pun">}));</span></code></pre></div>
+
+<p><img src="object-graphs/functions.png" alt="variables" title="" /></p>
+
+<p><br style="clear:left"/></p>
+
+<p>In the diagram, we see that even though <code>Fred.description</code> was set to <code>Lane.description</code>, it's really only referencing the function.  Thus all three references have equal ownership of the anonymous function.  This is why I try to not call functions on constructor prototypes "methods", because that implies some sort of binding of the function to the constructor and its "class". <em>(see <a href="http://howtonode.org/what-is-this">what is this</a> for more details on the dynamic nature of <code>this</code>)</em></p>
+
+<h2>Conclusion</h2>
+
+<p>I've had tons of fun using diagrams to visualize these data structures.  My hope is that this helps those of us that are visual learners to get a better grasp of JavaScript semantics.  I have past experience as both a front-end designer/developer and as a server-side architect.  I hope my unique perspective is useful to those coming from the world of design and learning the innards of this wonderful language known as JavaScript.</p>
+
+<p><em>(NOTE, all the diagrams are <a href="http://www.graphviz.org/">graphviz</a> dot files and can be seen <a href="http://github.com/creationix/howtonode.org/tree/master/articles/object-graphs/">here</a>)</em></p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/object-graphs";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/c953ddd239707998340e1a6fbb3eeb46?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Caswell</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/creationix">creationix</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/creationix">creationix</a></dd></dl><dl><dt>Location:</dt><dd>Red Lick, TX</dd></dl><dl><dt>Links:</dt><dd><a href="http://creationix.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Thu Sep 30 2010 13:48:55 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Thursday, September 30, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.2.2">node v0.2.2</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="object-graphs/variables.js">variables.js</a></li><li><a href="object-graphs/objects.js">objects.js</a></li><li><a href="object-graphs/globals.js">globals.js</a></li><li><a href="object-graphs/closure.js">closure.js</a></li><li><a href="object-graphs/functions.js">functions.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/object-graphs by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:08 GMT -->
+</html>

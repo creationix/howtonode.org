@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/getting-started-with-express by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Getting Started with Express - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="getting-started-with-express.html">Getting Started with Express</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>This was the second in a series of posts leading up to
+<a href="http://nodeknockout.com/">Node.js Knockout</a> on how to use <a href="http://nodejs.org/">node.js</a>. This post was
+written by guest author and <a href="http://nodeknockout.com/judging#tj_holowaychuk">Node.js Knockout judge</a>
+<a href="http://tjholowaychuk.com/">Tj Holowaychuk</a> and is
+<a href="http://tjholowaychuk.com/post/937557927/getting-started-with-express">cross-posted on his blog</a>.</p>
+
+<p>In this short tutorial for <a href="http://nodeknockout.com/">Node Knockout</a> we will be creating a
+small application using the popular <a href="http://expressjs.com/">Express</a> framework.</p>
+
+<p>Express is a light-weight <a href="http://sinatrarb.com/">Sinatra</a>-inspired web development
+framework. Express provides several great features such as an
+intuitive view system, robust routing, an executable for generating
+applications and much more.</p>
+
+<h2>Installation</h2>
+
+<p>To get started with Express we first have to install it. There are
+several ways to do so, however my personal favourite is the
+following command which does not require a node package management
+system:</p>
+
+<pre><code><span class="pln">$ curl http</span><span class="pun">:</span><span class="com">//expressjs.com/install.sh | sh</span><span class="pln"><br /></span></code></pre>
+
+<p>Alternatively if we have <a href="http://github.com/isaacs/npm">npm</a> installed we can simply execute:</p>
+
+<pre><code><span class="pln">$ npm install express<br /></span></code></pre>
+
+<h2>First Express Application</h2>
+
+<p>To create our first application we could use <em>express(1)</em> to
+generate an app for us, however an Express app <em>can</em> be a single
+JavaScript file if we wish, and in our case of a simple “Hello
+World” app that is exactly what we will do.</p>
+
+<p>The first thing we need to do is require express, and create an
+app. The <em>app</em> variable shown below is an <strong>express.Server</strong>,
+however by convention we typically refer to Express servers as
+“apps”.</p>
+
+<div class="snippet"><a href="getting-started-with-express/server.js" class="code-link">server.js<span class="hash">#requires</span></a><pre><code><span class="kwd">var</span><span class="pln"> express </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'express'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; app </span><span class="pun">=</span><span class="pln"> express</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">();</span></code></pre></div>
+
+<p>Our next task is to set up one or more routes. A route consists of
+a path (string or regexp), callback function, and HTTP method. Our
+hello world example calls <em>app.get()</em> which represents the HTTP
+<strong>GET</strong> method, with the path “/”, representing our “root” page,
+followed by the callback function.</p>
+
+<div class="snippet"><a href="getting-started-with-express/server.js" class="code-link">server.js<span class="hash">#routes</span></a><pre><code><span class="pln">app</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'/'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">){</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">send</span><span class="pun">(</span><span class="str">'Hello World'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>Next we need our server to listen on a given port. Below we call
+<em>listen()</em> which attempts to bind the server to port <em>3000</em> by
+default, however this can be whatever you like, for example
+<em>listen(80)</em>.</p>
+
+<div class="snippet"><a href="getting-started-with-express/server.js" class="code-link">server.js<span class="hash">#start</span></a><pre><code><span class="pln">app</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">();</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'Express server started on port %s'</span><span class="pun">,</span><span class="pln"> app</span><span class="pun">.</span><span class="pln">address</span><span class="pun">().</span><span class="pln">port</span><span class="pun">);</span></code></pre></div>
+
+<p>We can execute the app simply by executing <em>node(1)</em> against our
+JavaScript file:</p>
+
+<pre><code><span class="pln">$ node server</span><span class="pun">.</span><span class="pln">js<br /></span><span class="typ">Express</span><span class="pln"> server started on port </span><span class="lit">3000</span><span class="pln"><br /></span></code></pre>
+
+<p>Finally to confirm everything is working as expected:</p>
+
+<pre><code><span class="pln">$ curl http</span><span class="pun">:</span><span class="com">//localhost:3000</span><span class="pln"><br /></span><span class="typ">Hello</span><span class="pln"> </span><span class="typ">World</span><span class="pln"><br /></span></code></pre>
+
+<h2>Middleware</h2>
+
+<p>Behind the scenes the <a href="http://github.com/senchalabs/connect">Connect</a> middleware framework developed by
+myself (<a href="http://tjholowaychuk.com/">TJ Holowaychuk</a>) and <a href="http://creationix.com/">Tim Caswell</a> is
+utilized to power the Express middleware. For example if we wish to
+add logging support to our hello world application, we can add the
+following line below <em>app = express.createServer();</em>:</p>
+
+<pre><code><span class="pln">app</span><span class="pun">.</span><span class="kwd">use</span><span class="pun">(</span><span class="pln">express</span><span class="pun">.</span><span class="pln">logger</span><span class="pun">());</span><span class="pln"><br /></span></code></pre>
+
+<p>For more information on middleware usage view the <a href="http://expressjs.com/guide.html#Middleware">Middleware</a>
+section of the Express <a href="http://expressjs.com/guide.html">Guide</a>.</p>
+
+<h2>Source</h2>
+
+<p>Below is all <em>8</em> lines of source we used to create our first
+Express application:</p>
+
+<div class="snippet"><a href="getting-started-with-express/full-server.js" class="code-link">full-server.js</a><pre><code><span class="kwd">var</span><span class="pln"> express </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'express'</span><span class="pun">),</span><span class="pln"><br />&nbsp; &nbsp; app </span><span class="pun">=</span><span class="pln"> express</span><span class="pun">.</span><span class="pln">createServer</span><span class="pun">();</span><span class="pln"><br /><br />app</span><span class="pun">.</span><span class="kwd">use</span><span class="pun">(</span><span class="pln">express</span><span class="pun">.</span><span class="pln">logger</span><span class="pun">());</span><span class="pln"><br /><br />app</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'/'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">req</span><span class="pun">,</span><span class="pln"> res</span><span class="pun">){</span><span class="pln"><br />&nbsp; &nbsp; res</span><span class="pun">.</span><span class="pln">send</span><span class="pun">(</span><span class="str">'Hello World'</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br />app</span><span class="pun">.</span><span class="pln">listen</span><span class="pun">();</span><span class="pln"><br />console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'Express server started on port %s'</span><span class="pun">,</span><span class="pln"> app</span><span class="pun">.</span><span class="pln">address</span><span class="pun">().</span><span class="pln">port</span><span class="pun">);</span></code></pre></div><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/getting-started-with-express";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/f1e3ab214a976a39cfd713bc93deb10f?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>TJ Holowaychuk</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/visionmedia">visionmedia</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/tjholowaychuk">tjholowaychuk</a></dd></dl><dl><dt>Location:</dt><dd>Victoria BC</dd></dl><dl><dt>Links:</dt><dd><a href="http://tjholowaychuk.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Sat, 11 Sep 2010 22:55:36 GMT"><dt>Date Released:</dt><dd>Saturday, September 11, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.2.1">node v0.2.1</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="getting-started-with-express/server.js">server.js</a></li><li><a href="getting-started-with-express/full-server.js">full-server.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/getting-started-with-express by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:25 GMT -->
+</html>

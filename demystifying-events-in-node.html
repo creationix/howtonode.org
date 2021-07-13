@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/demystifying-events-in-node by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Demystifying events in node.js - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="demystifying-events-in-node.html">Demystifying events in node.js</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>Ok, here's an important thing to understand when you're working with node.js. There're lots of node objects that emit events, and you can easily find some examples on the documentation. But what's not really clear perhaps is how do you write your own events and listeners. You could get by for a while without this, but then you'll soon reach a wall. So how do you write them? The important friend you need to know first of all is the 'events' module in node.js.</p>
+
+<h2>The quick overview</h2>
+
+<p>To access this module, you simply add this to your js file:</p>
+
+<blockquote>
+  <p>require('events')</p>
+  
+  <p>requires('events').EventEmitter</p>
+</blockquote>
+
+<p>Specially, the docs will tell you the later is that all objects that emit events are basically instances of the latter. Let's create a simple dummy,</p>
+
+<div class="snippet"><a href="demystifying-events-in-node/dummy.js" class="code-link">dummy.js</a><pre><code><span class="com">// basic imports</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> events </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'events'</span><span class="pun">);</span><span class="pln"><br /><br /></span><span class="com">// for us to do a require later</span><span class="pln"><br /></span><span class="kwd">module</span><span class="pun">.</span><span class="pln">exports </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Dummy</span><span class="pun">;</span><span class="pln"><br /><br /></span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Dummy</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; events</span><span class="pun">.</span><span class="typ">EventEmitter</span><span class="pun">.</span><span class="pln">call</span><span class="pun">(</span><span class="kwd">this</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">}</span><span class="pln"><br /><br /></span><span class="com">// inherit events.EventEmitter</span><span class="pln"><br /></span><span class="typ">Dummy</span><span class="pun">.</span><span class="pln">super_ </span><span class="pun">=</span><span class="pln"> events</span><span class="pun">.</span><span class="typ">EventEmitter</span><span class="pun">;</span><span class="pln"><br /></span><span class="typ">Dummy</span><span class="pun">.</span><span class="pln">prototype </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Object</span><span class="pun">.</span><span class="pln">create</span><span class="pun">(</span><span class="pln">events</span><span class="pun">.</span><span class="typ">EventEmitter</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; constructor</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; value</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Dummy</span><span class="pun">,</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; enumerable</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">false</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>The important part here is that we're extending our object with EventEmitter, and thus inheriting all the prototype objects,methods...etc from it.</p>
+
+<p>So now let's assume Dummy needs to have a method call cooking(), and once he puts the chicken to roast, he wants an event to be emitted, e.g. 'cooked', and fire a callback call 'eat'. (yum, roast chix! :P)</p>
+
+<div class="snippet"><a href="demystifying-events-in-node/dummy-cooking.js" class="code-link">dummy-cooking.js</a><pre><code><span class="typ">Dummy</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">.</span><span class="pln">cooking </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">chicken</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">var</span><span class="pln"> </span><span class="kwd">self</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">chicken </span><span class="pun">=</span><span class="pln"> chicken</span><span class="pun">;</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">cook </span><span class="pun">=</span><span class="pln"> cook</span><span class="pun">();</span><span class="pln"> </span><span class="com">// assume dummy function that'll do the cooking</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">cook</span><span class="pun">(</span><span class="pln">chicken</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">cooked_chicken</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">chicken </span><span class="pun">=</span><span class="pln"> cooked_chicken</span><span class="pun">;</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">emit</span><span class="pun">(</span><span class="str">'cooked'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">chicken</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">;</span><span class="pln"><br /></span><span class="pun">}</span></code></pre></div>
+
+<p>So we're done with this module. Let's say we want to use it in our main script,</p>
+
+<div class="snippet"><a href="demystifying-events-in-node/dummy-node.js" class="code-link">dummy-node.js</a><pre><code><span class="com">// A nonsensical node.js program</span><span class="pln"><br /><br /></span><span class="kwd">var</span><span class="pln"> </span><span class="typ">Dummy</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'./dummy'</span><span class="pun">);</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> kenny </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Dummy</span><span class="pun">();</span><span class="pln"><br /></span><span class="kwd">var</span><span class="pln"> dinner </span><span class="pun">=</span><span class="pln"> kenny</span><span class="pun">.</span><span class="pln">cooking</span><span class="pun">(</span><span class="pln">fried_chix</span><span class="pun">);</span><span class="pln"><br />dinner</span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'cooked'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">chicken</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// eat up!</span><span class="pln"><br /></span><span class="pun">}</span></code></pre></div>
+
+<p>So basically, node.js runs through the couple of lines and then waits for the event 'cooked' to be emitted, upon which it then fires off the callback while passing it the returned argument(s).</p>
+
+<h2>Where to go from here</h2>
+
+<p>It's worthy to note that "sub-classing" in the examples given here are a bit of an overkill, as well as using events.EventEmitter for things that only fire one event once. It's probably better to put the new methods on the instance if there's only going to be a few of them and for firing a low level of events, you might want to use asynchronous functions instead.</p>
+
+<p>Regarding events.EventEmitter, there's a special event that you want to note - 'error'. This is fired whenever an error is encountered, and is special in the sense that if no listeners are attached it, node will throw an exception and terminate the execution. (thanks to Tim for highlighting this.)</p>
+
+<h2>Before I go eat my chix...</h2>
+
+<p>The docs has some good runthrough, and I helped myself by searching through my favorite libraries and looking at how others implemented it, and also received some good answers that helped clear this up after posting to the mailing list. I suggest taking a read of Tim Caswell's articles for a better insight to all this node-ty stuff:</p>
+
+<p><a href="control-flow-part-ii.html">Control Flow in Node Part 2</a></p>
+
+<p><a href="what-is-this.html">What is "this"?</a></p>
+
+<p>In the meanwhile, you can also view my crazy goofy sketch of a ircbot + logger + real-time websockets + search enabled bot mashup in node.js - <a href="http://github.com/kennyshen/tocho">tocho</a>! I had a lot of fun making him, and while I haven't posted the search feature to the demo site, you can lurk through the #node.js irc channel with a web sockets enabled browser in real-time <a href="http://northpole.sg/3Z">here</a>.</p>
+
+<p>Hope you found this article useful, and do comment below if you have any suggestions on adding to this (I'm sure I might have missed out something)</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/demystifying-events-in-node";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/9daaf27fb632d2149aa96d5c451336ad?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Kenny Shen</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/kennyshen">kennyshen</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/kenny_shen">kenny_shen</a></dd></dl><dl><dt>Location:</dt><dd>Singapore</dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Sun Aug 08 2010 01:48:53 GMT+0800"><dt>Date Released:</dt><dd>Saturday, August  7, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.1.102">node v0.1.102</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="demystifying-events-in-node/dummy.js">dummy.js</a></li><li><a href="demystifying-events-in-node/dummy-cooking.js">dummy-cooking.js</a></li><li><a href="demystifying-events-in-node/dummy-node.js">dummy-node.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/demystifying-events-in-node by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:39 GMT -->
+</html>

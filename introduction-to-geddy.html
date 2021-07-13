@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/introduction-to-geddy by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>An Introduction to Geddy - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="introduction-to-geddy.html">An Introduction to Geddy</a></h1><p class="old-node-warning">HEADS UP! This article was written for an older version of node.&nbsp;More up-to-date information may be available elsewhere.</p><p>This was the fifth in a series of posts leading up to
+<a href="http://nodeknockout.com/">Node.js Knockout</a> on how to use <a href="http://nodejs.org/">node.js</a>. This post was
+written by <a href="http://geddyjs.org/">geddy</a> author and <a href="http://nodeknockout.com/judging#matthew_eernisse">Node.js Knockout judge</a> Matthew
+Eernisse.</p>
+
+<p>Geddy is a modular, full-service web framework for Node.js, similar
+to Merb, Rails, Pylons, or Django.</p>
+
+<p>Geddy provides a lot of great features:</p>
+
+<ul>
+<li>Flexible, robust router with easy RESTful routing
+<a href="http://wiki.github.com/mde/geddy/using-the-router">(router docs)</a></li>
+<li>Intelligent content-negotiation <a href="http://wiki.github.com/mde/geddy/content-negotiation">(content-negotiation docs)</a></li>
+<li>Models and validations<a href="http://wiki.github.com/mde/geddy/models">(model docs)</a></li>
+<li>Simple, intuitive views with partials support</li>
+<li>Generator utility for easy creation of apps and scaffolding</li>
+</ul>
+
+<h2>Installation</h2>
+
+<p>There are a few different ways of getting Geddy.</p>
+
+<p>Download the current release, <a href="dist/geddy-v0.1.1.tar.gz">geddy-v0.1.1.tar.gz</a> (2010-08-06)</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work$ curl -O http:/</span><span class="pun">/</span><span class="pln">geddyjs</span><span class="pun">.</span><span class="pln">org</span><span class="pun">/</span><span class="pln">dist</span><span class="pun">/</span><span class="pln">geddy</span><span class="pun">-</span><span class="pln">v0</span><span class="pun">.</span><span class="lit">1.1</span><span class="pun">.</span><span class="pln">tar</span><span class="pun">.</span><span class="pln">gz<br />$ </span><span class="pun">~</span><span class="str">/work$ tar -xvzf geddy-v0.1.1.tar.gz<br />$ ~/</span><span class="pln">work$ cd geddy</span><span class="pun">-</span><span class="pln">v0</span><span class="pun">.</span><span class="lit">1.1</span><span class="pln"><br />$ </span><span class="pun">~/</span><span class="pln">work$ make </span><span class="pun">&amp;&amp;</span><span class="pln"> sudo make install<br /></span></code></pre>
+
+<p>Or, get the latest Geddy code from GitHub and install it:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work$ git clone git:/</span><span class="pun">/</span><span class="pln">github</span><span class="pun">.</span><span class="pln">com</span><span class="pun">/</span><span class="pln">mde</span><span class="pun">/</span><span class="pln">geddy</span><span class="pun">.</span><span class="pln">git<br />$ </span><span class="pun">~</span><span class="str">/work$ cd geddy<br />$ ~/</span><span class="pln">work$ make </span><span class="pun">&amp;&amp;</span><span class="pln"> sudo make install<br /></span></code></pre>
+
+<p>Geddy can also now be installed with NPM:</p>
+
+<pre><code><span class="pln">$ npm install geddy<br /></span></code></pre>
+
+<p>If you want to use a database, you'll need database bindings for
+Node (The Geddy GitHub wiki has docs for setting up <a href="http://wiki.github.com/mde/geddy/install-sqlite-and-node-sqlite">SQLite</a> or
+<a href="http://wiki.github.com/mde/geddy/install-postgresql-and-node_postgres">Postgres</a>). CouchDB does not require database bindings.</p>
+
+<p>NOTE: For Postgres, your database user must have the ability to
+create databases and tables.</p>
+
+<h3>Create an app</h3>
+
+<p>Create your Geddy app:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~/</span><span class="pln">work$ geddy</span><span class="pun">-</span><span class="pln">gen app bytor<br /></span><span class="typ">Created</span><span class="pln"> app bytor</span><span class="pun">.</span><span class="pln"><br /></span></code></pre>
+
+<p>Check if your app runs:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy<br /></span><span class="typ">Geddy</span><span class="pln"> worker </span><span class="pun">(</span><span class="pln">pid </span><span class="lit">5206</span><span class="pun">)</span><span class="pln"> running at port </span><span class="lit">4000</span><span class="pln"> </span><span class="pun">(</span><span class="pln">development mode</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>Go to <a href="http://localhost:4000/">http://localhost:4000/</a> — you should see the following:</p>
+
+<p>“Attention all planets of the Solar Federation”</p>
+
+<p>Geddy has some startup options you can see by doing <code>geddy -h</code> or
+<code>geddy --help</code>.</p>
+
+<h2>RESTful routes</h2>
+
+<p>Create a resource-based route with a model stub using
+<code>geddy-gen resource [model_name]</code>:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy</span><span class="pun">-</span><span class="pln">gen resource snow_dog<br /></span><span class="pun">[</span><span class="pln">ADDED</span><span class="pun">]</span><span class="pln"> </span><span class="pun">./</span><span class="pln">app</span><span class="pun">/</span><span class="pln">models</span><span class="pun">/</span><span class="pln">snow_dog</span><span class="pun">.</span><span class="pln">js<br /></span><span class="pun">[</span><span class="pln">ADDED</span><span class="pun">]</span><span class="pln"> </span><span class="pun">./</span><span class="pln">app</span><span class="pun">/</span><span class="pln">controllers</span><span class="pun">/</span><span class="pln">snow_dogs</span><span class="pun">.</span><span class="pln">js<br />resources snow_dogs route added to </span><span class="pun">./</span><span class="pln">config</span><span class="pun">/</span><span class="pln">router</span><span class="pun">.</span><span class="pln">js<br /></span><span class="typ">Updated</span><span class="pln"> inflections map</span><span class="pun">.</span><span class="pln"><br /></span><span class="typ">Created</span><span class="pln"> view templates</span><span class="pun">.</span><span class="pln"><br /></span></code></pre>
+
+<p>Geddy's pluralization code isn't that smart yet — if you want a
+special plural, add it with a comma after the model name (e.g.
+<code>geddy-gen resource foo,fooes</code>).</p>
+
+<p>There is a nice <a href="http://wiki.github.com/mde/geddy/using-the-router">wiki doc for Geddy's router</a>.</p>
+
+<p>Test your RESTful routes:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy<br /></span><span class="typ">Geddy</span><span class="pln"> worker </span><span class="pun">(</span><span class="pln">pid </span><span class="lit">5206</span><span class="pun">)</span><span class="pln"> running at port </span><span class="lit">4000</span><span class="pln"> </span><span class="pun">(</span><span class="pln">development mode</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>Go to [http://localhost:4000/snow_dogs.html][]. You should see the
+following:</p>
+
+<p>Params</p>
+
+<ul>
+<li>extension: html</li>
+<li>controller: SnowDogs</li>
+<li>action: index</li>
+<li>method: GET</li>
+</ul>
+
+<p>This is just printing out the contents of the <code>params</code> object in
+the action.</p>
+
+<p>Now go to [http://localhost:4000/snow_dogs.json][]. You should see
+the following:</p>
+
+<p>{"params":{"method":"GET","controller":"SnowDogs","action":"index","format":"json"}}</p>
+
+<p>This is Geddy's content-negotiation at work. Geddy tries to do the
+right thing based on the formats your controller supports, and what
+the client wants.</p>
+
+<p>There is more detailed info on
+<a href="http://wiki.github.com/mde/geddy/content-negotiation">Geddy's content-negotiation in the wiki doc</a>.</p>
+
+<h2>Model properties, etc.</h2>
+
+<p>Kill the server (Ctrl+c), and change your model as desired.</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ vi app</span><span class="pun">/</span><span class="pln">models</span><span class="pun">/</span><span class="pln">snow_dog</span><span class="pun">.</span><span class="pln">js<br /></span></code></pre>
+
+<p>Add some properties, validations, methods:</p>
+
+<div class="snippet"><a href="introduction-to-geddy/models/snow_dog.js" class="code-link">models/snow_dog.js</a><pre><code><span class="kwd">var</span><span class="pln"> </span><span class="typ">SnowDog</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br /><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">property</span><span class="pun">(</span><span class="str">'login'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'string'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">required</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">});</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">property</span><span class="pun">(</span><span class="str">'password'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'string'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">required</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">});</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">property</span><span class="pun">(</span><span class="str">'lastName'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'string'</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">property</span><span class="pun">(</span><span class="str">'firstName'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'string'</span><span class="pun">);</span><span class="pln"><br /><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">validatesPresent</span><span class="pun">(</span><span class="str">'login'</span><span class="pun">);</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">validatesFormat</span><span class="pun">(</span><span class="str">'login'</span><span class="pun">,</span><span class="pln"> </span><span class="str">/[a-z]+/</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">message</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Subdivisions!'</span><span class="pun">});</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">validatesLength</span><span class="pun">(</span><span class="str">'login'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">min</span><span class="pun">:</span><span class="pln"> </span><span class="lit">3</span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Uncomment the below to validate password confirmation</span><span class="pln"><br />&nbsp; </span><span class="com">// Use with the name of the other field to compare with</span><span class="pln"><br />&nbsp; </span><span class="com">// this.validatesConfirmed('password', 'confirmPassword');</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Use with any function that returns a Boolean</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">validatesWithFunction</span><span class="pun">(</span><span class="str">'password'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">s</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; </span><span class="kwd">return</span><span class="pln"> s</span><span class="pun">.</span><span class="pln">length </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; </span><span class="com">// Can define methods for instances like this</span><span class="pln"><br />&nbsp; </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">someMethod </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="com">// Do some stuff</span><span class="pln"><br />&nbsp; </span><span class="pun">};</span><span class="pln"><br /><br /></span><span class="pun">};</span><span class="pln"><br /><br />exports</span><span class="pun">.</span><span class="typ">SnowDog</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">SnowDog</span><span class="pun">;</span></code></pre></div>
+
+<p><a href="http://wiki.github.com/mde/geddy/models">The wiki doc on models</a> has more detailed info.</p>
+
+<h2>DB config</h2>
+
+<p>Turn on database support. Edit your development config file:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ vi config</span><span class="pun">/</span><span class="pln">environments</span><span class="pun">/</span><span class="pln">development</span><span class="pun">.</span><span class="pln">js<br /></span></code></pre>
+
+<p>Set the appropriate values in config.database. See the wiki doc on
+<a href="http://wiki.github.com/mde/geddy/sample-db-configs">sample DB configs</a> for examples.</p>
+
+<p>Create the database.</p>
+
+<p>(Remember, with Postgres, your database user has to have enough
+privileges to create a database.)</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy</span><span class="pun">-</span><span class="pln">gen db</span><span class="pun">:</span><span class="pln">create<br /></span><span class="typ">Creating</span><span class="pln"> DB </span><span class="kwd">for</span><span class="pln"> development</span><span class="pun">.</span><span class="pln">js</span><span class="pun">...</span><span class="pln"><br /></span></code></pre>
+
+<h2>Scaffold</h2>
+
+<p>Generate your scaffold from the model file you just edited:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy</span><span class="pun">-</span><span class="pln">gen scaffold snow_dog<br /></span><span class="typ">Created</span><span class="pln"> client</span><span class="pun">-</span><span class="pln">side model </span><span class="typ">JavaScript</span><span class="pln"> files</span><span class="pun">.</span><span class="pln"><br /></span><span class="typ">Created</span><span class="pln"> controller </span><span class="kwd">and</span><span class="pln"> views </span><span class="kwd">for</span><span class="pln"> snow_dog</span><span class="pun">.</span><span class="pln"><br /></span></code></pre>
+
+<p>Fire up the server again:</p>
+
+<pre><code><span class="pln">$ </span><span class="pun">~</span><span class="str">/work/</span><span class="pln">bytor$ geddy<br /></span><span class="typ">Geddy</span><span class="pln"> worker </span><span class="pun">(</span><span class="pln">pid </span><span class="lit">5206</span><span class="pun">)</span><span class="pln"> running at port </span><span class="lit">4000</span><span class="pln"> </span><span class="pun">(</span><span class="pln">development mode</span><span class="pun">)</span><span class="pln"><br /></span></code></pre>
+
+<p>Go to [http://localhost:4000/snow_dogs.html][], and start
+creating, editing, removing items.</p>
+
+<p>That’s pretty much it.</p>
+
+<p>The query API for Geddy's models is still pretty limited — it
+supports only find-by-id and find-by-type. You can take a look at
+the code in your controller for a closer look at the API.</p>
+
+<h2>Get involved</h2>
+
+<p>You can help out with Geddy by filing bug reports on GitHub here:</p>
+
+<p><a href="http://github.com/mde/geddy/issues">http://github.com/mde/geddy/issues</a></p>
+
+<p>If you have questions, problems, or feature ideas, you can shoot an
+e-mail to the mailing list here:</p>
+
+<p><a href="http://groups.google.com/group/geddy">http://groups.google.com/group/geddy</a></p>
+
+<p>And of course, you can always <a href="http://github.com/mde/geddy">fork Geddy on GitHub</a>, make
+improvements, and send a pull request.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/introduction-to-geddy";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/61399195fbd021b3a65437f2d37421ae?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Matthew Eernisse</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/mde">mde</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/mde">mde</a></dd></dl><dl><dt>Location:</dt><dd>San Francisco, CA</dd></dl><dl><dt>Links:</dt><dd><a href="http://fleegix.org/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Sat Sep 11 2010 17:02:05 GMT-0700 (PDT)"><dt>Date Released:</dt><dd>Saturday, September 11, 2010</dd></dl><dl><dt>Node Version:</dt><dd><a href="http://github.com/joyent/node/tree/v0.2.1">node v0.2.1</a></dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="introduction-to-geddy/models/snow_dog.js">models/snow_dog.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/introduction-to-geddy by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:23 GMT -->
+</html>

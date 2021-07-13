@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/intro-to-jake by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:15 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Intro to Jake - JavaScript build tool for Node.js - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="intro-to-jake.html">Intro to Jake - JavaScript build tool for Node.js</a></h1><p>Jake is a JavaScript build program for Node.js, with capabilities similar to GNU Make or Ruby's Rake. If you've ever built projects with Rake, you'll be very at home using Jake</p>
+
+<p>Jake has the following features:</p>
+
+<ul>
+<li>Jakefiles are in standard JavaScript syntax</li>
+<li>Tasks with prerequisites</li>
+<li>Namespaces for tasks</li>
+<li>Async execution of tasks</li>
+</ul>
+
+<h2>Installing</h2>
+
+<p><strong>Requirements</strong>: Jake requires Node.js. Of course.</p>
+
+<p>Get Jake:</p>
+
+<pre><code><span class="pln">git clone git</span><span class="pun">:</span><span class="com">//github.com/mde/node-jake.git</span><span class="pln"><br /></span></code></pre>
+
+<p>Build Jake:</p>
+
+<pre><code><span class="pln">cd node</span><span class="pun">-</span><span class="pln">jake </span><span class="pun">&amp;&amp;</span><span class="pln"> make </span><span class="pun">&amp;&amp;</span><span class="pln"> sudo make install<br /></span></code></pre>
+
+<p>Or install with NPM:</p>
+
+<pre><code><span class="pln">npm install jake<br /></span></code></pre>
+
+<p>(Or, get the code, and <code>npm link</code> in the code root.)</p>
+
+<h2>Basic usage</h2>
+
+<pre><code><span class="pln">jake </span><span class="pun">[</span><span class="pln">options</span><span class="pun">]</span><span class="pln"> target </span><span class="pun">(</span><span class="pln">commands</span><span class="pun">/</span><span class="pln">options </span><span class="pun">...)</span><span class="pln"><br /></span></code></pre>
+
+<p>You can see what other options Jake supports by doing <code>jake -h</code> or <code>jake --help</code> Probably the most important option starting off is the <code>-T</code> or <code>--tasks</code> option that lets you see what tasks are defined in a Jakefile.</p>
+
+<h2>Jakefiles and Jakefile syntax</h2>
+
+<p>You define your build tasks in a Jakefile.js (usually in the root of your project) -- by default the <code>jake</code> command looks for a Jakefile in the current directory, but you can also point Jake at a specific file using the -f (--jakefile) flag.</p>
+
+<p>In your Jakefile, call <code>task</code> to define tasks. Call it with three arguments (and one more optional argument):</p>
+
+<pre><code><span class="pln">task</span><span class="pun">(</span><span class="pln">name</span><span class="pun">,</span><span class="pln"> dependencies</span><span class="pun">,</span><span class="pln"> handler</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="pln">async</span><span class="pun">]);</span><span class="pln"><br /></span></code></pre>
+
+<p>Where <code>name</code> is the string name of the task, <code>dependencies</code> is an array of the dependencies, and <code>handler</code> is a function to run for the task.</p>
+
+<p>Here's an example:</p>
+
+<div class="snippet"><a href="intro-to-jake/sample-jakefile.js" class="code-link">sample-jakefile.js</a><pre><code><span class="pln">desc</span><span class="pun">(</span><span class="str">'This is the default task.'</span><span class="pun">);</span><span class="pln"><br />task</span><span class="pun">(</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">params</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'This is the default task.'</span><span class="pun">);</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">(</span><span class="pln">arguments</span><span class="pun">));</span><span class="pln"><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>This is a build tool for Node, so of course we want to support async execution, right? The <code>async</code> argument is optional, and when set to true <code>(async === true)</code> indicates the task executes asynchronously. Asynchronous tasks need to call <code>complete()</code> to signal they have completed.</p>
+
+<p>Here's an example of an asynchronous task:</p>
+
+<div class="snippet"><a href="intro-to-jake/async-jakefile.js" class="code-link">async-jakefile.js</a><pre><code><span class="pln">desc</span><span class="pun">(</span><span class="str">'This is an asynchronous task.'</span><span class="pun">);</span><span class="pln"><br />task</span><span class="pun">(</span><span class="str">'asynchronous'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; setTimeout</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Yay, I'm asynchronous!"</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; complete</span><span class="pun">();</span><span class="pln"><br />&nbsp; </span><span class="pun">},</span><span class="pln"> </span><span class="lit">1000</span><span class="pun">);</span><span class="pln"><br /></span><span class="pun">},</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">);</span></code></pre></div>
+
+<p>Use <code>desc</code> to add a string description of the task.</p>
+
+<p>Use <code>namespace</code> to create a namespace of tasks to perform. Call it with two arguments:</p>
+
+<pre><code><span class="kwd">namespace</span><span class="pun">(</span><span class="pln">name</span><span class="pun">,</span><span class="pln"> namespaceTasks</span><span class="pun">);</span><span class="pln"><br /></span></code></pre>
+
+<p>Where is <code>name</code> is the name of the namespace, and <code>namespaceTasks</code> is a function with calls inside it to <code>task</code> or <code>desc</code> defining all the tasks for that namespace.</p>
+
+<p>Here's an example:</p>
+
+<div class="snippet"><a href="intro-to-jake/namespace-jakefile.js" class="code-link">namespace-jakefile.js</a><pre><code><span class="pln">desc</span><span class="pun">(</span><span class="str">'This is the default task.'</span><span class="pun">);</span><span class="pln"><br />task</span><span class="pun">(</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'This is the default task.'</span><span class="pun">);</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">(</span><span class="pln">arguments</span><span class="pun">));</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /><br /></span><span class="kwd">namespace</span><span class="pun">(</span><span class="str">'foo'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; desc</span><span class="pun">(</span><span class="str">'This the foo:bar task'</span><span class="pun">);</span><span class="pln"><br />&nbsp; task</span><span class="pun">(</span><span class="str">'bar'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'doing foo:bar task'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">(</span><span class="pln">arguments</span><span class="pun">));</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /><br />&nbsp; desc</span><span class="pun">(</span><span class="str">'This the foo:baz task'</span><span class="pun">);</span><span class="pln"><br />&nbsp; task</span><span class="pun">(</span><span class="str">'baz'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'default'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'foo:bar'</span><span class="pun">],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'doing foo:baz task'</span><span class="pun">);</span><span class="pln"><br />&nbsp; &nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">(</span><span class="pln">arguments</span><span class="pun">));</span><span class="pln"><br />&nbsp; </span><span class="pun">});</span><span class="pln"><br /><br /></span><span class="pun">});</span></code></pre></div>
+
+<p>In this example, the foo:baz task depends on both the 'default' and the 'foo:bar' task.</p>
+
+<p>Run these namespaced tasks with <code>jake [namespace]:[task]</code>. The above example would be run with:</p>
+
+<pre><code><span class="pln">jake foo</span><span class="pun">:</span><span class="pln">baz<br /></span></code></pre>
+
+<h2>Passing parameters to jake</h2>
+
+<p>You can pass either positional or named parameters to Jake tasks (well, 'named parameters,' the JavaScripty way, in an Object).</p>
+
+<p>Single parameters passed to the jake command after the task name are passed along to the handler as positional arguments.</p>
+
+<p>So you can see this in action, let's set up an 'awesome' task that does nothing but print out the arguments it gets:</p>
+
+<pre><code><span class="pln">desc</span><span class="pun">(</span><span class="str">'This is an awesome task.'</span><span class="pun">);</span><span class="pln"><br />task</span><span class="pun">(</span><span class="str">'awesome'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br />&nbsp; console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">(</span><span class="typ">Array</span><span class="pun">.</span><span class="pln">prototype</span><span class="pun">.</span><span class="pln">slice</span><span class="pun">.</span><span class="pln">call</span><span class="pun">(</span><span class="pln">arguments</span><span class="pun">)));</span><span class="pln"><br /></span><span class="pun">});</span><span class="pln"><br /></span></code></pre>
+
+<p>With this example, running <code>jake</code> like this:</p>
+
+<pre><code><span class="pln">jake awesome foo bar baz<br /></span></code></pre>
+
+<p>You'd get the following output:</p>
+
+<pre><code><span class="pun">[</span><span class="pln"> </span><span class="str">'foo'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'bar'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'baz'</span><span class="pln"> </span><span class="pun">]</span><span class="pln"><br /></span></code></pre>
+
+<p>Paramters passed to the jake command that contain a colon (:) or equals sign (=) will be added to a keyword/value object that is passed as a final argument to the handler.</p>
+
+<p>With the above Jakefile, you could run <code>jake</code> like this:</p>
+
+<pre><code><span class="pln">jake awesome foo bar baz qux</span><span class="pun">:</span><span class="pln">zoobie frang</span><span class="pun">:</span><span class="pln">asdf<br /></span></code></pre>
+
+<p>And you'd get the following output:</p>
+
+<pre><code><span class="pun">[</span><span class="pln"> </span><span class="str">'foo'</span><span class="pln"><br /></span><span class="pun">,</span><span class="pln"> </span><span class="str">'bar'</span><span class="pln"><br /></span><span class="pun">,</span><span class="pln"> </span><span class="str">'baz'</span><span class="pln"><br /></span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> qux</span><span class="pun">:</span><span class="pln"> </span><span class="str">'zoobie'</span><span class="pun">,</span><span class="pln"> frang</span><span class="pun">:</span><span class="pln"> </span><span class="str">'asdf'</span><span class="pln"> </span><span class="pun">}</span><span class="pln"><br /></span><span class="pun">]</span><span class="pln"><br /></span></code></pre>
+
+<p>As you might expect if you're used to Make or Rake, running <code>jake</code> with no arguments runs the default task.</p>
+
+<h2>Related projects</h2>
+
+<p>James Coglan's "Jake": <a href="http://github.com/jcoglan/jake">http://github.com/jcoglan/jake</a></p>
+
+<p>Confusingly, this is a Ruby tool for building JavaScript packages from source code.</p>
+
+<p>280 North's Jake: <a href="http://github.com/280north/jake">http://github.com/280north/jake</a></p>
+
+<p>This is also a JavaScript port of Rake, but it runs on the JVM-based Narwhal platform.</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/intro-to-jake";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/61399195fbd021b3a65437f2d37421ae?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Matthew Eernisse</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/mde">mde</a></dd></dl><dl><dt>Twitter:</dt><dd><a href="https://twitter.com/mde">mde</a></dd></dl><dl><dt>Location:</dt><dd>San Francisco, CA</dd></dl><dl><dt>Links:</dt><dd><a href="http://fleegix.org/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Wed Sep 29 2010 12:39:01 GMT+0530 (IST)"><dt>Date Released:</dt><dd>Wednesday, September 29, 2010</dd></dl><dl><dt>Code Samples:</dt><dd><ul><li><a href="intro-to-jake/sample-jakefile.js">sample-jakefile.js</a></li><li><a href="intro-to-jake/async-jakefile.js">async-jakefile.js</a></li><li><a href="intro-to-jake/namespace-jakefile.js">namespace-jakefile.js</a></li></ul></dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/intro-to-jake by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 13:58:18 GMT -->
+</html>

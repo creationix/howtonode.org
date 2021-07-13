@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from localhost:8080/deploying-node-upstart-monit by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 14:00:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head><meta charset="utf-8" /><title>Deploying Node.js With Upstart and Monit - How To Node - NodeJS</title><meta name="description" content="Learn the zen of coding in NodeJS." /><meta name="viewport" content="width=device-width" /><link href="style.css" rel="stylesheet" /><link href="print.css" rel="stylesheet" media="print" /><link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="feed.xml" /><link href="favicon.ico" rel="icon" type="image/x-icon" /></head><body><div id="container"><div id="header"><a href="index.html"><img src="logo.png" alt="How to Node" class="logo" /><div class="tagline">The zen of coding in node.js</div></a></div><div id="main"><div class="article"><h1><a href="deploying-node-upstart-monit.html">Deploying Node.js With Upstart and Monit</a></h1><p><strong>So you like Node.js? You want to deploy it?</strong></p>
+
+<p>If I heard two "Yes"'s, then you are in the some boat as me, and being in that boat feels really really vulnerable. Like the kind of vulnerable you would feel if you were trapped in a cage with lions. And here is why:</p>
+
+<ul>
+<li>If Node.js decides to crash, you are screwed.</li>
+<li>If the above isn't enough for you, then you may need to reconsider.</li>
+</ul>
+
+<p>There are two well-known technologies that can save us from this mess, and you'd better believe we're going to use them!</p>
+
+<h2>Problems</h2>
+
+<p>The first problem we will get thrown by, is the fact that we cannot run Node.js as a daemon. A daemon, for the unaware, is a child process that spawns from a process, leaving the parent to die. Tragic story I know, but this allows things to run in the background. But why is this a problem? Well if <a href="http://static01.vanzonneveld.net:8080/techblog/article/run_nodejs_as_a_service_on_ubuntu_karmic/">Kevin's blog post</a> isn't enough for you, it essentially allows one to separate node from any form of interface, meaning terminal doesn't have stay open all day. I highly recommend you pause now and read Kevin's material, as it will expand more on daemonizing the node process.</p>
+
+<h2>upstart</h2>
+
+<p>As Kevin stated in his blog, the first tool we are going to look at is <a href="http://upstart.ubuntu.com/">upstart</a>, which will allow us to:</p>
+
+<ul>
+<li>Run Node.js as a daemon</li>
+<li>Provide an easy set of commands for stop / starting our Node.js application</li>
+</ul>
+
+<p>Most linux distributions that have a decent package manager which will allow you to install <a href="http://upstart.ubuntu.com/">upstart</a> the easy way. On debian systems this is usually:</p>
+
+<pre><code><span class="com">#!sh</span><span class="pln"><br />sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install upstart<br /></span></code></pre>
+
+<p>If you're running the latest Ubuntu, you've got it built in already.</p>
+
+<p>Otherwise you will need to configure and compile from source, and this blog post will not go off topic! So we resume...</p>
+
+<p>We now will want to configure <a href="http://upstart.ubuntu.com/">upstart</a>, and I am shamelessly borrowing Kevin's example:</p>
+
+<pre><code><span class="com">#!upstart</span><span class="pln"><br />description </span><span class="str">"node.js server"</span><span class="pln"><br />author &nbsp; &nbsp; &nbsp;</span><span class="str">"joe"</span><span class="pln"><br /><br />start on startup<br />stop on shutdown<br /><br />script<br />&nbsp; &nbsp; </span><span class="kwd">export</span><span class="pln"> HOME</span><span class="pun">=</span><span class="str">"/root"</span><span class="pln"><br /><br />&nbsp; &nbsp; echo $$ </span><span class="pun">&gt;</span><span class="pln"> </span><span class="str">/var/</span><span class="pln">run</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">pid<br />&nbsp; &nbsp; </span><span class="kwd">exec</span><span class="pln"> sudo </span><span class="pun">-</span><span class="pln">u username </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="kwd">local</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">node </span><span class="pun">/</span><span class="kwd">where</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">js </span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="str">/var/</span><span class="pln">log</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">log </span><span class="lit">2</span><span class="pun">&gt;&amp;</span><span class="lit">1</span><span class="pln"><br /></span><span class="kwd">end</span><span class="pln"> script<br /><br />pre</span><span class="pun">-</span><span class="pln">start script<br />&nbsp; &nbsp; </span><span class="com"># Date format same as (new Date()).toISOString() for consistency</span><span class="pln"><br />&nbsp; &nbsp; echo </span><span class="str">"[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Starting"</span><span class="pln"> </span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="str">/var/</span><span class="pln">log</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">log<br /></span><span class="kwd">end</span><span class="pln"> script<br /><br />pre</span><span class="pun">-</span><span class="pln">stop script<br />&nbsp; &nbsp; rm </span><span class="pun">/</span><span class="kwd">var</span><span class="pun">/</span><span class="pln">run</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">pid<br />&nbsp; &nbsp; echo </span><span class="str">"[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Stopping"</span><span class="pln"> </span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="str">/var/</span><span class="pln">log</span><span class="pun">/</span><span class="pln">yourprogram</span><span class="pun">.</span><span class="pln">sys</span><span class="pun">.</span><span class="pln">log<br /></span><span class="kwd">end</span><span class="pln"> script<br /></span></code></pre>
+
+<p>You will need to replace <code>username</code> with the user you want to run node as, <code>/where/yourprogram.js</code> with the location of your application, <code>/var/run/yourprogram.pid</code> with your program's pid file and <code>/var/log/yourprogram.sys.log</code> with the location of your log file. You can then save this file to <code>/etc/init/yourprogram.conf</code> for later use. (Dont't forget to make it executable!) If you are using an older linux distribution, you may need to save the file to <code>/etc/event.d/yourprogram</code></p>
+
+<p>Using your program is now a cinch:</p>
+
+<pre><code><span class="com">#!sh</span><span class="pln"><br />start yourprogram<br />stop yourprogram<br /></span></code></pre>
+
+<p>And now node will automatically start at boot and log output to <code>/var/log/node.log</code>. But I assumed you read all that on Kevin's blog, right? Moving on...</p>
+
+<h2>The real problem</h2>
+
+<p>Turning your application into a daemon isn't enough. A daemon can still crash, and those lions are getting awfully close. We need a tool that keeps an eye out for any falls our node instances may have. When something crashes our server, we need that tool to take evasive action. Also that tool should be capable of expanding its reach to any other services our app may need; such as databases and nginx instances. Thankfully this isn't taken lightly by most, and several helpful tools that fit our description do exist.</p>
+
+<h2>monit</h2>
+
+<p>Now that we have our application in a easy to manage form, we need to look at the real issue we are facing. What happens when Node.js crashes? Fortunately for us mortals someone has done most of the hard work for us, and blessed us with the <a href="http://mmonit.com/monit/">monit</a> utility. Essentially monit is a monitoring tool, which you configure tests that will be evaluated at certain intervals. If one of the tests fails, then it will take action depending on the rules you assign to it.</p>
+
+<p>I'm not going to tell you how to install it, <a href="http://mmonit.com/monit/">their website</a> has plenty on information for that, but here instead is an example config file designed for our upstart node daemon will made earlier:</p>
+
+<pre><code><span class="com">#!monit</span><span class="pln"><br /></span><span class="kwd">set</span><span class="pln"> logfile </span><span class="pun">/</span><span class="kwd">var</span><span class="pun">/</span><span class="pln">log</span><span class="pun">/</span><span class="pln">monit</span><span class="pun">.</span><span class="pln">log<br /><br />check process nodejs </span><span class="kwd">with</span><span class="pln"> pidfile </span><span class="str">"/var/run/yourprogram.pid"</span><span class="pln"><br />&nbsp; &nbsp; start program </span><span class="pun">=</span><span class="pln"> </span><span class="str">"/sbin/start yourprogram"</span><span class="pln"><br />&nbsp; &nbsp; stop program &nbsp;</span><span class="pun">=</span><span class="pln"> </span><span class="str">"/sbin/stop yourprogram"</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">if</span><span class="pln"> failed port </span><span class="lit">8000</span><span class="pln"> protocol HTTP<br />&nbsp; &nbsp; &nbsp; &nbsp; request </span><span class="pun">/</span><span class="pln"><br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">with</span><span class="pln"> timeout </span><span class="lit">10</span><span class="pln"> seconds<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">then</span><span class="pln"> restart<br /></span></code></pre>
+
+<p>You can save this in <code>/etc/monit/monitrc</code>. Here is the break down:</p>
+
+<pre><code><span class="kwd">set</span><span class="pln"> logfile </span><span class="pun">/</span><span class="kwd">var</span><span class="pun">/</span><span class="pln">log</span><span class="pun">/</span><span class="pln">monit</span><span class="pun">.</span><span class="pln">log<br /><br />check process nodejs </span><span class="kwd">with</span><span class="pln"> pidfile </span><span class="str">"/var/run/yourprogram.pid"</span><span class="pln"><br /></span></code></pre>
+
+<p>This will tell monit to log all output to <code>/var/log/monit.log</code>, and it also gives our node instance a name and location. I am assuming monit will be running on the same machine as your node app, so we will need to listen on 127.0.0.1 . If you wanted to run monit on another box, you most certainly can, in fact I recommend have multiple instances of monit running in different locations. You just have to ensure that monit is listening on the correct IP address, otherwise monit is rendered useless.
+The next part is the vital part, which defines how we will test for failures:</p>
+
+<pre><code><span class="com">#!monit</span><span class="pln"><br />start program </span><span class="pun">=</span><span class="pln"> </span><span class="str">"/sbin/start yourprogram"</span><span class="pln"><br />stop program &nbsp;</span><span class="pun">=</span><span class="pln"> </span><span class="str">"/sbin/stop yourprogram"</span><span class="pln"><br /></span><span class="kwd">if</span><span class="pln"> failed port </span><span class="lit">8000</span><span class="pln"> protocol HTTP<br />&nbsp; &nbsp; request </span><span class="pun">/</span><span class="pln"><br />&nbsp; &nbsp; </span><span class="kwd">with</span><span class="pln"> timeout </span><span class="lit">10</span><span class="pln"> seconds<br />&nbsp; &nbsp; </span><span class="kwd">then</span><span class="pln"> restart<br /></span></code></pre>
+
+<p>The first two lines should be self-explanatory, this defines how monit will start and stop your application. You will need to specify an absolute path to upstart's start and stop utilities, while suffixing your application name as an argument.</p>
+
+<p>The third line is the crux of monit's usefulness. If we were running our application on port 8000, serving through the HTTP protocol, then this would apply. Monit will perform an analysis on the specified port and protocol, and if its routines discover that something is not right, it will execute the next few lines. Monit has lots of different options for dealing with service failures, such as sending e-mails and restarting servers. In this case we are going to do a simple request to the root of the local domain, and if 10 seconds pass without the expected response, monit will restart the application.</p>
+
+<p>Now all that is left, is to start your application, then set monit off to do its tedious task of saving the world from crashing servers.</p>
+
+<pre><code><span class="com">#!monit</span><span class="pln"><br />sudo start yourprogram<br />monit </span><span class="pun">-</span><span class="pln">d </span><span class="lit">60</span><span class="pln"> </span><span class="pun">-</span><span class="pln">c </span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">monit</span><span class="pun">/</span><span class="pln">monitrc<br /></span></code></pre>
+
+<p>Setting the <code>-d 60</code> flag tells monit to check against your configuration every 60 seconds. I recommend setting this to the same time as any response timeouts you may have installed. You have now passed monit 101! Easy, huh?</p>
+
+<p>Monit's useful-ness doesn't hit a brick wall there either, monit can be extended further to monitor the other services your web application relies upon. This may range from databases to nginx instances. Their website has many more examples and configurations, and even more again can be found littered over the internet.</p>
+
+<h2>Continuation</h2>
+
+<p>The next article I will write I'll explain how the awesomeness of node, can play nicely with the superb nginx server. This enables us hackers to create large scale load-balanced applications. Stay tuned...</p><hr style="clear:both" /><div class="body" id="disqus_thread"></div>
+<script type="text/javascript">
+//<![CDATA[
+var disqus_url = "http://howtonode.org/deploying-node-upstart-monit";
+//]]>
+</script>
+<script src="http://disqus.com/forums/howtonodeorg/embed.js" type="text/javascript"></script><a href="http://disqus.com/forums/howtonodeorg/?url=ref" class="view-thread">View the discussion thread.</a><a href="http://disqus.com/" class="dsq-brlink">blog comments powered by<span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  var links = document.getElementsByTagName('a');
+  var query = '?';
+  for(var i = 0; i < links.length; i++) {
+    if(links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+    }
+  }
+  document.write('<script charset="utf-8" type="text/javascript" src="//disqus.com/forums/howtonodeorg/get_num_replies.js' + query + '"></' + 'script>');
+})();
+
+
+//]]>
+</script>
+</div></div><div id="sidebar"><div class="aside author"><h4>About the Author</h4><img src="https://www.gravatar.com/avatar/a9dab301e5610f0a21ef3fb833e5d253?r=pg&amp;s=200.jpg&amp;d=identicon" class="headshot" /><dl><dt>Name:</dt><dd>Tim Smart</dd></dl><dl><dt>Github:</dt><dd><a href="https://github.com/Tim-Smart">Tim-Smart</a></dd></dl><dl><dt>Links:</dt><dd><a href="http://www.fostle.com/">Homepage</a></dd></dl></div><div class="aside"><h4>About this Article</h4><a href="http://twitter.com/share" data-count="horizontal" data-via="creationix" class="twitter-share-button">Tweet</a><script src="http://platform.twitter.com/widgets.js"></script><dl title="Sat Feb 06 2010 10:03:12 GMT+1300 (NZST)"><dt>Date Released:</dt><dd>Friday, February  5, 2010</dd></dl><dl><dt>Revisions:</dt><dd><ul></ul></dd></dl></div><div class="bubble"><h3>About HowToNode.org</h3>
+
+<p>HowToNode.org is a community supported blog created by <a href="http://creationix.com/">Tim Caswell</a>. The purpose of the blog is to teach how to do various tasks in <a href="http://nodejs.org/">node.js</a> as well as teach fundamental concepts that are needed to write effective code.</p>
+
+<p>This site is powered by <a href="http://github.com/creationix/wheat">Wheat</a>, a git based blogging engine written in <a href="http://nodejs.org/">node.JS</a>.</p>
+
+<p>The content for this site is stored in a <a href="http://github.com/creationix/howtonode.org">git repository</a> that anyone can fork, write an article, and send a pull request. If your article passes the quality standards it will be published and help support the greater node community.</p></div></div><div id="footer"><p>&copy; 2011-2014 Tim Caswell under the MIT license.</p><p>Content and articles are copyrighted to the individual authors. Design by&nbsp;<a href="https://bengourley.co.uk/">Ben Gourley</a>. All code snippets used in the examples are in the public domain.</p><p>Wheat v2 running on node.js v16.4.2</p></div></div>
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+try {
+var pageTracker = _gat._getTracker("UA-12824411-1");
+pageTracker._trackPageview();
+} catch(err) {}
+//]]>
+</script>
+</body>
+<!-- Mirrored from localhost:8080/deploying-node-upstart-monit by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Jul 2021 14:00:19 GMT -->
+</html>
