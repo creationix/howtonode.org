@@ -17,7 +17,7 @@
     %h4
       Articles
     %ul
-      :each article in articles.slice(0,20)
+      :each article in articles.slice(0)
         %li
           %a{href: "/" + article.name}&=article.title
           &=" by " + article.author.name
