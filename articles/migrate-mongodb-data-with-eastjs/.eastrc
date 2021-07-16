@@ -1,0 +1,4 @@
+{
+    "adapter": "node_modules/east-mongo",
+    "url": "mongodb://localhost/east-sample-db"
+}
