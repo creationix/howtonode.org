@@ -1,0 +1,26 @@
+[
+  {
+     "first":"John",
+     "last":"Doe",
+     "office":"Toronto",
+     "team":"Marketing",
+     "phone":"555-203-3002",
+     "email": "john@company.com"
+  },
+  {
+     "first":"Jane",
+     "last":"Doe",
+     "office":"Milwaukee",
+     "team":"Human Resources",
+     "phone":"555-203-3007",
+     "email": "jane@company.com"     
+  },  
+  {
+     "first":"Chuck",
+     "last":"Smith",
+     "office":"Milwaukee",
+     "team":"Development",
+     "phone":"555-203-3003",
+     "email": "chuck@company.com"     
+  },    
+]
